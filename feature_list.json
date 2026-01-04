@@ -618,7 +618,8 @@
     "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T02:50:47.548061Z",
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "test_file": "tests/e2e/026-percentage-buttons-leverage.spec.ts"
   },
   {
     "category": "functional",
@@ -641,7 +642,8 @@
     "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T02:53:39.366243Z",
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "test_file": "tests/e2e/027-order-options-checkboxes.spec.ts"
   },
   {
     "category": "functional",
@@ -662,7 +664,8 @@
     "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T03:01:37.326485Z",
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "test_file": "tests/e2e/028-order-value-balance-display.spec.ts"
   },
   {
     "category": "functional",
