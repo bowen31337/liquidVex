@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { FavoritesProvider } from '@/contexts/FavoritesContext';
 import { wagmiConfig } from '@/lib/wagmi';
 import { useOrderStore } from '@/stores/orderStore';
+import { useMarketStore } from '@/stores/marketStore';
 
 export function ClientProviders({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient({
@@ -36,6 +37,8 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
       (window as any).stores = {
         useOrderStore: useOrderStore,
         getOrderStoreState: () => useOrderStore.getState(),
+        useMarketStore: useMarketStore,
+        getMarketStoreState: () => useMarketStore.getState(),
       };
     }
   }, []);

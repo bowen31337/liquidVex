@@ -32,6 +32,17 @@ export function Header() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [walletModalOpen, setWalletModalOpen] = useState(false);
 
+  // Auto-close wallet modal in test mode
+  useEffect(() => {
+    const isTestMode = typeof window !== 'undefined' &&
+      (window.location.search.includes('testMode=true') ||
+       window.location.search.includes('testMode=1'));
+
+    if (isTestMode) {
+      setWalletModalOpen(false);
+    }
+  }, []);
+
   // Format price with commas and decimals
   const formatPrice = (price: number) => {
     return `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;

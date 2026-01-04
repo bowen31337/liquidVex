@@ -9,6 +9,8 @@ import { useMarketStore } from '../../stores/marketStore';
 import { useOrderStore } from '../../stores/orderStore';
 import { useWebSocket } from '../../hooks/useWebSocket';
 import { OrderBookLevel } from '../../types';
+import { useKeyboardShortcuts, KeyboardShortcut } from '../../hooks/useKeyboardShortcuts';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 interface OrderBookProps {
   levels?: number; // Number of levels to display
@@ -25,6 +27,47 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
   const { isConnected } = useWebSocket(
     `${process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:8001'}/ws/orderbook/${selectedAsset}`
   );
+
+  // Keyboard shortcuts for order book
+  const keyboardShortcuts: KeyboardShortcut[] = [
+    {
+      key: '1',
+      description: 'Set precision to 1 decimal',
+      callback: () => setSelectedPrecision(1),
+    },
+    {
+      key: '2',
+      description: 'Set precision to 2 decimals',
+      callback: () => setSelectedPrecision(2),
+    },
+    {
+      key: '4',
+      description: 'Set precision to 4 decimals',
+      callback: () => setSelectedPrecision(4),
+    },
+    {
+      key: '6',
+      description: 'Set precision to 6 decimals',
+      callback: () => setSelectedPrecision(6),
+    },
+    {
+      key: 'z',
+      description: 'Reset aggregation to 1',
+      callback: () => setAggregation(1),
+    },
+    {
+      key: 'x',
+      description: 'Set aggregation to 5',
+      callback: () => setAggregation(5),
+    },
+    {
+      key: 'c',
+      description: 'Set aggregation to 10',
+      callback: () => setAggregation(10),
+    },
+  ];
+
+  useKeyboardShortcuts(keyboardShortcuts);
 
   // Group price levels by aggregation
   const groupLevels = (levels: OrderBookLevel[], isAsk: boolean) => {
@@ -138,27 +181,29 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
           <div className="flex gap-1">
             <span className="px-1 py-0.5 rounded bg-surface-elevated">Precision:</span>
             {[1, 2, 4, 6].map(prec => (
-              <button
-                key={prec}
-                onClick={() => setSelectedPrecision(prec)}
-                className={`px-1.5 py-0.5 rounded ${selectedPrecision === prec ? 'bg-surface-elevated text-text-primary' : ''}`}
-              >
-                {prec}d
-              </button>
+              <Tooltip key={prec} content={`Press '${prec}' to set precision to ${prec} decimals`} position="bottom">
+                <button
+                  onClick={() => setSelectedPrecision(prec)}
+                  className={`px-1.5 py-0.5 rounded ${selectedPrecision === prec ? 'bg-surface-elevated text-text-primary' : ''}`}
+                >
+                  {prec}d
+                </button>
+              </Tooltip>
             ))}
           </div>
           {/* Aggregation Controls */}
           <div className="flex gap-1">
             <span className="px-1 py-0.5 rounded bg-surface-elevated">Group:</span>
             {[1, 5, 10, 25].map(group => (
-              <button
-                key={group}
-                onClick={() => setAggregation(group)}
-                className={`px-1.5 py-0.5 rounded ${aggregation === group ? 'bg-surface-elevated text-text-primary' : ''}`}
-                data-testid={`aggregation-${group}`}
-              >
-                {group}
-              </button>
+              <Tooltip key={group} content={`Press '${group === 1 ? 'z' : group === 5 ? 'x' : group === 10 ? 'c' : group}' to set aggregation to ${group}`} position="bottom">
+                <button
+                  onClick={() => setAggregation(group)}
+                  className={`px-1.5 py-0.5 rounded ${aggregation === group ? 'bg-surface-elevated text-text-primary' : ''}`}
+                  data-testid={`aggregation-${group}`}
+                >
+                  {group}
+                </button>
+              </Tooltip>
             ))}
           </div>
         </div>

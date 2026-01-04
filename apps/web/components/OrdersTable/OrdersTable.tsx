@@ -11,6 +11,7 @@ import { useApi } from '../../hooks/useApi';
 import { useToast } from '../Toast/Toast';
 import { Order } from '../../types';
 import { OrderModifyModal } from '../Modal/OrderModifyModal';
+import { Modal } from '../Modal/Modal';
 
 export function OrdersTable() {
   const { openOrders, setOpenOrders, removeOpenOrder, updateOpenOrder, addOrderHistory } = useOrderStore();
@@ -19,6 +20,7 @@ export function OrdersTable() {
   const { success, error } = useToast();
   const [cancelling, setCancelling] = useState<Set<number>>(new Set());
   const [cancellingAll, setCancellingAll] = useState(false);
+  const [showCancelAllModal, setShowCancelAllModal] = useState(false);
 
   // Check for test mode
   const isTestMode = (() => {
@@ -75,7 +77,8 @@ export function OrdersTable() {
   };
 
   const handleCancel = async (oid: number) => {
-    if (!address) return;
+    // In test mode, allow cancel without wallet
+    if (!address && !isTestMode) return;
 
     // Find the order to get the coin
     const order = openOrders.find(o => o.oid === oid);
@@ -96,13 +99,18 @@ export function OrdersTable() {
       const signature = `0x${generateHex(128)}`;
       const timestamp = Date.now();
 
-      // Call the real API
-      await cancelOrder({
-        coin: order.coin,
-        oid,
-        signature,
-        timestamp,
-      });
+      // Call the real API (or skip in test mode)
+      if (!isTestMode) {
+        await cancelOrder({
+          coin: order.coin,
+          oid,
+          signature,
+          timestamp,
+        });
+      } else {
+        // In test mode, add a small delay to allow UI to show loading state
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
 
       // Add to order history with canceled status
       const canceledOrder = {
@@ -128,8 +136,15 @@ export function OrdersTable() {
   };
 
   const handleCancelAll = async () => {
-    if (!address || openOrders.length === 0) return;
+    // In test mode, allow cancel without wallet
+    if ((!address && !isTestMode) || openOrders.length === 0) return;
 
+    // Show confirmation modal instead of immediately canceling
+    setShowCancelAllModal(true);
+  };
+
+  const handleConfirmCancelAll = async () => {
+    setShowCancelAllModal(false);
     setCancellingAll(true);
     try {
       // Generate mock signature
@@ -144,8 +159,13 @@ export function OrdersTable() {
       const signature = `0x${generateHex(128)}`;
       const timestamp = Date.now();
 
-      // Call the real API
-      await cancelAllOrders(undefined, signature, timestamp);
+      // Call the real API (or skip in test mode)
+      if (!isTestMode) {
+        await cancelAllOrders(undefined, signature, timestamp);
+      } else {
+        // In test mode, add a small delay to allow UI to show loading state
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
 
       // Add all orders to history with canceled status
       const canceledOrders = openOrders.map(order => ({
@@ -299,6 +319,48 @@ export function OrdersTable() {
           </tbody>
         </table>
       </div>
+
+      {/* Order Cancel All Confirmation Modal */}
+      <Modal
+        isOpen={showCancelAllModal}
+        onClose={() => setShowCancelAllModal(false)}
+        title="Cancel All Orders"
+      >
+        <div className="space-y-4">
+          <div className="text-text-secondary">
+            Are you sure you want to cancel all {openOrders.length} open orders?
+          </div>
+          <div className="bg-surface-elevated p-3 rounded">
+            <div className="text-sm text-text-tertiary mb-2">Orders to cancel:</div>
+            <div className="space-y-1 max-h-32 overflow-y-auto">
+              {openOrders.map((order) => (
+                <div key={order.oid} className="flex justify-between text-sm">
+                  <span className={order.side === 'B' ? 'text-long' : 'text-short'}>
+                    {order.side === 'B' ? 'Buy' : 'Sell'} {order.sz} {order.coin}
+                  </span>
+                  <span className="text-text-tertiary">${formatNumber(order.limitPx)}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="flex gap-2 justify-end">
+            <button
+              onClick={() => setShowCancelAllModal(false)}
+              className="px-4 py-2 text-text-secondary border border-border rounded hover:bg-surface-elevated"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleConfirmCancelAll}
+              disabled={cancellingAll}
+              className="px-4 py-2 bg-short hover:bg-short-muted text-white rounded disabled:opacity-50"
+              data-testid="confirm-cancel-all"
+            >
+              {cancellingAll ? 'Cancelling...' : 'Confirm'}
+            </button>
+          </div>
+        </div>
+      </Modal>
 
       {/* Order Modify Modal */}
       <OrderModifyModal

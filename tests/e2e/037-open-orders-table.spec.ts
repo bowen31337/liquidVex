@@ -113,7 +113,7 @@ test.describe('Feature 37: Open Orders Table Complete Functionality', () => {
     await expect(firstRow.locator('td').nth(1)).toContainText('BTC'); // Symbol
     await expect(firstRow.locator('td').nth(2)).toContainText('Buy'); // Side
     await expect(firstRow.locator('td').nth(3)).toContainText('limit'); // Type
-    await expect(firstRow.locator('td').nth(4)).toContainText('45000'); // Price
+    await expect(firstRow.locator('td').nth(4)).toContainText('45,000.00'); // Price
     await expect(firstRow.locator('td').nth(5)).toContainText('0.5'); // Size
 
     // Check second order (Sell ETH)

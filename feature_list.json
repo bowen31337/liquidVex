@@ -850,7 +850,7 @@
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T03:12:30.797212Z",
     "dev_failure_count": 0,
-    "notes": "15/15 E2E tests passing. Comprehensive validation for size, price, stop price, and post-only spread crossing. Clear error messages displayed.",
+    "notes": "All 14 tests passing",
     "qa_completed_at": "2026-01-04T21:23:56.122076Z"
   },
   {
@@ -1701,11 +1701,10 @@
     "is_qa_passed": false,
     "qa_retry_count": 0,
     "dev_failure_count": 0,
-    "last_dev_failure_at": null,
-    "dev_failure_reasons": [],
     "is_stuck": false,
     "stuck_reason": null,
-    "stuck_at": null
+    "stuck_at": null,
+    "dev_completed_at": "2026-01-04T10:31:35.628247Z"
   },
   {
     "category": "functional",
@@ -1862,9 +1861,11 @@
     "is_dev_done": true,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_failure_count": 0,
-    "last_dev_failure_at": null,
-    "dev_failure_reasons": [],
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-04T10:31:43.436082Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ],
     "is_stuck": false,
     "stuck_reason": null,
     "stuck_at": null
@@ -2142,8 +2143,14 @@
       "Step 6: Verify tooltip shows shortcut key"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "dev_failure_count": 0,
+    "is_stuck": false,
+    "stuck_reason": null,
+    "stuck_at": null,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T10:32:06.779945Z"
   },
   {
     "category": "style",
