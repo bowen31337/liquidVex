@@ -104,13 +104,6 @@ export function Chart() {
   useEffect(() => {
     if (!chartContainerRef.current) return;
 
-    // In test mode, skip chart creation if no dimensions to prevent errors
-    if (isTestMode && (chartContainerRef.current.clientWidth === 0 || chartContainerRef.current.clientHeight === 0)) {
-      const { setIsLoadingCandles } = useMarketStore.getState();
-      setIsLoadingCandles(false);
-      return;
-    }
-
     // Clean up existing chart - check if already disposed
     if (chartRef.current) {
       try {
@@ -123,6 +116,13 @@ export function Chart() {
       lineSeriesRef.current = null;
       volumeSeriesRef.current = null;
       rsiSeriesRef.current = null;
+    }
+
+    // In test mode, skip chart creation if no dimensions to prevent errors
+    if (isTestMode && (chartContainerRef.current.clientWidth === 0 || chartContainerRef.current.clientHeight === 0)) {
+      const { setIsLoadingCandles } = useMarketStore.getState();
+      setIsLoadingCandles(false);
+      return;
     }
 
     const chart = createChart(chartContainerRef.current, {

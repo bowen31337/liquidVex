@@ -25,12 +25,24 @@ test.describe('Application Startup and Initial Render', () => {
 
     // Step 3: Populate store data to transition from skeletons to real components
     // This simulates WebSocket data arriving so the app renders real components instead of skeletons
+
+    // Wait for stores to be available
+    await page.waitForFunction(() => {
+      return typeof window !== 'undefined' &&
+             (window as any).stores &&
+             (window as any).stores.getMarketStoreState;
+    }, { timeout: 5000 });
+
     await page.evaluate(() => {
       const stores = (window as any).stores;
-      if (stores && stores.getMarketStoreState) {
-        const marketState = stores.getMarketStoreState();
-        // Populate order book data
-        marketState.setOrderBook({
+      if (!stores || !stores.getMarketStoreState) {
+        console.error('Stores not available:', stores);
+        return;
+      }
+      const marketState = stores.getMarketStoreState();
+
+      // Populate order book data
+      marketState.setOrderBook({
           bids: [
             { px: 95420, sz: 1.5, n: 3 },
             { px: 95415, sz: 2.1, n: 5 },
@@ -67,11 +79,28 @@ test.describe('Application Startup and Initial Render', () => {
           { t: Date.now() - 900000, o: 95450, h: 95470, l: 95430, c: 95435, v: 110 },
           { t: Date.now(), o: 95435, h: 95445, l: 95415, c: 95425, v: 80 },
         ]);
-      }
     });
 
     // Wait for components to transition from skeletons to real components
     await page.waitForTimeout(500);
+
+    // DEBUG: Verify the store state was updated correctly
+    const storeState = await page.evaluate(() => {
+      const stores = (window as any).stores;
+      if (stores && stores.getMarketStoreState) {
+        const state = stores.getMarketStoreState();
+        return {
+          isLoadingCandles: state.isLoadingCandles,
+          isLoadingOrderBook: state.isLoadingOrderBook,
+          isLoadingTrades: state.isLoadingTrades,
+          hasCandles: state.candles.length > 0,
+          hasOrderBook: !!state.orderBook,
+          hasTrades: state.trades.length > 0,
+        };
+      }
+      return null;
+    });
+    console.log('Store state after population:', storeState);
 
     // Step 4: Verify the main trading interface is displayed
     const mainElement = page.locator('main');
