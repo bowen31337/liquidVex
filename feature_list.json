@@ -3562,8 +3562,11 @@
       "Step 5: Verify no sound on next fill"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T14:21:42.076574Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -3589,8 +3592,10 @@
       "Step 6: Verify positions table shows skeleton"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "dev_completed_at": "2026-01-04T14:26:55.431150+00:00",
+    "notes": "Skeleton components already implemented: ChartSkeleton, OrderBookSkeleton, RecentTradesSkeleton, PositionsTableSkeleton. All have proper data-testid attributes and are conditionally rendered based on loading states. Used in TradingGrid and PositionsTable components."
   },
   {
     "category": "style",
@@ -3616,8 +3621,11 @@
       "Step 4: Verify empty state has appropriate styling"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T14:21:45.817780Z",
+    "dev_failure_count": 0
   },
   {
     "category": "style",
@@ -3629,8 +3637,10 @@
       "Step 4: Verify button has reduced opacity or greyed out"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "dev_completed_at": "2026-01-04T14:26:55.431150+00:00",
+    "notes": "Disabled button styling already implemented throughout app using Tailwind classes: disabled:opacity-50 and disabled:cursor-not-allowed. Applied to all interactive buttons in OrderForm, Modals, and other components."
   },
   {
     "category": "style",
@@ -3956,9 +3966,13 @@
       "Step 3: Verify link opens in new tab",
       "Step 4: Verify original tab remains open"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "dev_completed_at": "2026-01-04T14:26:55.431150+00:00",
+    "qa_completed_at": "2026-01-04T14:26:55.431150+00:00",
+    "test_file": "tests/e2e/help-documentation-link.spec.ts",
+    "notes": "Help link includes target=\"_blank\" and rel=\"noopener noreferrer\" for security and new tab behavior. Verified by E2E tests."
   },
   {
     "category": "functional",
@@ -3968,9 +3982,13 @@
       "Step 2: Click help",
       "Step 3: Verify documentation opens or displays"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "dev_completed_at": "2026-01-04T14:26:55.431150+00:00",
+    "qa_completed_at": "2026-01-04T14:26:55.431150+00:00",
+    "test_file": "tests/e2e/help-documentation-link.spec.ts",
+    "notes": "Added help icon to header with link to Hyperliquid docs. Icon positioned between settings and wallet button. External link opens in new tab with proper security attributes (target=\"_blank\" rel=\"noopener noreferrer\"). All 6 E2E tests passing."
   },
   {
     "category": "functional",
