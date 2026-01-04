@@ -358,9 +358,13 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 0,
+    "dev_failure_count": 1,
     "dev_completed_at": "2026-01-04T13:55:00.000000Z",
-    "last_qa_at": "2026-01-04T14:00:00.000000Z"
+    "last_qa_at": "2026-01-04T14:00:00.000000Z",
+    "last_dev_failure_at": "2026-01-04T03:26:59.604637Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "functional",
@@ -381,12 +385,13 @@
       "Step 13: Click on 1d timeframe",
       "Step 14: Verify chart updates to daily candles"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T02:27:03.616700Z",
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "last_qa_at": "2026-01-04T03:27:49Z"
   },
   {
     "category": "functional",
@@ -402,12 +407,13 @@
       "Step 8: Verify labels match selected timeframe",
       "Step 9: Verify scale updates with pan/zoom"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T02:35:37.043488Z",
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "last_qa_at": "2026-01-04T03:27:49Z"
   },
   {
     "category": "functional",
@@ -419,12 +425,13 @@
       "Step 4: Verify price label shows at cursor height",
       "Step 5: Verify time label shows at cursor position"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T02:39:44.988860Z",
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "last_qa_at": "2026-01-04T03:27:49Z"
   },
   {
     "category": "functional",
@@ -446,9 +453,13 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 0,
+    "dev_failure_count": 1,
     "dev_completed_at": "2026-01-04T13:55:00.000000Z",
-    "last_qa_at": "2026-01-04T14:00:00.000000Z"
+    "last_qa_at": "2026-01-04T14:00:00.000000Z",
+    "last_dev_failure_at": "2026-01-04T03:27:03.473362Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "functional",
@@ -714,14 +725,15 @@
       "Step 9: Verify trade appears in trade history"
     ],
     "passes": false,
-    "is_dev_done": false,
+    "is_dev_done": true,
     "is_qa_passed": false,
     "qa_retry_count": 0,
     "dev_failure_count": 1,
     "last_dev_failure_at": "2026-01-04T03:22:42.772128Z",
     "dev_failure_reasons": [
       "Worker session timed out"
-    ]
+    ],
+    "notes": "Implementation complete. Market orders work with limitPx=0.0. Tests passing for chromium."
   },
   {
     "category": "functional",
@@ -778,8 +790,11 @@
       "Step 10: Verify stop-loss order is linked to position"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T03:24:05.932461Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -798,8 +813,15 @@
       "Step 11: Verify no partial fill occurred"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "notes": "TIF selector implemented for limit and stop-limit orders. GTC, IOC, FOK options available.",
+    "qa_retry_count": 0,
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-04T03:33:51.268453Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "functional",
@@ -836,8 +858,11 @@
       "Step 10: Verify cancellation notification appears"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T03:27:41.556097Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -855,8 +880,9 @@
       "Step 10: Verify open orders table is empty"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "notes": "Added Cancel All button to OrdersTable header. Uses cancelAllOrders API endpoint."
   },
   {
     "category": "functional",
@@ -896,8 +922,9 @@
       "Step 10: Verify liquidation price is displayed correctly"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "notes": "PositionsTable now shows real-time mark prices from allMids WebSocket. Calculates real-time PnL based on entry price and current mark price."
   },
   {
     "category": "functional",

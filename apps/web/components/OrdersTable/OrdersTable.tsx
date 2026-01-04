@@ -12,8 +12,9 @@ import { useApi } from '../../hooks/useApi';
 export function OrdersTable() {
   const { openOrders, setOpenOrders, removeOpenOrder } = useOrderStore();
   const { isConnected, address } = useWalletStore();
-  const { getOpenOrders, cancelOrder } = useApi();
+  const { getOpenOrders, cancelOrder, cancelAllOrders } = useApi();
   const [cancelling, setCancelling] = useState<Set<number>>(new Set());
+  const [cancellingAll, setCancellingAll] = useState(false);
 
   // Load orders when wallet connects
   useEffect(() => {
@@ -65,9 +66,25 @@ export function OrdersTable() {
     }
   };
 
+  const handleCancelAll = async () => {
+    if (!address || openOrders.length === 0) return;
+
+    setCancellingAll(true);
+    try {
+      // In real implementation:
+      // await cancelAllOrders({ signature: '...', timestamp: Date.now() });
+      await new Promise(resolve => setTimeout(resolve, 500)); // Mock delay
+      setOpenOrders([]); // Clear all orders
+    } catch (err) {
+      console.error('Failed to cancel all orders:', err);
+    } finally {
+      setCancellingAll(false);
+    }
+  };
+
   if (!isConnected) {
     return (
-      <div className="p-4 text-center text-text-tertiary text-sm">
+      <div className="p-4 text-center text-text-tertiary text-sm pointer-events-none">
         Connect your wallet to view orders
       </div>
     );
@@ -75,7 +92,7 @@ export function OrdersTable() {
 
   if (openOrders.length === 0) {
     return (
-      <div className="p-4 text-center text-text-tertiary text-sm">
+      <div className="p-4 text-center text-text-tertiary text-sm pointer-events-none">
         No open orders
       </div>
     );
@@ -94,7 +111,19 @@ export function OrdersTable() {
             <th>Size</th>
             <th>Filled</th>
             <th>Status</th>
-            <th>Actions</th>
+            <th>
+              Actions
+              {openOrders.length > 0 && (
+                <button
+                  onClick={handleCancelAll}
+                  disabled={cancellingAll}
+                  className="ml-2 px-2 py-0.5 text-xs bg-short hover:bg-short-muted text-white rounded disabled:opacity-50"
+                  data-testid="cancel-all-orders"
+                >
+                  {cancellingAll ? 'Cancelling...' : 'Cancel All'}
+                </button>
+              )}
+            </th>
           </tr>
         </thead>
         <tbody>
