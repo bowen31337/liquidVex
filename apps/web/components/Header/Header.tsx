@@ -8,11 +8,11 @@ import { useEffect } from 'react';
 import { useMarketStore } from '../../stores/marketStore';
 import { useWalletStore } from '../../stores/walletStore';
 import { useApi } from '../../hooks/useApi';
+import { AssetSelector } from '../AssetSelector';
 
 export function Header() {
   const {
     selectedAsset,
-    setSelectedAsset,
     currentPrice,
     priceChange24h,
     markPrice,
@@ -78,10 +78,8 @@ export function Header() {
       <div className="flex items-center gap-4">
         <h1 className="text-xl font-semibold text-text-primary">liquidVex</h1>
 
-        {/* Asset Selector - placeholder for now */}
-        <div className="text-text-secondary text-sm cursor-pointer hover:text-text-primary transition-colors">
-          {selectedAsset}-PERP
-        </div>
+        {/* Asset Selector */}
+        <AssetSelector />
 
         {/* Connection Status Indicator */}
         <div

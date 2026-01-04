@@ -47,10 +47,16 @@ export function Chart() {
   useEffect(() => {
     if (!chartContainerRef.current) return;
 
-    // Clean up existing chart
+    // Clean up existing chart - check if already disposed
     if (chartRef.current) {
-      chartRef.current.remove();
+      try {
+        chartRef.current.remove();
+      } catch (e) {
+        // Chart was already disposed, ignore
+      }
       chartRef.current = null;
+      candleSeriesRef.current = null;
+      lineSeriesRef.current = null;
     }
 
     const chart = createChart(chartContainerRef.current, {
@@ -109,7 +115,11 @@ export function Chart() {
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      chart.remove();
+      try {
+        chart.remove();
+      } catch (e) {
+        // Chart was already disposed
+      }
     };
   }, [chartType]);
 
@@ -184,20 +194,23 @@ export function Chart() {
     <div className={`panel ${isFullscreen ? 'fixed inset-4 z-50' : ''} p-2 flex flex-col`}>
       {/* Chart Controls */}
       <div className="flex items-center justify-between mb-2">
-        <div className="flex gap-1">
-          {Object.keys(TIMEFRAMES).map((tf) => (
-            <button
-              key={tf}
-              onClick={() => setTimeframe(tf as Timeframe)}
-              className={`px-2 py-1 text-xs rounded ${
-                timeframe === tf
-                  ? 'bg-accent text-white'
-                  : 'text-text-secondary hover:text-text-primary hover:bg-surface-elevated'
-              }`}
-            >
-              {tf}
-            </button>
-          ))}
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-medium text-text-secondary uppercase tracking-wider">Chart</span>
+          <div className="flex gap-1">
+            {Object.keys(TIMEFRAMES).map((tf) => (
+              <button
+                key={tf}
+                onClick={() => setTimeframe(tf as Timeframe)}
+                className={`px-2 py-1 text-xs rounded ${
+                  timeframe === tf
+                    ? 'bg-accent text-white'
+                    : 'text-text-secondary hover:text-text-primary hover:bg-surface-elevated'
+                }`}
+              >
+                {tf}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="flex gap-2">

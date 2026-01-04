@@ -466,8 +466,11 @@
       "Step 12: Verify wallet balance displays correctly"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T02:43:16.854748Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",

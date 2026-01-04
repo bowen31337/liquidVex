@@ -17,6 +17,7 @@ interface OrderBookProps {
 
 export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
   const { orderBook, selectedAsset, setOrderBook } = useMarketStore();
+  const { setOrderForm } = useOrderStore();
   const [aggregation, setAggregation] = useState<number>(1); // Price grouping
 
   // Connect to order book WebSocket
@@ -52,8 +53,10 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
 
   // Handle price click to populate order form
   const handlePriceClick = (price: number) => {
-    // This would interact with the order form store
-    console.log('Price clicked:', price);
+    // Format price to match display precision
+    const formattedPrice = price.toFixed(precision);
+    // Update order form with clicked price
+    setOrderForm({ price: formattedPrice });
   };
 
   // Prepare data for rendering

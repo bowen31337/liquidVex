@@ -29,25 +29,90 @@ export function useApi() {
   const getAccountState = useCallback(async (address: string): Promise<AccountState> => {
     const response = await fetch(`${API_URL}/api/account/state/${address}`);
     if (!response.ok) throw new Error('Failed to fetch account state');
-    return response.json();
+    const data = await response.json();
+    // Transform snake_case to camelCase
+    return {
+      equity: data.equity,
+      marginUsed: data.margin_used,
+      availableBalance: data.available_balance,
+      withdrawable: data.withdrawable,
+      crossMarginSummary: {
+        accountValue: data.cross_margin_summary?.account_value || 0,
+        totalMarginUsed: data.cross_margin_summary?.total_margin_used || 0,
+      },
+    };
   }, []);
 
   const getPositions = useCallback(async (address: string): Promise<any[]> => {
     const response = await fetch(`${API_URL}/api/account/positions/${address}`);
     if (!response.ok) throw new Error('Failed to fetch positions');
-    return response.json();
+    const data = await response.json();
+    // Transform snake_case to camelCase
+    return data.map((pos: any) => ({
+      coin: pos.coin,
+      side: pos.side,
+      entryPx: pos.entry_px,
+      sz: pos.sz,
+      leverage: pos.leverage,
+      marginUsed: pos.margin_used,
+      unrealizedPnl: pos.unrealized_pnl,
+      realizedPnl: pos.realized_pnl,
+      liquidationPx: pos.liquidation_px,
+      marginType: pos.margin_type,
+    }));
   }, []);
 
   const getOpenOrders = useCallback(async (address: string): Promise<any[]> => {
     const response = await fetch(`${API_URL}/api/account/orders/${address}`);
     if (!response.ok) throw new Error('Failed to fetch open orders');
-    return response.json();
+    const data = await response.json();
+    // Transform snake_case to camelCase
+    return data.map((order: any) => ({
+      oid: order.oid,
+      coin: order.coin,
+      side: order.side,
+      limitPx: order.limit_px,
+      sz: order.sz,
+      origSz: order.orig_sz,
+      status: order.status,
+      timestamp: order.timestamp,
+      orderType: order.order_type,
+      reduceOnly: order.reduce_only,
+      postOnly: order.post_only,
+      tif: order.tif,
+    }));
   }, []);
 
   const getAccountHistory = useCallback(async (address: string): Promise<AccountHistory> => {
     const response = await fetch(`${API_URL}/api/account/history/${address}`);
     if (!response.ok) throw new Error('Failed to fetch account history');
-    return response.json();
+    const data = await response.json();
+    // Transform snake_case to camelCase
+    return {
+      orders: data.orders.map((order: any) => ({
+        oid: order.oid,
+        coin: order.coin,
+        side: order.side,
+        limitPx: order.limit_px,
+        sz: order.sz,
+        origSz: order.orig_sz,
+        status: order.status,
+        timestamp: order.timestamp,
+        orderType: order.order_type,
+        reduceOnly: order.reduce_only,
+        postOnly: order.post_only,
+        tif: order.tif,
+      })),
+      trades: data.trades.map((trade: any) => ({
+        coin: trade.coin,
+        side: trade.side,
+        px: trade.px,
+        sz: trade.sz,
+        time: trade.time,
+        fee: trade.fee,
+        hash: trade.hash,
+      })),
+    };
   }, []);
 
   const placeOrder = useCallback(async (request: OrderRequest): Promise<OrderResponse> => {
