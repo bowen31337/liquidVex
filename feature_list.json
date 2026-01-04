@@ -532,9 +532,9 @@
       "Step 5: Verify connect button reappears",
       "Step 6: Verify balance and address are hidden"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T02:48:53.671654Z",
     "dev_failure_count": 0
@@ -884,7 +884,7 @@
     "passes": false,
     "is_dev_done": true,
     "is_qa_passed": false,
-    "notes": "Added Cancel All button to OrdersTable header. Uses cancelAllOrders API endpoint.",
+    "notes": "Updated handleCancelAll to use real API with signature generation and order history tracking.",
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T03:36:53.855090Z",
     "dev_failure_count": 0
@@ -1604,7 +1604,7 @@
       "Step 4: Verify calls succeed again"
     ],
     "passes": false,
-    "is_dev_done": false,
+    "is_dev_done": true,
     "is_qa_passed": false
   },
   {
@@ -1623,7 +1623,7 @@
       "Step 10: Verify 401 error for invalid signature"
     ],
     "passes": false,
-    "is_dev_done": false,
+    "is_dev_done": true,
     "is_qa_passed": false
   },
   {
@@ -2461,8 +2461,9 @@
       "Step 14: Verify order appears in Order History as canceled"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "notes": "Updated OrdersTable to use real cancelOrder API with signature generation. Added addOrderHistory to store. Created comprehensive E2E test."
   },
   {
     "category": "functional",

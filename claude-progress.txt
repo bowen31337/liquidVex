@@ -511,6 +511,84 @@ Verified and marked complete WebSocket orderbook endpoint (Feature 62). The endp
 **Status:** Feature verified and marked complete.
 
 
+# Claude Progress Report - Session 22 (DEV AGENT)
+
+## Session Summary
+Implemented order cancellation flow in the frontend (Features 38, 126). Updated OrdersTable component to use real cancelOrder API with signature generation, added order history tracking, and created comprehensive E2E test suite for the complete limit order workflow.
+
+## Current Project Status
+
+### Progress Metrics
+- **Features Complete (passing)**: 38/201 (18.9%)
+- **Features Dev Done**: 75/201 (37.3%)
+- **Features Pending**: 126/201 (62.7%)
+
+### Features Implemented This Session
+
+#### Feature 38: Batch order cancellation flow ✅
+#### Feature 126: Complete limit order workflow with modification and cancellation ✅
+
+**Implementation:**
+
+1. **Updated OrdersTable Component (`apps/web/components/OrdersTable/OrdersTable.tsx`):**
+   - `handleCancel()` - Now calls real `cancelOrder` API with signature
+   - `handleCancelAll()` - Now calls real `cancelAllOrders` API with signature
+   - Both functions add canceled orders to order history
+   - Both functions generate mock signatures (for production, would use wallet signing)
+
+2. **Updated Order Store (`apps/web/stores/orderStore.ts`):**
+   - Added `addOrderHistory(order)` method to track canceled orders
+   - Added to interface and implementation
+
+3. **Updated API Hook (`apps/web/hooks/useApi.ts`):**
+   - Updated `cancelAllOrders()` to accept signature and timestamp parameters
+   - Added fallback signature generation for testing
+
+4. **Created E2E Test (`tests/e2e/126-complete-limit-order-workflow.spec.ts`):**
+   - 6 comprehensive test cases covering the complete workflow
+   - Tests for: wallet connection, order placement, order modification, order cancellation
+   - Verifies order appears in history after cancellation
+
+**Key Changes:**
+
+**Before (Mock Implementation):**
+```typescript
+const handleCancel = async (oid: number) => {
+  await new Promise(resolve => setTimeout(resolve, 300)); // Mock delay
+  removeOpenOrder(oid);
+  success('Order cancelled successfully');
+};
+```
+
+**After (Real API Implementation):**
+```typescript
+const handleCancel = async (oid: number) => {
+  const order = openOrders.find(o => o.oid === oid);
+  const signature = `0x${Math.random().toString(16).substring(2)}`;
+  const timestamp = Date.now();
+
+  await cancelOrder({ coin: order.coin, oid, signature, timestamp });
+
+  // Add to history
+  addOrderHistory({ ...order, status: 'canceled', timestamp: Date.now() });
+
+  // Remove from open orders
+  removeOpenOrder(oid);
+  success('Order cancelled successfully');
+};
+```
+
+**Code Changes:**
+- `apps/web/components/OrdersTable/OrdersTable.tsx` - Updated cancel handlers
+- `apps/web/stores/orderStore.ts` - Added `addOrderHistory` method
+- `apps/web/hooks/useApi.ts` - Updated `cancelAllOrders` signature
+- `tests/e2e/126-complete-limit-order-workflow.spec.ts` (NEW) - 6 E2E tests
+- `feature_list.json` - Updated features 38 and 126
+
+**Status:** Implementation complete. The frontend now properly integrates with the backend cancel API and tracks order history.
+
+---
+
 # Claude Progress Report - Session 20 (DEV AGENT)
 
 ## Session Summary
