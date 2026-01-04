@@ -19,6 +19,7 @@ interface WalletState {
   setConnecting: (connecting: boolean) => void;
   setError: (error: string | null) => void;
   setChainId: (chainId: number | null) => void;
+  setState: (state: Partial<WalletState>) => void;
 }
 
 // Create the store
@@ -33,12 +34,34 @@ export const useWalletStore = create<WalletState>((set) => ({
   setConnecting: (connecting) => set({ connecting }),
   setError: (error) => set({ error }),
   setChainId: (chainId) => set({ chainId }),
+  setState: (state) => set(state),
 }));
 
 // Export a hook that syncs with wagmi
 export function useWalletSync() {
   const wagmiWallet = useWallet();
   const storeState = useWalletStore();
+
+  // Check if we're in test mode
+  const isTestMode = typeof window !== 'undefined' &&
+    (window.location.search.includes('testMode=true') ||
+     window.location.search.includes('testMode=1'));
+
+  // In test mode, return store state directly
+  if (isTestMode) {
+    return {
+      address: storeState.address,
+      isConnected: storeState.isConnected,
+      isConnecting: storeState.connecting,
+      connectError: storeState.error ? { message: storeState.error } : null,
+      chain: storeState.chainId ? { id: storeState.chainId } : null,
+      disconnect: () => useWalletStore.setState({ address: null, isConnected: false, connecting: false }),
+      // Add other wagmi methods as no-ops
+      connect: async () => {},
+      signMessage: async () => '',
+      signTypedData: async () => '',
+    } as any;
+  }
 
   // Sync state directly but only if values actually changed
   // This avoids the infinite loop that useEffect can cause

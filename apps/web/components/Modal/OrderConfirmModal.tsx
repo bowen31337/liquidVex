@@ -14,6 +14,7 @@ interface OrderConfirmModalProps {
   onConfirm: () => void;
   onCancel: () => void;
   isSubmitting?: boolean;
+  error?: string | null;
 }
 
 export function OrderConfirmModal({
@@ -23,6 +24,7 @@ export function OrderConfirmModal({
   onConfirm,
   onCancel,
   isSubmitting = false,
+  error = null,
 }: OrderConfirmModalProps) {
   if (!isOpen) return null;
 
@@ -122,6 +124,13 @@ export function OrderConfirmModal({
               </div>
             )}
           </div>
+
+          {/* Error Display */}
+          {error && (
+            <div className="mt-2 p-2 bg-surface-elevated border border-short rounded text-xs text-short" data-testid="modal-error">
+              {error}
+            </div>
+          )}
         </div>
 
         {/* Footer */}

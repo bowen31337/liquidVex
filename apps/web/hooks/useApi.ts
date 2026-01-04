@@ -11,13 +11,40 @@ export function useApi() {
   const getExchangeMeta = useCallback(async (): Promise<ExchangeMeta> => {
     const response = await fetch(`${API_URL}/api/info/meta`);
     if (!response.ok) throw new Error('Failed to fetch exchange meta');
-    return response.json();
+    const data = await response.json();
+    // Transform snake_case to camelCase
+    return {
+      exchange: data.exchange,
+      assets: data.assets.map((asset: any) => ({
+        coin: asset.coin,
+        szDecimals: asset.sz_decimals,
+        pxDecimals: asset.px_decimals,
+        minSz: asset.min_sz,
+        maxLeverage: asset.max_leverage,
+        fundingRate: asset.funding_rate,
+        openInterest: asset.open_interest,
+        volume24h: asset.volume_24h,
+        priceChange24h: asset.price_change_24h,
+      })),
+    };
   }, []);
 
   const getAssetInfo = useCallback(async (coin: string): Promise<AssetInfo> => {
     const response = await fetch(`${API_URL}/api/info/asset/${coin}`);
     if (!response.ok) throw new Error(`Failed to fetch asset info for ${coin}`);
-    return response.json();
+    const data = await response.json();
+    // Transform snake_case to camelCase
+    return {
+      coin: data.coin,
+      szDecimals: data.sz_decimals,
+      pxDecimals: data.px_decimals,
+      minSz: data.min_sz,
+      maxLeverage: data.max_leverage,
+      fundingRate: data.funding_rate,
+      openInterest: data.open_interest,
+      volume24h: data.volume_24h,
+      priceChange24h: data.price_change_24h,
+    };
   }, []);
 
   const getCandles = useCallback(async (coin: string, interval: string = '1h', limit: number = 500): Promise<any[]> => {

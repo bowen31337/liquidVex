@@ -22,7 +22,7 @@ export function OrderForm() {
   const { isConnected } = useWalletStore();
   const { currentPrice, selectedAsset } = useMarketStore();
   const { placeOrder } = useApi();
-  const { validateMargin, validateReduceOnly, validatePostOnly } = useMarginValidation();
+  const { validateMargin, validateReduceOnly, validatePostOnly, validateLeverage, validateSize, validateDecimalPrecision, assetInfo } = useMarginValidation();
   const { accountState } = useAccount();
   const { success: showSuccess, error: showError } = useToast();
   const { addToRecentlyTraded } = useFavoritesActions();
@@ -58,10 +58,44 @@ export function OrderForm() {
   // Get margin validation results for display
   const marginValidation = validateMargin();
 
-  // Handle input changes
+  // Handle input changes with decimal precision truncation
   const handleInputChange = (field: string, value: string | number | boolean) => {
-    setOrderForm({ [field]: value });
+    // Apply decimal precision truncation for price and size
+    if ((field === 'price' || field === 'size') && typeof value === 'string') {
+      const maxDecimals = field === 'price'
+        ? (assetInfo?.pxDecimals || 2)
+        : (assetInfo?.szDecimals || 4);
+      const truncated = truncateDecimals(value, maxDecimals);
+      setOrderForm({ [field]: truncated });
+    } else {
+      setOrderForm({ [field]: value });
+    }
     setError(null);
+  };
+
+  // Helper function to truncate decimals
+  const truncateDecimals = (value: string, maxDecimals: number): string => {
+    if (!value || value === '') return value;
+
+    // Handle negative sign
+    const isNegative = value.startsWith('-');
+    const cleanValue = isNegative ? value.substring(1) : value;
+
+    const numValue = parseFloat(cleanValue);
+    if (isNaN(numValue)) return isNegative ? `-${cleanValue}` : value;
+
+    const parts = cleanValue.split('.');
+    if (parts.length === 1) return isNegative ? `-${cleanValue}` : cleanValue;
+
+    const integerPart = parts[0];
+    let decimalPart = parts[1];
+
+    if (decimalPart.length > maxDecimals) {
+      decimalPart = decimalPart.substring(0, maxDecimals);
+    }
+
+    const result = `${integerPart}.${decimalPart}`;
+    return isNegative ? `-${result}` : result;
   };
 
   // Handle side toggle
@@ -90,14 +124,16 @@ export function OrderForm() {
     // Calculate max size based on available balance and current price
     const maxSize = availableBalance / (parseFloat(orderForm.price) || currentPrice);
     const newSize = maxSize * (pct / 100);
-    setOrderForm({ size: newSize.toFixed(4) });
+    const sizeDecimals = assetInfo?.szDecimals || 4;
+    setOrderForm({ size: newSize.toFixed(sizeDecimals) });
   };
 
   // Increment/decrement price
   const adjustPrice = (delta: number) => {
     const current = parseFloat(orderForm.price) || currentPrice;
     const newPrice = Math.max(0, current + delta);
-    setOrderForm({ price: newPrice.toFixed(2) });
+    const priceDecimals = assetInfo?.pxDecimals || 2;
+    setOrderForm({ price: newPrice.toFixed(priceDecimals) });
   };
 
   // Validate form
@@ -108,9 +144,10 @@ export function OrderForm() {
       return false;
     }
 
-    const size = parseFloat(orderForm.size);
-    if (!size || size <= 0) {
-      setError('Invalid size');
+    // Validate size (Feature 133: Minimum order size validation)
+    const sizeValidation = validateSize();
+    if (!sizeValidation.isValid) {
+      setError(sizeValidation.error || 'Invalid size');
       return false;
     }
 
@@ -180,10 +217,24 @@ export function OrderForm() {
       }
     }
 
+    // Validate leverage (Feature 132: Maximum leverage limits enforced per asset)
+    const leverageValidation = validateLeverage();
+    if (!leverageValidation.isValid) {
+      setError(leverageValidation.error || 'Invalid leverage');
+      return false;
+    }
+
     // Validate margin (insufficient margin check)
     const marginValidation = validateMargin();
     if (!marginValidation.isValid) {
       setError(marginValidation.error || 'Insufficient margin for this order');
+      return false;
+    }
+
+    // Validate decimal precision (Features 134-135)
+    const decimalValidation = validateDecimalPrecision();
+    if (!decimalValidation.isValid && decimalValidation.error) {
+      setError(decimalValidation.error);
       return false;
     }
 
@@ -224,6 +275,16 @@ export function OrderForm() {
     };
     const isTestModeNow = checkTestMode();
 
+    // Check for wallet rejection simulation (for testing)
+    const checkWalletRejectionMode = () => {
+      if (typeof window !== 'undefined') {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('walletReject') === 'true';
+      }
+      return false;
+    };
+    const shouldSimulateRejection = checkWalletRejectionMode();
+
     try {
       // Generate mock signature (in production, wallet would sign)
       // Generate a 130-character hex signature (64 bytes for r + 64 bytes for s + '0x' prefix)
@@ -237,6 +298,12 @@ export function OrderForm() {
       };
       const signature = `0x${generateHex(128)}`;
       const timestamp = Date.now();
+
+      // Simulate wallet rejection if in rejection test mode
+      if (shouldSimulateRejection) {
+        // Simulate the error that a wallet would throw when user rejects
+        throw new Error('User rejected request: The user rejected the request to sign the transaction.');
+      }
 
       // In test mode, skip API call and simulate success
       if (isTestModeNow) {
@@ -332,8 +399,23 @@ export function OrderForm() {
       }
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : 'Order failed';
-      setError(errorMsg);
-      showError(errorMsg);
+
+      // Detect wallet rejection errors
+      const isWalletRejection = /user rejected|rejected request|user denied|cancelled|canceled/i.test(errorMsg);
+
+      if (isWalletRejection) {
+        // User-friendly message for wallet rejection
+        const friendlyMessage = 'Transaction rejected: You rejected the transaction in your wallet. You can try again if you change your mind.';
+        setError(friendlyMessage);
+        showError(friendlyMessage);
+      } else {
+        // Other errors
+        setError(errorMsg);
+        showError(errorMsg);
+      }
+
+      // Note: Modal stays open so user can retry without re-filling form
+      // Form state is preserved
       setIsSubmitting(false);
     }
   };
@@ -566,16 +648,21 @@ export function OrderForm() {
         <input
           type="range"
           min={1}
-          max={50}
+          max={assetInfo?.maxLeverage || 50}
           value={orderForm.leverage}
           onChange={(e) => handleInputChange('leverage', parseInt(e.target.value))}
           className="range-input mt-1"
           aria-labelledby="leverage-label"
           aria-valuemin={1}
-          aria-valuemax={50}
+          aria-valuemax={assetInfo?.maxLeverage || 50}
           aria-valuenow={orderForm.leverage}
           aria-label="Leverage multiplier"
         />
+        {assetInfo && (
+          <div className="text-xs text-text-tertiary mt-1 text-right">
+            Max: {assetInfo.maxLeverage}x
+          </div>
+        )}
       </div>
 
       {/* Options */}
@@ -686,6 +773,7 @@ export function OrderForm() {
         onConfirm={handleConfirmOrder}
         onCancel={handleCancelOrder}
         isSubmitting={isSubmitting}
+        error={error}
       />
     </div>
   );
