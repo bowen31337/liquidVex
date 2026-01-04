@@ -48,7 +48,12 @@ export function OrderForm() {
 
   // Handle order type change
   const handleTypeChange = (type: 'limit' | 'market' | 'stop_limit' | 'stop_market') => {
-    setOrderForm({ type });
+    // Clear postOnly if switching to a non-limit order type
+    const updates: Partial<typeof orderForm> = { type };
+    if (type === 'market' || type === 'stop_market') {
+      updates.postOnly = false;
+    }
+    setOrderForm(updates);
   };
 
   // Percentage buttons
@@ -226,7 +231,7 @@ export function OrderForm() {
   const showPriceInput = ['limit', 'stop_limit'].includes(orderForm.type);
 
   return (
-    <div className="panel p-3 flex flex-col h-full relative z-10">
+    <div className="panel p-3 flex flex-col h-full relative z-10" data-testid="order-entry-panel">
       {/* Buy/Sell Toggle */}
       <div className="flex mb-4">
         <button
@@ -260,6 +265,7 @@ export function OrderForm() {
           value={orderForm.type}
           onChange={(e) => handleTypeChange(e.target.value as any)}
           className="input w-full mt-1"
+          data-testid="order-type-select"
         >
           <option value="limit">Limit</option>
           <option value="market">Market</option>
@@ -360,13 +366,14 @@ export function OrderForm() {
       </div>
 
       {/* Options */}
-      <div className="flex gap-4 text-xs mb-3">
+      <div className="flex gap-4 text-xs mb-3" data-testid="order-options">
         <label className="flex items-center gap-2 text-text-secondary cursor-pointer">
           <input
             type="checkbox"
             checked={orderForm.reduceOnly}
             onChange={(e) => handleInputChange('reduceOnly', e.target.checked)}
             className="rounded"
+            data-testid="reduce-only-checkbox"
           />
           Reduce Only
         </label>
@@ -377,6 +384,7 @@ export function OrderForm() {
               checked={orderForm.postOnly}
               onChange={(e) => handleInputChange('postOnly', e.target.checked)}
               className="rounded"
+              data-testid="post-only-checkbox"
             />
             Post Only
           </label>

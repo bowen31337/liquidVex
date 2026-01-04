@@ -1,0 +1,140 @@
+# Claude Progress Report - Session 24 (DEV AGENT)
+
+## Session Summary
+Implemented and verified Feature #27: Order options checkboxes (reduce-only, post-only). Added comprehensive E2E test suite with 8 tests, all passing on Chromium and Firefox. Enhanced OrderForm component with proper state management for post-only clearing when switching to market orders.
+
+## Current Project Status
+
+### Progress Metrics
+- **Features Complete (passing)**: 44/201 (21.9%) ⬆️ +1 from last session
+- **Features Dev Done**: 79/201 (39.3%)
+- **Features Pending**: 122/201 (60.7%)
+
+### Feature Implemented This Session
+
+#### Feature #27: Order options checkboxes (reduce-only, post-only) ✅
+
+**Implementation:**
+
+1. **Added data-testid attributes to OrderForm component:**
+   - `data-testid="order-entry-panel"` - Main order form container
+   - `data-testid="order-type-select"` - Order type dropdown
+   - `data-testid="reduce-only-checkbox"` - Reduce-only checkbox
+   - `data-testid="post-only-checkbox"` - Post-only checkbox
+   - `data-testid="order-options"` - Options container
+
+2. **Enhanced OrderForm state management:**
+   - Updated `handleTypeChange` to clear `postOnly` when switching to market/stop-market orders
+   - Proper state preservation across order type changes
+   - Reduce-only state maintained across all order types
+
+3. **Created comprehensive E2E test suite (`tests/e2e/027-order-options-checkboxes.spec.ts`):**
+   - 8 test cases covering all checkbox functionality
+   - Tests visibility, toggling, state persistence, and accessibility
+   - All 16 tests passing (Chromium + Firefox)
+
+**Test Coverage:**
+1. ✅ Reduce-only checkbox visible for all order types (Limit, Market, Stop-Limit, Stop-Market)
+2. ✅ Post-only checkbox visible only for Limit and Stop-Limit orders
+3. ✅ Reduce-only checkbox can be toggled on/off
+4. ✅ Post-only checkbox can be toggled on/off
+5. ✅ Checkbox state preserved when switching between Limit and Stop-Limit
+6. ✅ Post-only cleared when switching to Market orders (new feature)
+7. ✅ Reduce-only state maintained across all order type changes
+8. ✅ Accessible labels present for both checkboxes
+
+**Code Changes:**
+- `apps/web/components/OrderForm/OrderForm.tsx` - Added data-testid attributes, enhanced handleTypeChange
+- `tests/e2e/027-order-options-checkboxes.spec.ts` (NEW) - 8 E2E tests (16 total with browsers)
+- `feature_list.json` - Updated Feature #27 status
+
+**Status:** ✅ Implementation complete and verified. All tests passing.
+
+## Technical Improvements
+
+### OrderForm Component Enhancements:
+1. **Better State Management:**
+   ```typescript
+   const handleTypeChange = (type: 'limit' | 'market' | 'stop_limit' | 'stop_market') => {
+     const updates: Partial<typeof orderForm> = { type };
+     if (type === 'market' || type === 'stop_market') {
+       updates.postOnly = false; // Clear post-only for market orders
+     }
+     setOrderForm(updates);
+   };
+   ```
+
+2. **Testability:**
+   - Added comprehensive data-testid attributes
+   - Proper label association for accessibility
+   - Clear separation of concerns
+
+### Test Architecture:
+- Uses specific data-testid selectors for reliability
+- Tests both functional and accessibility requirements
+- Cross-browser compatibility verified (Chromium, Firefox)
+
+## Files Modified This Session
+
+1. `apps/web/components/OrderForm/OrderForm.tsx` - Added test IDs and state management
+2. `tests/e2e/027-order-options-checkboxes.spec.ts` (NEW) - 8 E2E tests
+3. `feature_list.json` - Updated Feature #27 to passing
+4. `claude-progress-session24.txt` - Session report
+
+## Test Results Summary
+
+### Feature #27: Order options checkboxes ✅
+```
+✅ 8/8 tests passing (Chromium)
+✅ 8/8 tests passing (Firefox)
+✅ 16/16 total tests passing
+
+Test Cases:
+1. ✅ Display reduce-only checkbox for all order types
+2. ✅ Display post-only checkbox only for limit and stop-limit orders
+3. ✅ Toggle reduce-only checkbox state
+4. ✅ Toggle post-only checkbox state
+5. ✅ Preserve checkbox state when switching between limit and stop-limit
+6. ✅ Clear post-only when switching to market order types
+7. ✅ Maintain reduce-only state across all order type changes
+8. ✅ Have accessible labels
+```
+
+## Next Steps
+
+**Recommended Features to Verify Next:**
+
+Features that are dev-done but not yet passing (35 remaining):
+1. Feature #28: Order value and balance display calculations
+2. Feature #30: Complete limit buy order placement flow
+3. Feature #31: Market order execution flow
+4. Feature #32: Stop-limit order placement flow
+5. Feature #33: Stop-market order placement flow
+
+**Priority:** Complete order placement and execution flows before moving to position management features.
+
+## Session Statistics
+
+- **Duration:** ~45 minutes
+- **Features Verified:** 1
+- **Tests Created:** 8 test cases (16 with browsers)
+- **Tests Passing:** 16/16 (100%)
+- **Files Modified:** 2
+- **Files Created:** 1
+- **Lines of Code Added:** ~250 (tests + attributes)
+- **Git Commits:** 1 pending
+
+## Quality Notes
+
+### Code Quality:
+- ✅ Comprehensive test coverage
+- ✅ Proper state management
+- ✅ Accessibility considerations
+- ✅ Cross-browser compatibility
+- ✅ Clear test documentation
+
+### Best Practices Followed:
+- Used data-testid for reliable test selectors
+- Semantic HTML with proper label associations
+- State management aligned with user expectations
+- Clear separation between limit and market order behaviors
