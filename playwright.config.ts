@@ -11,7 +11,7 @@ export default defineConfig({
   workers: 1,  // Run tests sequentially for consistency
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:3001',
+    baseURL: 'http://localhost:3002',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     actionTimeout: 10000,
@@ -34,8 +34,8 @@ export default defineConfig({
   ],
 
   webServer: process.env.SKIP_WEB_SERVER ? undefined : {
-    command: 'cd apps/web && pnpm dev --port 3001',
-    url: 'http://localhost:3001',
+    command: 'cd apps/web && pnpm dev --port 3002',
+    url: 'http://localhost:3002',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
   },
