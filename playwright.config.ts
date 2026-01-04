@@ -11,7 +11,7 @@ export default defineConfig({
   workers: 1,  // Run tests sequentially for consistency
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:3002',
+    baseURL: process.env.TEST_BASE_URL || 'http://localhost:3002',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     actionTimeout: 10000,

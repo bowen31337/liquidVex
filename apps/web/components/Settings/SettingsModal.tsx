@@ -47,6 +47,7 @@ interface SessionKey {
 }
 
 export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
+  const [activeTab, setActiveTab] = useState<'general' | 'session-keys'>('general');
   const [settings, setSettings] = useState<Settings>({
     language: 'en',
     notifications: {
@@ -70,6 +71,16 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
       keys: [],
     },
   });
+
+  // Session key creation modal state
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [newKeyName, setNewKeyName] = useState('');
+  const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
+  const [sessionKeyError, setSessionKeyError] = useState<string | null>(null);
+
+  // Session key revocation confirmation state
+  const [showRevokeConfirm, setShowRevokeConfirm] = useState(false);
+  const [keyToRevoke, setKeyToRevoke] = useState<string | null>(null);
 
   // Update a primitive setting value (language)
   const updatePrimitiveSetting = <S extends 'language'>(
@@ -155,36 +166,80 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
     reader.readAsText(file);
   };
 
+  const handleOpenCreateModal = () => {
+    setNewKeyName('');
+    setSelectedPermissions([]);
+    setSessionKeyError(null);
+    setShowCreateModal(true);
+  };
+
   const handleCreateSessionKey = async () => {
+    // Validation
+    if (!newKeyName.trim()) {
+      setSessionKeyError('Session key name is required');
+      return;
+    }
+    if (selectedPermissions.length === 0) {
+      setSessionKeyError('At least one permission is required');
+      return;
+    }
+
     try {
       // This would call the API to create a session key
       const response = await fetch('/api/wallet/create-session-key', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: `Session Key ${Date.now()}`,
-          permissions: ['trade', 'view']
+          name: newKeyName,
+          permissions: selectedPermissions
         })
       });
 
       if (response.ok) {
         const newKey = await response.json();
+        // Add local fields for display
+        const keyWithLocalFields = {
+          ...newKey,
+          createdAt: new Date().toISOString(),
+          lastUsed: new Date().toISOString(),
+          isActive: true
+        };
         setSettings(prev => ({
           ...prev,
           sessionKeys: {
             ...prev.sessionKeys,
-            keys: [...prev.sessionKeys.keys, newKey]
+            keys: [...prev.sessionKeys.keys, keyWithLocalFields]
           }
         }));
+        setShowCreateModal(false);
+        setSessionKeyError(null);
+      } else {
+        setSessionKeyError('Failed to create session key');
       }
     } catch (error) {
       console.error('Failed to create session key:', error);
+      setSessionKeyError('Failed to create session key');
     }
   };
 
-  const handleRevokeSessionKey = async (keyId: string) => {
+  const togglePermission = (permission: string) => {
+    setSelectedPermissions(prev =>
+      prev.includes(permission)
+        ? prev.filter(p => p !== permission)
+        : [...prev, permission]
+    );
+  };
+
+  const handleOpenRevokeConfirm = (keyId: string) => {
+    setKeyToRevoke(keyId);
+    setShowRevokeConfirm(true);
+  };
+
+  const handleConfirmRevoke = async () => {
+    if (!keyToRevoke) return;
+
     try {
-      const response = await fetch(`/api/wallet/revoke-session-key/${keyId}`, {
+      const response = await fetch(`/api/wallet/revoke-session-key/${keyToRevoke}`, {
         method: 'POST'
       });
 
@@ -194,10 +249,12 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
           sessionKeys: {
             ...prev.sessionKeys,
             keys: prev.sessionKeys.keys.map(key =>
-              key.id === keyId ? { ...key, isActive: false } : key
+              key.id === keyToRevoke ? { ...key, isActive: false } : key
             )
           }
         }));
+        setShowRevokeConfirm(false);
+        setKeyToRevoke(null);
       }
     } catch (error) {
       console.error('Failed to revoke session key:', error);
@@ -205,7 +262,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Account Settings">
+    <Modal isOpen={isOpen} onClose={onClose} title="Account Settings" data-testid="settings-modal">
       <div className="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
         {/* Language & Display */}
         <div className="space-y-4">
@@ -383,7 +440,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
         </div>
 
         {/* Session Keys */}
-        <div className="space-y-4">
+        <div className="space-y-4" data-testid="session-keys-section">
           <h3 className="text-lg font-semibold text-text-primary">Session Keys</h3>
 
           <div className="flex items-center space-x-2 mb-4">
@@ -396,6 +453,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                 sessionKeys: { ...prev.sessionKeys, enabled: e.target.checked }
               }))}
               className="w-4 h-4 text-accent bg-surface-elevated border-border rounded"
+              data-testid="session-keys-toggle"
             />
             <label htmlFor="session-keys-enabled" className="text-sm text-text-primary">
               Enable Session Keys for reduced signing
@@ -407,21 +465,22 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               <div className="flex justify-between items-center mb-3">
                 <span className="text-sm text-text-secondary">Active Session Keys</span>
                 <button
-                  onClick={handleCreateSessionKey}
+                  onClick={handleOpenCreateModal}
                   className="p-1 bg-accent text-black rounded text-sm hover:bg-accent/90 transition-colors"
+                  data-testid="create-session-key-button"
                 >
                   Create Session Key
                 </button>
               </div>
 
               {settings.sessionKeys.keys.length === 0 ? (
-                <div className="text-sm text-text-tertiary p-3 bg-surface-elevated border border-border rounded">
+                <div className="text-sm text-text-tertiary p-3 bg-surface-elevated border border-border rounded" data-testid="session-keys-empty">
                   No session keys created yet. Create a session key to reduce signing requirements for trades.
                 </div>
               ) : (
-                <div className="space-y-2 max-h-40 overflow-y-auto">
+                <div className="space-y-2 max-h-40 overflow-y-auto" data-testid="session-key-list">
                   {settings.sessionKeys.keys.map((key) => (
-                    <div key={key.id} className="flex items-center justify-between p-3 bg-surface-elevated border border-border rounded">
+                    <div key={key.id} className="flex items-center justify-between p-3 bg-surface-elevated border border-border rounded" data-testid="session-key-item">
                       <div className="flex-1">
                         <div className="text-sm font-medium text-text-primary">{key.name}</div>
                         <div className="text-xs text-text-tertiary">
@@ -429,7 +488,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                           {' • '}
                           Last used: {new Date(key.lastUsed).toLocaleDateString()}
                         </div>
-                        <div className="text-xs text-text-tertiary">
+                        <div className="text-xs text-text-tertiary" data-testid="session-key-permissions">
                           Permissions: {key.permissions.join(', ')}
                         </div>
                       </div>
@@ -438,13 +497,14 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                           key.isActive
                             ? 'bg-success/20 text-success border border-success/50'
                             : 'bg-loss/20 text-loss border border-loss/50'
-                        }`}>
+                        }`} data-testid="session-key-status">
                           {key.isActive ? 'Active' : 'Revoked'}
                         </span>
                         {key.isActive && (
                           <button
-                            onClick={() => handleRevokeSessionKey(key.id)}
+                            onClick={() => handleOpenRevokeConfirm(key.id)}
                             className="p-1 bg-loss/20 text-loss border border-loss/50 rounded text-sm hover:bg-loss/30 transition-colors"
+                            data-testid="revoke-session-key-button"
                           >
                             Revoke
                           </button>
@@ -508,6 +568,119 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
           </div>
         </div>
       </div>
+
+      {/* Create Session Key Modal */}
+      {showCreateModal && (
+        <div className="modal-overlay fixed inset-0 z-50 flex items-center justify-center" data-testid="create-session-key-modal">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+          <div className="modal-content relative bg-surface border border-border rounded-lg shadow-xl w-full max-w-md mx-4 animate-fade-in">
+            <div className="flex items-center justify-between p-4 border-b border-border">
+              <h2 className="text-lg font-semibold text-text-primary">Create Session Key</h2>
+              <button
+                onClick={() => setShowCreateModal(false)}
+                className="p-1 hover:bg-surface-elevated rounded transition-colors"
+                data-testid="close-create-modal-button"
+                aria-label="Close"
+              >
+                <svg className="w-5 h-5 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="p-4 space-y-4">
+              {/* Name Input */}
+              <div>
+                <label className="block text-sm text-text-secondary mb-2">Session Key Name</label>
+                <input
+                  type="text"
+                  value={newKeyName}
+                  onChange={(e) => setNewKeyName(e.target.value)}
+                  placeholder="e.g., Trading Bot Key"
+                  className="w-full p-2 bg-surface-elevated border border-border rounded text-text-primary"
+                  data-testid="session-key-name-input"
+                />
+              </div>
+
+              {/* Permissions */}
+              <div>
+                <label className="block text-sm text-text-secondary mb-2">Permissions</label>
+                <div className="space-y-2">
+                  {['trade', 'view', 'withdraw'].map(permission => (
+                    <label key={permission} className="flex items-center space-x-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={selectedPermissions.includes(permission)}
+                        onChange={() => togglePermission(permission)}
+                        className="w-4 h-4 text-accent bg-surface-elevated border-border rounded"
+                        data-testid={`permission-${permission}-checkbox`}
+                      />
+                      <span className="text-sm text-text-primary capitalize">{permission}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Error Message */}
+              {sessionKeyError && (
+                <div className="text-sm text-error bg-loss/10 border border-loss/30 rounded p-2" data-testid="session-key-error">
+                  {sessionKeyError}
+                </div>
+              )}
+
+              {/* Actions */}
+              <div className="flex gap-2 pt-2">
+                <button
+                  onClick={() => setShowCreateModal(false)}
+                  className="flex-1 px-4 py-2 bg-surface-elevated border border-border rounded hover:bg-surface-hover transition-colors text-text-primary"
+                  data-testid="cancel-create-button"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleCreateSessionKey}
+                  className="flex-1 px-4 py-2 bg-accent text-black rounded hover:bg-accent/90 transition-colors"
+                  data-testid="confirm-session-key-button"
+                >
+                  Create
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Revoke Confirmation Modal */}
+      {showRevokeConfirm && (
+        <div className="modal-overlay fixed inset-0 z-50 flex items-center justify-center" data-testid="revoke-confirm-modal">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+          <div className="modal-content relative bg-surface border border-border rounded-lg shadow-xl w-full max-w-sm mx-4 animate-fade-in">
+            <div className="p-4 space-y-4">
+              <h2 className="text-lg font-semibold text-text-primary">Confirm Revocation</h2>
+              <p className="text-sm text-text-secondary">
+                Are you sure you want to revoke this session key? This action cannot be undone.
+              </p>
+
+              <div className="flex gap-2 pt-2">
+                <button
+                  onClick={() => setShowRevokeConfirm(false)}
+                  className="flex-1 px-4 py-2 bg-surface-elevated border border-border rounded hover:bg-surface-hover transition-colors text-text-primary"
+                  data-testid="cancel-revoke-button"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleConfirmRevoke}
+                  className="flex-1 px-4 py-2 bg-loss/20 text-loss border border-loss/50 rounded hover:bg-loss/30 transition-colors"
+                  data-testid="confirm-revoke-button"
+                >
+                  Revoke
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </Modal>
   );
 }

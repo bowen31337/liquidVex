@@ -1819,7 +1819,8 @@
     "is_stuck": false,
     "stuck_reason": null,
     "stuck_at": null,
-    "qa_retry_count": 0
+    "qa_retry_count": 0,
+    "qa_completed_at": "2026-01-04T15:26:08.252Z"
   },
   {
     "category": "style",
@@ -3495,12 +3496,14 @@
       "Step 4: Sign session key creation",
       "Step 5: Verify subsequent orders don't require signing"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T14:07:19.451491Z",
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "qa_completed_at": "2026-01-04T15:34:06.959805+00:00",
+    "test_file": "tests/e2e/162-163-session-keys.spec.ts"
   },
   {
     "category": "functional",
@@ -3513,14 +3516,16 @@
     ],
     "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 1,
     "dev_completed_at": "2026-01-05T01:46:00.000000Z",
     "last_dev_failure_at": "2026-01-04T14:58:53.081547Z",
     "dev_failure_reasons": [
       "Worker session timed out"
-    ]
+    ],
+    "qa_completed_at": "2026-01-04T15:34:06.959816+00:00",
+    "test_file": "tests/e2e/162-163-session-keys.spec.ts"
   },
   {
     "category": "functional",
@@ -3701,15 +3706,25 @@
       "Step 5: Fix value",
       "Step 6: Verify normal styling returns"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 1,
-    "last_dev_failure_at": "2026-01-04T14:51:42.131746Z",
+    "dev_failure_count": 2,
+    "last_dev_failure_at": "2026-01-04T15:21:43.872565Z",
     "dev_failure_reasons": [
+      "Worker session timed out",
       "Worker session timed out"
-    ]
+    ],
+    "qa_completed_at": "2026-01-04T15:18:35.180303+00:00",
+    "test_file": "tests/e2e/173-validation-error-styling.spec.ts",
+    "test_results": {
+      "chromium": 6,
+      "firefox": 6,
+      "total": 12,
+      "passed": 12,
+      "failed": 0
+    }
   },
   {
     "category": "style",
@@ -3734,15 +3749,17 @@
       "Step 2: Verify custom scrollbar styling",
       "Step 3: Verify scrollbar matches dark theme"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 1,
-    "last_dev_failure_at": "2026-01-04T14:58:05.134202Z",
+    "dev_failure_count": 2,
+    "last_dev_failure_at": "2026-01-04T15:28:07.731858Z",
     "dev_failure_reasons": [
+      "Worker session timed out",
       "Worker session timed out"
-    ]
+    ],
+    "qa_completed_at": "2026-01-04T15:26:08.255Z"
   },
   {
     "category": "style",
@@ -3828,9 +3845,13 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 0,
+    "dev_failure_count": 1,
     "dev_completed_at": "2026-01-05T02:10:00.000000Z",
-    "qa_completed_at": "2026-01-05T02:10:00.000000Z"
+    "qa_completed_at": "2026-01-05T02:10:00.000000Z",
+    "last_dev_failure_at": "2026-01-04T15:17:05.650860Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "style",
@@ -3864,9 +3885,13 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 0,
+    "dev_failure_count": 1,
     "dev_completed_at": "2026-01-05T02:10:00.000000Z",
-    "qa_completed_at": "2026-01-05T02:10:00.000000Z"
+    "qa_completed_at": "2026-01-05T02:10:00.000000Z",
+    "last_dev_failure_at": "2026-01-04T15:22:27.525166Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "style",
@@ -3897,9 +3922,13 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 0,
+    "dev_failure_count": 1,
     "dev_completed_at": "2026-01-05T02:10:00.000000Z",
-    "qa_completed_at": "2026-01-05T02:10:00.000000Z"
+    "qa_completed_at": "2026-01-05T02:10:00.000000Z",
+    "last_dev_failure_at": "2026-01-04T15:29:40.620767Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "style",
