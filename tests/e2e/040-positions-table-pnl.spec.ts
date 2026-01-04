@@ -126,7 +126,7 @@ test.describe('Feature 40: Positions Table with Real-time PnL', () => {
     await expect(firstRow.locator('td').nth(7)).toContainText('10x'); // Leverage
     await expect(firstRow.locator('td').nth(8)).toContainText('2,250.00'); // Margin (with comma)
     await expect(firstRow.locator('td').nth(9)).toContainText('40,000.00'); // Liq Price (with comma)
-    await expect(firstRow.locator('td').nth(10)).toContainText('CROSS'); // Margin Type
+    await expect(firstRow.locator('td').nth(11)).toContainText('CROSS'); // Margin Type (index 11 due to Liq. Risk column)
 
     // Check second row (ETH Short)
     const secondRow = page.locator('tbody tr').nth(1);
@@ -138,7 +138,7 @@ test.describe('Feature 40: Positions Table with Real-time PnL', () => {
     await expect(secondRow.locator('td').nth(7)).toContainText('5x'); // Leverage
     await expect(secondRow.locator('td').nth(8)).toContainText('6,000.00'); // Margin (with comma)
     await expect(secondRow.locator('td').nth(9)).toContainText('3,500.00'); // Liq Price (with comma)
-    await expect(secondRow.locator('td').nth(10)).toContainText('ISOLATED'); // Margin Type
+    await expect(secondRow.locator('td').nth(11)).toContainText('ISOLATED'); // Margin Type (index 11 due to Liq. Risk column)
   });
 
   test('should color code long and short positions correctly', async ({ page }) => {

@@ -9,7 +9,7 @@ test.describe('Account Balance Component', () => {
     await page.waitForLoadState('networkidle');
 
     // Check if the account balance component is visible
-    const accountBalance = page.locator('[class*="AccountBalance"]').first();
+    const accountBalance = page.locator('[data-testid="account-balance"]');
     await expect(accountBalance).toBeVisible();
 
     // Check for key elements in the account balance display
@@ -24,7 +24,7 @@ test.describe('Account Balance Component', () => {
     await page.goto('http://localhost:3002');
 
     // Wait for the account balance to load
-    const accountBalance = page.locator('[class*="AccountBalance"]').first();
+    const accountBalance = page.locator('[data-testid="account-balance"]');
     await expect(accountBalance).toBeVisible();
 
     // Should show equity value (not loading state if data is mocked)
@@ -35,7 +35,7 @@ test.describe('Account Balance Component', () => {
     await page.goto('http://localhost:3002');
     await page.waitForLoadState('networkidle');
 
-    const accountBalance = page.locator('[class*="AccountBalance"]').first();
+    const accountBalance = page.locator('[data-testid="account-balance"]');
 
     // Check for PnL percentage display
     const pnlElement = accountBalance.locator('text=/\\d+\\.\\d+%/');

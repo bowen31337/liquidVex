@@ -128,10 +128,14 @@ export function PositionsTable() {
     });
   };
 
-  // Format PnL with sign and color
-  const formatPnl = (pnl: number) => {
-    const cls = pnl >= 0 ? 'text-long' : 'text-short';
-    return <span className={cls}>{pnl >= 0 ? '+' : ''}{formatFixedDecimals(pnl, 2)}</span>;
+  // Get PnL class (for td)
+  const getPnlClass = (pnl: number) => {
+    return pnl >= 0 ? 'text-long' : 'text-short';
+  };
+
+  // Format PnL value with sign
+  const formatPnlValue = (pnl: number) => {
+    return `${pnl >= 0 ? '+' : ''}${formatFixedDecimals(pnl, 2)}`;
   };
 
   // Handle close position click
@@ -315,6 +319,15 @@ export function PositionsTable() {
               const rowClass = risk && risk.riskLevel !== 'low'
                 ? `border-l-4 ${risk.riskLevel === 'critical' ? 'border-red-500' : risk.riskLevel === 'high' ? 'border-orange-500' : 'border-yellow-500'}`
                 : '';
+              // Determine unrealized PnL value and class
+              const unrealizedPnlValue = realTimePnl !== null ? realTimePnl : pos.unrealizedPnl;
+              const unrealizedPnlClass = getPnlClass(unrealizedPnlValue);
+              const unrealizedPnlText = formatPnlValue(unrealizedPnlValue);
+
+              // Realized PnL
+              const realizedPnlClass = getPnlClass(pos.realizedPnl);
+              const realizedPnlText = formatPnlValue(pos.realizedPnl);
+
               return (
                 <tr key={idx} className={rowClass}>
                   <td>{pos.coin}</td>
@@ -324,13 +337,8 @@ export function PositionsTable() {
                   <td>{formatVariableDecimals(pos.sz, 4)}</td>
                   <td>{formatFixedDecimals(pos.entryPx, 2)}</td>
                   <td>{markPrice ? formatFixedDecimals(markPrice, 2) : '--'}</td>
-                  <td>
-                    {realTimePnl !== null
-                      ? formatPnl(realTimePnl)
-                      : formatPnl(pos.unrealizedPnl)
-                    }
-                  </td>
-                  <td>{formatPnl(pos.realizedPnl)}</td>
+                  <td className={unrealizedPnlClass}>{unrealizedPnlText}</td>
+                  <td className={realizedPnlClass}>{realizedPnlText}</td>
                   <td>{pos.leverage}x</td>
                   <td>{formatFixedDecimals(pos.marginUsed, 2)}</td>
                   <td>{formatFixedDecimals(pos.liquidationPx, 2)}</td>

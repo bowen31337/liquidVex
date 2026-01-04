@@ -19,7 +19,7 @@ export function AccountBalance() {
 
   if (!accountState) {
     return (
-      <div className="bg-surface border border-border rounded-lg p-4">
+      <div data-testid="account-balance-loading" className="bg-surface border border-border rounded-lg p-4">
         <div className="animate-pulse space-y-2">
           <div className="h-4 bg-surface-elevated rounded w-1/3"></div>
           <div className="h-8 bg-surface-elevated rounded w-2/3"></div>
@@ -30,7 +30,7 @@ export function AccountBalance() {
   }
 
   return (
-    <div className="bg-surface border border-border rounded-lg p-4 space-y-3">
+    <div data-testid="account-balance" className="bg-surface border border-border rounded-lg p-4 space-y-3">
       {/* Account Equity */}
       <div className="space-y-1">
         <div className="flex justify-between items-center">

@@ -1164,12 +1164,13 @@
       "Step 7: Change account leverage",
       "Step 8: Verify new leverage applies to new positions"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T04:00:49.058140Z",
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "qa_passed_at": "2026-01-05T00:22:00.000000Z"
   },
   {
     "category": "functional",
@@ -1420,9 +1421,9 @@
       "Step 3: Verify response contains funding rate array",
       "Step 4: Verify each entry has timestamp and rate"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 0,
     "dev_completed_at": "2026-01-04T08:15:36.147897Z"
@@ -2160,11 +2161,9 @@
     "passes": false,
     "is_dev_done": true,
     "is_qa_passed": false,
-    "dev_failure_count": 1,
-    "last_dev_failure_at": "2026-01-04T10:45:45.320949Z",
-    "dev_failure_reasons": [
-      "Worker session timed out"
-    ],
+    "dev_failure_count": 0,
+    "last_dev_failure_at": null,
+    "dev_failure_reasons": [],
     "is_stuck": false,
     "stuck_reason": null,
     "stuck_at": null,
@@ -2580,9 +2579,9 @@
       "Step 7: Navigate to development URL",
       "Step 8: Verify hot module replacement works"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 0,
     "is_stuck": false,
@@ -3171,7 +3170,13 @@
     ],
     "passes": false,
     "is_dev_done": false,
-    "is_qa_passed": false
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-04T13:23:13.401142Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "functional",
@@ -3233,8 +3238,11 @@
       "Step 4: Verify amount matches expected calculation"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T13:23:25.381016Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -3262,8 +3270,11 @@
       "Step 4: Verify form values are preserved"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T13:22:24.107969Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",

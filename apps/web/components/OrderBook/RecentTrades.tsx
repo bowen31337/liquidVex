@@ -20,8 +20,22 @@ export function RecentTrades() {
     return price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
 
-  // Format size
+  // Format size - abbreviate large trades, full precision for small trades
   const formatSize = (size: number) => {
+    // For very small trades or trades < 1000, show full precision
+    if (size < 1000) {
+      return size.toFixed(4);
+    }
+    // For larger trades, abbreviate with K/M/B suffixes
+    if (size >= 1e9) {
+      return `${(size / 1e9).toFixed(2)}B`;
+    }
+    if (size >= 1e6) {
+      return `${(size / 1e6).toFixed(2)}M`;
+    }
+    if (size >= 1e3) {
+      return `${(size / 1e3).toFixed(2)}K`;
+    }
     return size.toFixed(4);
   };
 
