@@ -9,10 +9,12 @@ import { useAccount } from '../../hooks/useAccount';
 import { useMarketStore } from '../../stores/marketStore';
 import { formatCurrency } from '../../lib/utils';
 import { DepositModal } from '../Modal/DepositModal';
+import { WithdrawalModal } from '../Modal/WithdrawalModal';
 
 export function AccountBalance() {
   const { accountState, getPNLPercent } = useAccount();
   const [depositModalOpen, setDepositModalOpen] = useState(false);
+  const [withdrawalModalOpen, setWithdrawalModalOpen] = useState(false);
 
   const pnlPercent = getPNLPercent();
   const isProfit = pnlPercent >= 0;
@@ -31,6 +33,7 @@ export function AccountBalance() {
           </div>
         </div>
         <DepositModal isOpen={depositModalOpen} onClose={() => setDepositModalOpen(false)} />
+        <WithdrawalModal isOpen={withdrawalModalOpen} onClose={() => setWithdrawalModalOpen(false)} />
       </>
     );
   }
@@ -130,6 +133,7 @@ export function AccountBalance() {
             Deposit
           </button>
           <button
+            onClick={() => setWithdrawalModalOpen(true)}
             data-testid="withdraw-button"
             className="flex-1 px-3 py-2 bg-short text-white text-sm rounded hover:bg-short-muted transition-colors"
           >
@@ -138,6 +142,7 @@ export function AccountBalance() {
         </div>
       </div>
       <DepositModal isOpen={depositModalOpen} onClose={() => setDepositModalOpen(false)} />
+      <WithdrawalModal isOpen={withdrawalModalOpen} onClose={() => setWithdrawalModalOpen(false)} />
     </>
   );
 }

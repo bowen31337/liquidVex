@@ -3477,12 +3477,13 @@
       "Step 3: Verify withdrawal modal opens",
       "Step 4: Verify available withdrawal amount shown"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_completed_at": "2026-01-04T13:58:50.837454Z",
-    "dev_failure_count": 0
+    "dev_completed_at": "2026-01-04T15:09:08.234748Z",
+    "dev_failure_count": 0,
+    "qa_completed_at": "2026-01-04T15:09:08.234755Z"
   },
   {
     "category": "functional",
@@ -3800,9 +3801,13 @@
       "Step 4: Click a button",
       "Step 5: Verify active state styling"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-05T02:10:00.000000Z",
+    "qa_completed_at": "2026-01-05T02:10:00.000000Z"
   },
   {
     "category": "style",
@@ -3814,9 +3819,13 @@
       "Step 4: Drag slider",
       "Step 5: Verify smooth visual feedback"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-05T02:10:00.000000Z",
+    "qa_completed_at": "2026-01-05T02:10:00.000000Z"
   },
   {
     "category": "style",
@@ -3828,9 +3837,13 @@
       "Step 4: Click to check",
       "Step 5: Verify checked state uses accent color"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-04T15:08:51.485152Z",
+    "qa_completed_at": "2026-01-05T02:10:00.000000Z"
   },
   {
     "category": "style",
@@ -3842,9 +3855,13 @@
       "Step 4: Verify dropdown menu styling",
       "Step 5: Verify option hover state"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-05T02:10:00.000000Z",
+    "qa_completed_at": "2026-01-05T02:10:00.000000Z"
   },
   {
     "category": "style",
@@ -3856,8 +3873,11 @@
       "Step 4: Verify hover states on buttons"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T15:07:25.140511Z",
+    "dev_failure_count": 0
   },
   {
     "category": "style",
@@ -3868,9 +3888,13 @@
       "Step 3: Verify logo remains crisp",
       "Step 4: Verify logo scales appropriately"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-05T02:10:00.000000Z",
+    "qa_completed_at": "2026-01-05T02:10:00.000000Z"
   },
   {
     "category": "style",
@@ -3881,9 +3905,13 @@
       "Step 3: Verify consistent icon sizes",
       "Step 4: Verify icons use correct colors"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-05T02:10:00.000000Z",
+    "qa_completed_at": "2026-01-05T02:10:00.000000Z"
   },
   {
     "category": "style",
@@ -3893,9 +3921,13 @@
       "Step 2: Verify divider uses border color",
       "Step 3: Verify consistent divider thickness"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-05T02:10:00.000000Z",
+    "qa_completed_at": "2026-01-05T02:10:00.000000Z"
   },
   {
     "category": "style",
@@ -3905,9 +3937,13 @@
       "Step 2: Verify consistent shadow styling",
       "Step 3: Verify elevation hierarchy is clear"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-05T02:10:00.000000Z",
+    "qa_completed_at": "2026-01-05T02:10:00.000000Z"
   },
   {
     "category": "style",
@@ -3918,9 +3954,13 @@
       "Step 3: Verify header text is uppercase and muted",
       "Step 4: Verify header is sticky on scroll"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-05T02:10:00.000000Z",
+    "qa_completed_at": "2026-01-05T02:10:00.000000Z"
   },
   {
     "category": "style",
@@ -3931,9 +3971,13 @@
       "Step 3: Verify numeric columns are right-aligned",
       "Step 4: Verify text columns are left-aligned"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-05T02:10:00.000000Z",
+    "qa_completed_at": "2026-01-05T02:10:00.000000Z"
   },
   {
     "category": "style",
@@ -3943,9 +3987,13 @@
       "Step 2: Verify zebra striping if implemented",
       "Step 3: Verify hover state distinct from stripe"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-05T02:10:00.000000Z",
+    "qa_completed_at": "2026-01-05T02:10:00.000000Z"
   },
   {
     "category": "style",
@@ -3956,9 +4004,13 @@
       "Step 3: Verify filled status uses positive color",
       "Step 4: Verify canceled status uses muted color"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-05T02:10:00.000000Z",
+    "qa_completed_at": "2026-01-05T02:10:00.000000Z"
   },
   {
     "category": "functional",
@@ -3969,9 +4021,13 @@
       "Step 3: Refresh browser",
       "Step 4: Verify wallet remains connected"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-05T02:10:00.000000Z",
+    "qa_completed_at": "2026-01-05T02:10:00.000000Z"
   },
   {
     "category": "functional",
@@ -3983,9 +4039,13 @@
       "Step 4: Click forward button",
       "Step 5: Verify state is maintained"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-05T02:10:00.000000Z",
+    "qa_completed_at": "2026-01-05T02:10:00.000000Z"
   },
   {
     "category": "functional",
@@ -3996,9 +4056,13 @@
       "Step 3: Switch pairs in UI",
       "Step 4: Verify URL updates accordingly"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-05T02:10:00.000000Z",
+    "qa_completed_at": "2026-01-05T02:10:00.000000Z"
   },
   {
     "category": "functional",
@@ -4057,9 +4121,13 @@
       "Step 4: Verify no message loss under load",
       "Step 5: Verify UI remains responsive"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-05T02:10:00.000000Z",
+    "qa_completed_at": "2026-01-05T02:10:00.000000Z"
   },
   {
     "category": "style",
@@ -4070,9 +4138,13 @@
       "Step 3: Verify content reflows smoothly",
       "Step 4: Verify no overlapping elements"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-05T02:10:00.000000Z",
+    "qa_completed_at": "2026-01-05T02:10:00.000000Z"
   },
   {
     "category": "functional",
