@@ -7,7 +7,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Panel Resize and Layout Persistence', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
     // Clear localStorage to ensure clean state
     await page.evaluate(() => {
       localStorage.clear();

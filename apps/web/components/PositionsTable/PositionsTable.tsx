@@ -102,9 +102,11 @@ export function PositionsTable() {
     const markPrice = markPrices[pos.coin];
     if (!markPrice) return null;
 
-    const entryValue = pos.entryPx * pos.sz;
-    const currentValue = markPrice * pos.sz;
-    const pnl = pos.side === 'long' ? currentValue - entryValue : entryValue - currentValue;
+    // For long: PnL = (markPrice - entryPx) * sz
+    // For short: PnL = (entryPx - markPrice) * sz
+    const pnl = pos.side === 'long'
+      ? (markPrice - pos.entryPx) * pos.sz
+      : (pos.entryPx - markPrice) * pos.sz;
     return pnl;
   };
 
@@ -300,7 +302,7 @@ export function PositionsTable() {
                     {pos.side.toUpperCase()}
                   </td>
                   <td>{formatNumber(pos.sz, 4)}</td>
-                  <td>{formatNumber(pos.entryPx)}</td>
+                  <td>{formatNumber(pos.entryPx, 0)}</td>
                   <td>{markPrice ? formatNumber(markPrice) : '--'}</td>
                   <td>
                     {realTimePnl !== null

@@ -14,6 +14,8 @@ import { RecentTrades } from '@/components/OrderBook/RecentTrades';
 import { OrderForm } from '@/components/OrderForm/OrderForm';
 import { useMarketStore } from '@/stores/marketStore';
 import { SectionErrorBoundary } from '@/components/ErrorBoundary';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import type { KeyboardShortcut } from '@/hooks/useKeyboardShortcuts';
 import {
   ChartSkeleton,
   OrderBookSkeleton,
@@ -140,6 +142,34 @@ export function TradingGrid() {
     }));
   };
 
+  // Global keyboard shortcuts (defined after callback functions)
+  const globalKeyboardShortcuts: KeyboardShortcut[] = [
+    {
+      key: 'c',
+      modifiers: { ctrl: true },
+      description: 'Cancel all orders',
+      callback: () => {
+        // This would need to trigger the cancel all functionality
+        // For now, we'll show an alert to simulate the action
+        alert('Cancel all orders shortcut triggered (Ctrl+C)');
+      },
+    },
+    {
+      key: 'k',
+      modifiers: { ctrl: true },
+      description: 'Toggle full-screen chart',
+      callback: toggleFullScreen,
+    },
+    {
+      key: 'm',
+      modifiers: { ctrl: true },
+      description: 'Toggle compact mode',
+      callback: toggleCompactMode,
+    },
+  ];
+
+  useKeyboardShortcuts(globalKeyboardShortcuts);
+
   const handleResize = (panel: keyof PanelSizes, delta: number) => {
     setState((prev) => {
       const otherPanels = Object.keys(prev.sizes).filter(k => k !== panel) as Array<keyof PanelSizes>;
@@ -183,12 +213,6 @@ export function TradingGrid() {
     document.addEventListener('mouseup', handleMouseUp);
   };
 
-  // Calculate dynamic height based on compact mode
-  const getContainerHeight = () => {
-    const baseHeight = state.compactMode ? 'calc(100vh-3rem-160px)' : 'calc(100vh-3.5rem-200px)';
-    return baseHeight;
-  };
-
   // Calculate dynamic padding based on compact mode
   const getPaddingClass = () => {
     return state.compactMode ? 'p-0.5' : 'p-1';
@@ -197,14 +221,14 @@ export function TradingGrid() {
   // Full-screen chart mode - only show chart
   if (state.fullScreenChart) {
     return (
-      <div className="flex flex-col h-[calc(100vh-3.5rem)] overflow-hidden bg-background">
+      <div className="flex flex-col h-[calc(100vh-3.5rem)] overflow-hidden bg-background" role="main" aria-label="Trading interface - Full-screen chart mode">
         {/* Full-screen chart controls */}
         <div className="flex items-center justify-between bg-surface border-b border-border px-4 py-2">
           <div className="text-sm text-text-secondary">Full-screen Chart Mode</div>
           <div className="flex gap-2">
             <button
               onClick={toggleFullScreen}
-              className="px-3 py-1 text-xs bg-accent hover:bg-accent/90 text-white rounded transition-colors"
+              className="px-3 py-1 text-xs bg-accent hover:bg-accent/90 text-white rounded transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background" aria-label="Exit full-screen chart mode"
               data-testid="exit-fullscreen"
               title="Exit Full-screen"
             >
@@ -212,12 +236,12 @@ export function TradingGrid() {
             </button>
             <button
               onClick={toggleCompactMode}
-              className={`px-3 py-1 text-xs rounded transition-colors ${
+              className={`px-3 py-1 text-xs rounded transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                 state.compactMode
-                  ? 'bg-long hover:bg-long-muted text-white'
-                  : 'bg-surface-elevated hover:bg-border text-text-primary border border-border'
+                  ? 'bg-long hover:bg-long-muted text-white focus-visible:ring-long'
+                  : 'bg-surface-elevated hover:bg-border text-text-primary border border-border focus-visible:ring-border'
               }`}
-              data-testid="toggle-compact"
+              data-testid="toggle-compact" aria-label="Toggle compact mode"
               title="Toggle Compact Mode"
             >
               {state.compactMode ? 'Compact' : 'Normal'}
@@ -242,7 +266,7 @@ export function TradingGrid() {
       <div className="flex items-center justify-end gap-2 px-4 py-1 bg-surface border-b border-border">
         <button
           onClick={toggleFullScreen}
-          className="px-2 py-1 text-xs bg-surface-elevated hover:bg-border text-text-primary border border-border rounded transition-colors"
+          className="px-2 py-1 text-xs bg-surface-elevated hover:bg-border text-text-primary border border-border rounded transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background" aria-label="Full-screen Chart"
           data-testid="toggle-fullscreen"
           title="Full-screen Chart"
         >
@@ -250,12 +274,12 @@ export function TradingGrid() {
         </button>
         <button
           onClick={toggleCompactMode}
-          className={`px-2 py-1 text-xs rounded transition-colors ${
+          className={`px-2 py-1 text-xs rounded transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
             state.compactMode
-              ? 'bg-long hover:bg-long-muted text-white'
-              : 'bg-surface-elevated hover:bg-border text-text-primary border border-border'
+              ? 'bg-long hover:bg-long-muted text-white focus-visible:ring-long'
+              : 'bg-surface-elevated hover:bg-border text-text-primary border border-border focus-visible:ring-border'
           }`}
-          data-testid="toggle-compact"
+          data-testid="toggle-compact" aria-label="Toggle compact mode"
           title="Toggle Compact Mode"
         >
           {state.compactMode ? 'Compact' : 'Normal'}
@@ -287,7 +311,7 @@ export function TradingGrid() {
           </div>
           {/* Vertical Resize Handle */}
           <div
-            className="absolute inset-y-0 right-0 w-3 cursor-col-resize hover:bg-accent/30 transition-colors z-30 flex items-center justify-center"
+            className="absolute inset-y-0 right-0 w-3 cursor-col-resize hover:bg-accent/30 transition-colors z-30 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent" role="separator" aria-label="Resize panel" tabIndex={0}
             onMouseDown={(e) => startDragging('chart', e)}
             data-testid="resize-handle-chart"
             title="Drag to resize chart panel"
@@ -318,7 +342,7 @@ export function TradingGrid() {
           </div>
           {/* Vertical Resize Handle */}
           <div
-            className="absolute inset-y-0 right-0 w-3 cursor-col-resize hover:bg-accent/30 transition-colors z-30 flex items-center justify-center"
+            className="absolute inset-y-0 right-0 w-3 cursor-col-resize hover:bg-accent/30 transition-colors z-30 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent" role="separator" aria-label="Resize panel" tabIndex={0}
             onMouseDown={(e) => startDragging('orderBook', e)}
             data-testid="resize-handle-orderbook"
             title="Drag to resize order book panel"

@@ -25,15 +25,15 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
   }));
 
   // Expose stores to window for testing
-  useEffect(() => {
+  // Run immediately on mount to ensure stores are available early
+  if (typeof window !== 'undefined') {
     // Only expose in test mode or development
     const isTestMode = process.env.NEXT_PUBLIC_TEST_MODE === 'true' ||
                        process.env.NODE_ENV === 'test' ||
-                       typeof window !== 'undefined' &&
-                       (window.location.search.includes('testMode=true') ||
-                        window.location.search.includes('testMode=1'));
+                       window.location.search.includes('testMode=true') ||
+                       window.location.search.includes('testMode=1');
 
-    if (isTestMode && typeof window !== 'undefined') {
+    if (isTestMode && !(window as any).stores) {
       // Expose the store factory and current state
       (window as any).stores = {
         useOrderStore: useOrderStore,
@@ -44,7 +44,7 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
         getWalletStoreState: () => useWalletStore.getState(),
       };
     }
-  }, []);
+  }
 
   // Render providers directly - no client-side blocking
   // WagmiProvider and QueryClientProvider handle SSR correctly

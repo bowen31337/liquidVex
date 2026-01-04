@@ -3,14 +3,14 @@ import { test, expect } from '@playwright/test';
 test.describe('Feature #79: Bottom panel tab navigation and state persistence', () => {
   test.beforeEach(async ({ page }) => {
     // Clear localStorage before each test
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
     await page.evaluate(() => {
       localStorage.clear();
     });
   });
 
   test('should display all tabs in bottom panel', async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Wait for page to fully load
     await page.waitForLoadState('networkidle');
@@ -33,7 +33,7 @@ test.describe('Feature #79: Bottom panel tab navigation and state persistence', 
   });
 
   test('should switch tabs and display correct content', async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Wait for bottom panel
     await page.waitForSelector('[data-testid="bottom-panel"]', { timeout: 5000 });
@@ -80,7 +80,7 @@ test.describe('Feature #79: Bottom panel tab navigation and state persistence', 
   });
 
   test('should persist selected tab across page refresh', async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Wait for bottom panel
     await page.waitForSelector('[data-testid="bottom-panel"]', { timeout: 5000 });
@@ -108,7 +108,7 @@ test.describe('Feature #79: Bottom panel tab navigation and state persistence', 
   });
 
   test('should persist selected tab when switching trading pairs', async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Wait for bottom panel
     await page.waitForSelector('[data-testid="bottom-panel"]', { timeout: 5000 });
@@ -142,7 +142,7 @@ test.describe('Feature #79: Bottom panel tab navigation and state persistence', 
   });
 
   test('should persist selected tab across multiple refreshes', async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Wait for bottom panel
     await page.waitForSelector('[data-testid="bottom-panel"]', { timeout: 5000 });
@@ -165,7 +165,7 @@ test.describe('Feature #79: Bottom panel tab navigation and state persistence', 
   });
 
   test('should reset to default tab when localStorage is cleared', async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Wait for bottom panel
     await page.waitForSelector('[data-testid="bottom-panel"]', { timeout: 5000 });
@@ -192,7 +192,7 @@ test.describe('Feature #79: Bottom panel tab navigation and state persistence', 
   });
 
   test('should show badge counts on tabs when data exists', async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Wait for bottom panel
     await page.waitForSelector('[data-testid="bottom-panel"]', { timeout: 5000 });
@@ -207,7 +207,7 @@ test.describe('Feature #79: Bottom panel tab navigation and state persistence', 
   });
 
   test('should handle rapid tab switching without losing state', async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Wait for bottom panel
     await page.waitForSelector('[data-testid="bottom-panel"]', { timeout: 5000 });

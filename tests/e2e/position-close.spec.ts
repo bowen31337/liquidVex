@@ -8,7 +8,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Position Close Flow', () => {
   test('Positions table has Close button for positions', async ({ page }) => {
     // Step 1: Navigate to the application
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Step 2: Connect wallet (mock connection)
     const connectButton = page.locator('button:has-text("Connect Wallet")');
@@ -40,7 +40,7 @@ test.describe('Position Close Flow', () => {
   });
 
   test('Clicking Close button opens confirmation modal', async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Connect wallet
     const connectButton = page.locator('button:has-text("Connect Wallet")');
@@ -65,7 +65,7 @@ test.describe('Position Close Flow', () => {
   });
 
   test('Position close modal has correct content', async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Connect wallet
     const connectButton = page.locator('button:has-text("Connect Wallet")');
@@ -100,7 +100,7 @@ test.describe('Position Close Flow', () => {
   });
 
   test('Position close modal can be cancelled', async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Connect wallet
     const connectButton = page.locator('button:has-text("Connect Wallet")');

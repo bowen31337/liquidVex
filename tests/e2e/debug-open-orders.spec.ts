@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Debug Open Orders', () => {
   test('debug orders table', async ({ page }) => {
-    await page.goto('http://localhost:3001?testMode=true');
+    await page.goto('http://localhost:3002?testMode=true');
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1000);
 

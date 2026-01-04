@@ -8,7 +8,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Take-profit and Stop-loss Order Attachment', () => {
   test('should allow take-profit order attachment to position', async ({ page }) => {
     // Step 1: Create a position first
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Connect wallet
     const connectButton = page.locator('button:has-text("Connect Wallet")');
@@ -70,7 +70,7 @@ test.describe('Take-profit and Stop-loss Order Attachment', () => {
   });
 
   test('should allow stop-loss order attachment to position', async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Connect wallet
     const connectButton = page.locator('button:has-text("Connect Wallet")');
@@ -123,7 +123,7 @@ test.describe('Take-profit and Stop-loss Order Attachment', () => {
   });
 
   test('should display stop price input for stop orders', async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Connect wallet
     const connectButton = page.locator('button:has-text("Connect Wallet")');
@@ -151,7 +151,7 @@ test.describe('Take-profit and Stop-loss Order Attachment', () => {
   });
 
   test('should validate stop price for stop orders', async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Connect wallet
     const connectButton = page.locator('button:has-text("Connect Wallet")');
@@ -176,7 +176,7 @@ test.describe('Take-profit and Stop-loss Order Attachment', () => {
   });
 
   test('should validate limit price for stop-limit orders', async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Connect wallet
     const connectButton = page.locator('button:has-text("Connect Wallet")');
@@ -205,7 +205,7 @@ test.describe('Take-profit and Stop-loss Order Attachment', () => {
   });
 
   test('should show limit price input for stop-limit orders', async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Connect wallet
     const connectButton = page.locator('button:has-text("Connect Wallet")');
@@ -230,7 +230,7 @@ test.describe('Take-profit and Stop-loss Order Attachment', () => {
   });
 
   test('should hide limit price input for stop-market orders', async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Connect wallet
     const connectButton = page.locator('button:has-text("Connect Wallet")');
@@ -255,7 +255,7 @@ test.describe('Take-profit and Stop-loss Order Attachment', () => {
   });
 
   test('should allow post-only for stop-limit orders', async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Connect wallet
     const connectButton = page.locator('button:has-text("Connect Wallet")');
@@ -281,7 +281,7 @@ test.describe('Take-profit and Stop-loss Order Attachment', () => {
   });
 
   test('should not show post-only for stop-market orders', async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Connect wallet
     const connectButton = page.locator('button:has-text("Connect Wallet")');
@@ -303,7 +303,7 @@ test.describe('Take-profit and Stop-loss Order Attachment', () => {
   });
 
   test('should handle order confirmation for stop orders', async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Connect wallet
     const connectButton = page.locator('button:has-text("Connect Wallet")');

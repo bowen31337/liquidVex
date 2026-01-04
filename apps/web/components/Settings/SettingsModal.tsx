@@ -55,25 +55,27 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
     },
   });
 
-  const updateSetting = <K extends keyof Settings>(
-    section: K,
-    key: keyof Settings[K],
-    value: any
+  // Update a primitive setting value (theme, language)
+  const updatePrimitiveSetting = <S extends 'theme' | 'language'>(
+    section: S,
+    value: Settings[S]
   ) => {
-    setSettings(prev => {
-      const sectionValue = prev[section];
-      if (typeof sectionValue === 'object' && sectionValue !== null) {
-        return {
-          ...prev,
-          [section]: {
-            ...sectionValue,
-            [key]: value,
-          },
-        };
-      }
-      // For non-object sections, just update the section directly
-      return prev;
-    });
+    setSettings(prev => ({ ...prev, [section]: value }));
+  };
+
+  // Update a nested setting value (notifications, display, trading)
+  const updateNestedSetting = <S extends 'notifications' | 'display' | 'trading'>(
+    section: S,
+    key: keyof Settings[S],
+    value: Settings[S][typeof key]
+  ) => {
+    setSettings(prev => ({
+      ...prev,
+      [section]: {
+        ...prev[section],
+        [key]: value,
+      },
+    }));
   };
 
   const handleSave = () => {
@@ -146,7 +148,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               <label className="block text-sm text-text-secondary mb-2">Theme</label>
               <select
                 value={settings.theme}
-                onChange={(e) => updateSetting('theme', 'theme', e.target.value)}
+                onChange={(e) => updatePrimitiveSetting('theme', e.target.value as 'dark' | 'light')}
                 className="w-full p-2 bg-surface-elevated border border-border rounded text-text-primary"
               >
                 <option value="dark">Dark</option>
@@ -158,7 +160,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               <label className="block text-sm text-text-secondary mb-2">Language</label>
               <select
                 value={settings.language}
-                onChange={(e) => updateSetting('language', 'language', e.target.value)}
+                onChange={(e) => updatePrimitiveSetting('language', e.target.value)}
                 className="w-full p-2 bg-surface-elevated border border-border rounded text-text-primary"
               >
                 <option value="en">English</option>
@@ -175,7 +177,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               type="checkbox"
               id="compact-mode"
               checked={settings.display.compactMode}
-              onChange={(e) => updateSetting('display', 'compactMode', e.target.checked)}
+              onChange={(e) => updateNestedSetting('display', 'compactMode', e.target.checked)}
               className="w-4 h-4 text-accent bg-surface-elevated border-border rounded"
             />
             <label htmlFor="compact-mode" className="text-sm text-text-primary">
@@ -197,7 +199,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               <input
                 type="checkbox"
                 checked={settings.notifications.orderConfirmations}
-                onChange={(e) => updateSetting('notifications', 'orderConfirmations', e.target.checked)}
+                onChange={(e) => updateNestedSetting('notifications', 'orderConfirmations', e.target.checked)}
                 className="w-4 h-4 text-accent bg-surface-elevated border-border rounded"
               />
             </div>
@@ -210,7 +212,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               <input
                 type="checkbox"
                 checked={settings.notifications.priceAlerts}
-                onChange={(e) => updateSetting('notifications', 'priceAlerts', e.target.checked)}
+                onChange={(e) => updateNestedSetting('notifications', 'priceAlerts', e.target.checked)}
                 className="w-4 h-4 text-accent bg-surface-elevated border-border rounded"
               />
             </div>
@@ -223,7 +225,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               <input
                 type="checkbox"
                 checked={settings.notifications.fundingReminders}
-                onChange={(e) => updateSetting('notifications', 'fundingReminders', e.target.checked)}
+                onChange={(e) => updateNestedSetting('notifications', 'fundingReminders', e.target.checked)}
                 className="w-4 h-4 text-accent bg-surface-elevated border-border rounded"
               />
             </div>
@@ -244,7 +246,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                 min="0"
                 max="8"
                 value={settings.display.pricePrecision}
-                onChange={(e) => updateSetting('display', 'pricePrecision', parseInt(e.target.value))}
+                onChange={(e) => updateNestedSetting('display', 'pricePrecision', parseInt(e.target.value))}
                 className="w-full"
               />
             </div>
@@ -258,7 +260,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                 min="0"
                 max="8"
                 value={settings.display.sizePrecision}
-                onChange={(e) => updateSetting('display', 'sizePrecision', parseInt(e.target.value))}
+                onChange={(e) => updateNestedSetting('display', 'sizePrecision', parseInt(e.target.value))}
                 className="w-full"
               />
             </div>
@@ -274,7 +276,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               <label className="block text-sm text-text-secondary mb-2">Default Leverage</label>
               <select
                 value={settings.trading.defaultLeverage}
-                onChange={(e) => updateSetting('trading', 'defaultLeverage', parseInt(e.target.value))}
+                onChange={(e) => updateNestedSetting('trading', 'defaultLeverage', parseInt(e.target.value))}
                 className="w-full p-2 bg-surface-elevated border border-border rounded text-text-primary"
               >
                 {[1, 2, 5, 10, 20, 50, 100].map(leverage => (
@@ -288,7 +290,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               <input
                 type="text"
                 value={settings.trading.defaultOrderSize}
-                onChange={(e) => updateSetting('trading', 'defaultOrderSize', e.target.value)}
+                onChange={(e) => updateNestedSetting('trading', 'defaultOrderSize', e.target.value)}
                 className="w-full p-2 bg-surface-elevated border border-border rounded text-text-primary"
                 placeholder="e.g., 1.0 or 1000"
               />
@@ -304,7 +306,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               <input
                 type="checkbox"
                 checked={settings.trading.confirmOrders}
-                onChange={(e) => updateSetting('trading', 'confirmOrders', e.target.checked)}
+                onChange={(e) => updateNestedSetting('trading', 'confirmOrders', e.target.checked)}
                 className="w-4 h-4 text-accent bg-surface-elevated border-border rounded"
               />
             </div>
@@ -317,7 +319,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               <input
                 type="checkbox"
                 checked={settings.trading.soundEffects}
-                onChange={(e) => updateSetting('trading', 'soundEffects', e.target.checked)}
+                onChange={(e) => updateNestedSetting('trading', 'soundEffects', e.target.checked)}
                 className="w-4 h-4 text-accent bg-surface-elevated border-border rounded"
               />
             </div>

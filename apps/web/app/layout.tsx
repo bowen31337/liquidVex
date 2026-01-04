@@ -3,6 +3,10 @@ import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { MarketDataProvider } from '@/components/MarketDataProvider';
 import { ClientProviders } from '@/components/ClientProviders';
+import { PerformanceMonitor } from '@/components/PerformanceMonitor/PerformanceMonitor';
+import { AccessibilityProvider } from '@/contexts/AccessibilityContext';
+import KeyboardShortcuts from '@/components/KeyboardShortcuts/KeyboardShortcuts';
+import ScreenReaderAnnouncements from '@/components/ScreenReaderAnnouncements/ScreenReaderAnnouncements';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -31,11 +35,16 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <body className="bg-background text-text-primary antialiased">
-        <ClientProviders>
-          <MarketDataProvider>
-            {children}
-          </MarketDataProvider>
-        </ClientProviders>
+        <AccessibilityProvider>
+          <ClientProviders>
+            <MarketDataProvider>
+              {children}
+              <KeyboardShortcuts />
+              <ScreenReaderAnnouncements />
+              <PerformanceMonitor enabled={process.env.NODE_ENV === 'development'} />
+            </MarketDataProvider>
+          </ClientProviders>
+        </AccessibilityProvider>
       </body>
     </html>
   );

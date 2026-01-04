@@ -3,7 +3,7 @@
  */
 import { useEffect, useCallback } from 'react';
 
-interface KeyboardShortcut {
+export interface KeyboardShortcut {
   key: string;
   modifiers?: {
     ctrl?: boolean;
@@ -17,14 +17,30 @@ interface KeyboardShortcut {
 
 export function useKeyboardShortcuts(shortcuts: KeyboardShortcut[]) {
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
+    // Get the active element
+    const activeElement = document.activeElement;
+
+    // Don't override form inputs unless explicitly allowed
+    const isFormInput = activeElement instanceof HTMLInputElement ||
+                      activeElement instanceof HTMLTextAreaElement ||
+                      activeElement instanceof HTMLSelectElement;
+
+    // Special case: Allow Enter key even in inputs for order submission
+    const isEnterKey = event.key === 'Enter';
+
+    // Only process shortcuts if not in a form input, or if it's Enter key
+    if (isFormInput && !isEnterKey) {
+      return;
+    }
+
     for (const shortcut of shortcuts) {
       const { key, modifiers = {} } = shortcut;
 
-      // Check modifiers
-      const hasCtrl = modifiers.ctrl ? event.ctrlKey : !event.ctrlKey;
-      const hasAlt = modifiers.alt ? event.altKey : !event.altKey;
-      const hasShift = modifiers.shift ? event.shiftKey : !event.shiftKey;
-      const hasMeta = modifiers.meta ? event.metaKey : !event.metaKey;
+      // Check modifiers - only check if modifier is specified
+      const hasCtrl = modifiers.ctrl === undefined || modifiers.ctrl === event.ctrlKey;
+      const hasAlt = modifiers.alt === undefined || modifiers.alt === event.altKey;
+      const hasShift = modifiers.shift === undefined || modifiers.shift === event.shiftKey;
+      const hasMeta = modifiers.meta === undefined || modifiers.meta === event.metaKey;
 
       if (hasCtrl && hasAlt && hasShift && hasMeta && event.key.toLowerCase() === key.toLowerCase()) {
         event.preventDefault();

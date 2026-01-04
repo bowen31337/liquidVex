@@ -18,7 +18,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Batch Order Cancellation Flow', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the application with test mode enabled
-    await page.goto('http://localhost:3001?testMode=true');
+    await page.goto('http://localhost:3002?testMode=true');
 
     // Wait for the page to load
     await expect(page).toHaveTitle(/liquidVex/);

@@ -5,6 +5,8 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { OrderBookData, TradeData, CandleData, AssetInfo } from '../types';
+import { createDebouncedUpdater, StateBatcher } from '../utils/stateOptimization';
+import { reportNetworkError, reportValidationError } from '../utils/errorHandler';
 
 // Interface for persisted market state
 interface PersistedMarketState {
@@ -18,6 +20,14 @@ interface PersistedMarketState {
 interface NonPersistedMarketState {
   // Aliases for compatibility
   selectedCoin: string;
+
+  // Performance monitoring
+  performanceMetrics: {
+    orderBookUpdates: number;
+    tradeUpdates: number;
+    candleUpdates: number;
+    lastUpdate: number;
+  };
 
   // Loading states
   isLoadingOrderBook: boolean;
@@ -52,6 +62,12 @@ interface NonPersistedMarketState {
   fundingCountdown: number;
   setFundingRate: (rate: number) => void;
   setFundingCountdown: (seconds: number) => void;
+
+  // 24h volume and open interest
+  volume24h: number;
+  openInterest: number;
+  setVolume24h: (volume: number) => void;
+  setOpenInterest: (interest: number) => void;
 
   // All mid prices
   allMids: Record<string, number>;
@@ -104,6 +120,13 @@ export const useMarketStore = create<MarketState>()(
       // Non-persisted state
       selectedCoin: 'BTC',
 
+      performanceMetrics: {
+        orderBookUpdates: 0,
+        tradeUpdates: 0,
+        candleUpdates: 0,
+        lastUpdate: 0,
+      },
+
       isLoadingOrderBook: true,
       isLoadingTrades: true,
       isLoadingCandles: true,
@@ -112,13 +135,38 @@ export const useMarketStore = create<MarketState>()(
       setIsLoadingCandles: (loading) => set({ isLoadingCandles: loading }),
 
       orderBook: null,
-      setOrderBook: (data) => set({ orderBook: data, isLoadingOrderBook: false }),
+      setOrderBook: (data) => {
+        // Validate order book data
+        if (!data || !Array.isArray(data.bids) || !Array.isArray(data.asks)) {
+          reportValidationError('Invalid order book data received', { data });
+          return;
+        }
+
+        const state = get();
+        set({
+          orderBook: data,
+          isLoadingOrderBook: false,
+          performanceMetrics: {
+            ...state.performanceMetrics,
+            orderBookUpdates: state.performanceMetrics.orderBookUpdates + 1,
+            lastUpdate: Date.now(),
+          },
+        });
+      },
 
       trades: [],
       addTrade: (trade) => {
         const state = get();
         const newTrades = [trade, ...state.trades].slice(0, 50); // Keep last 50
-        set({ trades: newTrades, isLoadingTrades: false });
+        set({
+          trades: newTrades,
+          isLoadingTrades: false,
+          performanceMetrics: {
+            ...state.performanceMetrics,
+            tradeUpdates: state.performanceMetrics.tradeUpdates + 1,
+            lastUpdate: Date.now(),
+          },
+        });
       },
       clearTrades: () => set({ trades: [], isLoadingTrades: true }),
 
@@ -135,6 +183,11 @@ export const useMarketStore = create<MarketState>()(
       fundingCountdown: 3600,
       setFundingRate: (rate) => set({ fundingRate: rate }),
       setFundingCountdown: (seconds) => set({ fundingCountdown: seconds }),
+
+      volume24h: 0,
+      openInterest: 0,
+      setVolume24h: (volume) => set({ volume24h: volume }),
+      setOpenInterest: (interest) => set({ openInterest: interest }),
 
       allMids: {},
       setAllMids: (mids) => {
@@ -188,7 +241,15 @@ export const useMarketStore = create<MarketState>()(
           newCandles = [...state.candles, normalizedCandle].slice(-500); // Keep last 500
         }
 
-        set({ candles: newCandles, isLoadingCandles: false });
+        set({
+          candles: newCandles,
+          isLoadingCandles: false,
+          performanceMetrics: {
+            ...state.performanceMetrics,
+            candleUpdates: state.performanceMetrics.candleUpdates + 1,
+            lastUpdate: Date.now(),
+          },
+        });
       },
       clearCandles: () => set({ candles: [], isLoadingCandles: true }),
 

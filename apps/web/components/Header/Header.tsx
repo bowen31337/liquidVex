@@ -25,6 +25,10 @@ export function Header() {
     indexPrice,
     fundingRate,
     fundingCountdown,
+    volume24h,
+    openInterest,
+    setVolume24h,
+    setOpenInterest,
   } = useMarketStore();
 
   const wagmiWallet = useWalletSync();
@@ -68,6 +72,14 @@ export function Header() {
     return `${sign}${percent.toFixed(2)}%`;
   };
 
+  // Format large numbers (volume, open interest)
+  const formatLargeNumber = (num: number) => {
+    if (num >= 1e9) return `$${(num / 1e9).toFixed(2)}B`;
+    if (num >= 1e6) return `$${(num / 1e6).toFixed(2)}M`;
+    if (num >= 1e3) return `$${(num / 1e3).toFixed(2)}K`;
+    return `$${num.toLocaleString()}`;
+  };
+
   // Format countdown
   const formatCountdown = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
@@ -99,7 +111,13 @@ export function Header() {
           // Update current price from meta
           const asset = meta.assets.find((a: any) => a.coin === selectedAsset);
           if (asset) {
-            // Prices are updated via store defaults, but we could fetch more specific data here
+            // Update volume and open interest from asset info
+            if (asset.volume24h !== undefined) {
+              setVolume24h(asset.volume24h);
+            }
+            if (asset.openInterest !== undefined) {
+              setOpenInterest(asset.openInterest);
+            }
           }
         }
       } catch (err) {
@@ -115,7 +133,7 @@ export function Header() {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [getExchangeMeta, selectedAsset]);
+  }, [getExchangeMeta, selectedAsset, setVolume24h, setOpenInterest]);
 
   // Responsive breakpoints
   const isTablet = windowWidth < 1024;
@@ -166,6 +184,14 @@ export function Header() {
           </div>
         )}
 
+        {/* Volume and Open Interest - hidden on mobile */}
+        {!isMobile && (
+          <div className="text-xs text-text-tertiary text-right hidden md:block">
+            <div title="24h Volume">Vol: {formatLargeNumber(volume24h)}</div>
+            <div title="Open Interest">OI: {formatLargeNumber(openInterest)}</div>
+          </div>
+        )}
+
         {/* Account Balance */}
         <AccountBalance />
 
@@ -173,8 +199,9 @@ export function Header() {
         <button
           onClick={() => setSettingsOpen(true)}
           data-testid="settings-button"
-          className="p-2 text-text-secondary hover:text-text-primary transition-colors"
+          className="icon-btn text-text-secondary hover:text-text-primary transition-colors"
           title="Settings"
+          aria-label="Open settings"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -200,6 +227,7 @@ export function Header() {
           className={`btn btn-accent min-w-[140px] ${
             isConnected ? 'bg-long hover:bg-long-muted' : ''
           }`}
+          aria-label={isConnecting ? 'Connecting to wallet' : isConnected ? 'Disconnect wallet' : 'Connect wallet'}
         >
           {isConnecting
             ? 'Connecting...'

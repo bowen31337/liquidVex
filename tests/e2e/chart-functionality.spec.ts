@@ -7,7 +7,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Chart Functionality Tests', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
     await page.waitForLoadState('networkidle');
 
     // Wait for chart to load

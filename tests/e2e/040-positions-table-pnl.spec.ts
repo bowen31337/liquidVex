@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Feature 40: Positions Table with Real-time PnL', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the app with test mode enabled
-    await page.goto('http://localhost:3001?testMode=true');
+    await page.goto('http://localhost:3002?testMode=true');
 
     // Wait for the page to load
     await page.waitForLoadState('networkidle');

@@ -31,11 +31,13 @@ export function useAccount(address?: string) {
         setAccountState(mockAccountState);
       }, 30000);
 
-      return () => clearInterval(interval);
-    } else {
-      // If no address, use mock data
-      setAccountState(mockAccountState);
+      return () => {
+        clearInterval(interval);
+      };
     }
+    // If no address, use mock data
+    setAccountState(mockAccountState);
+    return () => {};
   }, [address, setAccountState]);
 
   // Manual refresh function

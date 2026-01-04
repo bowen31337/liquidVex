@@ -14,7 +14,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Feature 36: Order Validation', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to app with test mode enabled
-    await page.goto('http://localhost:3001?testMode=true');
+    await page.goto('http://localhost:3002?testMode=true');
     await page.waitForLoadState('networkidle');
   });
 

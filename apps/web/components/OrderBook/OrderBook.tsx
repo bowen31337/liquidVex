@@ -9,7 +9,8 @@ import { useMarketStore } from '../../stores/marketStore';
 import { useOrderStore } from '../../stores/orderStore';
 import { useWebSocket } from '../../hooks/useWebSocket';
 import { OrderBookLevel } from '../../types';
-import { useKeyboardShortcuts, KeyboardShortcut } from '../../hooks/useKeyboardShortcuts';
+import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
+import type { KeyboardShortcut } from '../../hooks/useKeyboardShortcuts';
 import { Tooltip } from '../Tooltip/Tooltip';
 
 interface OrderBookProps {
@@ -184,7 +185,7 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
               <Tooltip key={prec} content={`Press '${prec}' to set precision to ${prec} decimals`} position="bottom">
                 <button
                   onClick={() => setSelectedPrecision(prec)}
-                  className={`px-1.5 py-0.5 rounded ${selectedPrecision === prec ? 'bg-surface-elevated text-text-primary' : ''}`}
+                  className={`px-1.5 py-0.5 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-accent ${selectedPrecision === prec ? 'bg-surface-elevated text-text-primary' : ''}`}
                 >
                   {prec}d
                 </button>
@@ -198,7 +199,7 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
               <Tooltip key={group} content={`Press '${group === 1 ? 'z' : group === 5 ? 'x' : group === 10 ? 'c' : group}' to set aggregation to ${group}`} position="bottom">
                 <button
                   onClick={() => setAggregation(group)}
-                  className={`px-1.5 py-0.5 rounded ${aggregation === group ? 'bg-surface-elevated text-text-primary' : ''}`}
+                  className={`px-1.5 py-0.5 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-accent ${aggregation === group ? 'bg-surface-elevated text-text-primary' : ''}`}
                   data-testid={`aggregation-${group}`}
                 >
                   {group}
@@ -258,7 +259,7 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
               return (
                 <div
                   key={`ask-${idx}`}
-                  className="relative flex items-center text-xs font-mono py-0.5 px-1 hover:bg-surface-elevated cursor-pointer group"
+                  className="relative flex items-center text-xs font-mono py-0.5 px-1 hover:bg-surface-elevated cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent" role="button" tabIndex={0}
                   onClick={() => handlePriceClick(level.px)}
                 >
                   {/* Depth Bar */}
@@ -292,7 +293,7 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
               return (
                 <div
                   key={`bid-${idx}`}
-                  className="relative flex items-center text-xs font-mono py-0.5 px-1 hover:bg-surface-elevated cursor-pointer group"
+                  className="relative flex items-center text-xs font-mono py-0.5 px-1 hover:bg-surface-elevated cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent" role="button" tabIndex={0}
                   onClick={() => handlePriceClick(level.px)}
                 >
                   {/* Depth Bar */}

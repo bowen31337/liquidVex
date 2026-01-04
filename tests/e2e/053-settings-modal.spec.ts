@@ -7,7 +7,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Settings Modal', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
   });
 
   test('Settings button is visible in header', async ({ page }) => {

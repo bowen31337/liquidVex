@@ -2,7 +2,7 @@
  * TanStack Query hooks for market data with caching
  */
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMarketStore } from '../stores/marketStore';
 import { infoAPI } from '../lib/api';
 

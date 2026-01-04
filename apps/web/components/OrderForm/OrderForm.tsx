@@ -9,15 +9,21 @@ import { useOrderStore } from '../../stores/orderStore';
 import { useWalletStore } from '../../stores/walletStore';
 import { useMarketStore } from '../../stores/marketStore';
 import { useApi } from '../../hooks/useApi';
+import { useMarginValidation } from '../../hooks/useMarginValidation';
+import { useAccount } from '../../hooks/useAccount';
 import { OrderConfirmModal } from '../Modal/OrderConfirmModal';
 import { useToast } from '../Toast/Toast';
 import { useFavoritesActions } from '../../contexts/FavoritesContext';
+import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
+import type { KeyboardShortcut } from '../../hooks/useKeyboardShortcuts';
 
 export function OrderForm() {
   const { orderForm, setOrderForm, resetOrderForm, addOpenOrder } = useOrderStore();
   const { isConnected } = useWalletStore();
   const { currentPrice, selectedAsset } = useMarketStore();
   const { placeOrder } = useApi();
+  const { validateMargin, validateReduceOnly, validatePostOnly } = useMarginValidation();
+  const { accountState } = useAccount();
   const { success: showSuccess, error: showError } = useToast();
   const { addToRecentlyTraded } = useFavoritesActions();
 
@@ -46,8 +52,11 @@ export function OrderForm() {
     return price * size;
   })();
 
-  // Get available balance (mock)
-  const availableBalance = 10000; // Would come from account state
+  // Get available balance from account state
+  const availableBalance = accountState?.availableBalance || 10000; // Fallback to mock value
+
+  // Get margin validation results for display
+  const marginValidation = validateMargin();
 
   // Handle input changes
   const handleInputChange = (field: string, value: string | number | boolean) => {
@@ -151,6 +160,31 @@ export function OrderForm() {
           }
         }
       }
+    }
+
+    // Validate reduce-only requires existing position
+    if (orderForm.reduceOnly) {
+      const reduceValidation = validateReduceOnly();
+      if (!reduceValidation.isValid) {
+        setError(reduceValidation.error || 'Reduce-only order requires existing position');
+        return false;
+      }
+    }
+
+    // Validate post-only order type
+    if (orderForm.postOnly) {
+      const postValidation = validatePostOnly();
+      if (!postValidation.isValid) {
+        setError(postValidation.error || 'Post-only orders must be limit orders');
+        return false;
+      }
+    }
+
+    // Validate margin (insufficient margin check)
+    const marginValidation = validateMargin();
+    if (!marginValidation.isValid) {
+      setError(marginValidation.error || 'Insufficient margin for this order');
+      return false;
     }
 
     return true;
@@ -309,6 +343,77 @@ export function OrderForm() {
     setShowConfirmModal(false);
   };
 
+  // Keyboard shortcuts - defined after all functions
+  const keyboardShortcuts: KeyboardShortcut[] = [
+    {
+      key: 'b',
+      description: 'Switch to Buy',
+      callback: () => handleSideToggle('buy'),
+    },
+    {
+      key: 's',
+      description: 'Switch to Sell',
+      callback: () => handleSideToggle('sell'),
+    },
+    {
+      key: 'Enter',
+      description: 'Submit order',
+      callback: handleSubmit,
+    },
+    {
+      key: 'Escape',
+      description: 'Cancel order',
+      callback: () => setShowConfirmModal(false),
+    },
+    {
+      key: 'z',
+      description: 'Set aggregation to 1',
+      callback: () => {
+        // This would need to be passed down or handled differently
+        // For now, we'll skip this as it's order book specific
+      },
+    },
+    {
+      key: 'x',
+      description: 'Set aggregation to 5',
+      callback: () => {
+        // This would need to be passed down or handled differently
+        // For now, we'll skip this as it's order book specific
+      },
+    },
+    {
+      key: 'c',
+      description: 'Set aggregation to 10',
+      callback: () => {
+        // This would need to be passed down or handled differently
+        // For now, we'll skip this as it's order book specific
+      },
+    },
+    {
+      key: '1',
+      description: 'Set 25% size',
+      callback: () => handlePercentage(25),
+    },
+    {
+      key: '2',
+      description: 'Set 50% size',
+      callback: () => handlePercentage(50),
+    },
+    {
+      key: '3',
+      description: 'Set 75% size',
+      callback: () => handlePercentage(75),
+    },
+    {
+      key: '4',
+      description: 'Set 100% size',
+      callback: () => handlePercentage(100),
+    },
+  ];
+
+  // Register keyboard shortcuts
+  useKeyboardShortcuts(keyboardShortcuts);
+
   // Get submit button text and style
   const submitConfig = {
     text: orderForm.side === 'buy' ? 'Buy / Long' : 'Sell / Short',
@@ -319,26 +424,30 @@ export function OrderForm() {
   const showPriceInput = ['limit', 'stop_limit'].includes(orderForm.type);
 
   return (
-    <div className="panel p-3 flex flex-col h-full relative z-10" data-testid="order-entry-panel">
+    <div className="panel p-3 flex flex-col h-full relative z-10" data-testid="order-entry-panel" role="region" aria-label="Order Entry Form">
       {/* Buy/Sell Toggle */}
       <div className="flex mb-4">
         <button
           onClick={() => handleSideToggle('buy')}
-          className={`flex-1 py-2 text-center rounded-l font-medium transition-colors ${
+          className={`flex-1 py-2 text-center rounded-l font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-long focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
             orderForm.side === 'buy'
               ? 'bg-long text-white'
               : 'bg-surface-elevated text-text-secondary hover:text-text-primary'
           }`}
+          aria-pressed={orderForm.side === 'buy'}
+          aria-label="Switch to Buy / Long order"
         >
           Buy / Long
         </button>
         <button
           onClick={() => handleSideToggle('sell')}
-          className={`flex-1 py-2 text-center rounded-r font-medium transition-colors ${
+          className={`flex-1 py-2 text-center rounded-r font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-short focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
             orderForm.side === 'sell'
               ? 'bg-short text-white'
               : 'bg-surface-elevated text-text-secondary hover:text-text-primary'
           }`}
+          aria-pressed={orderForm.side === 'sell'}
+          aria-label="Switch to Sell / Short order"
         >
           Sell / Short
         </button>
@@ -346,14 +455,16 @@ export function OrderForm() {
 
       {/* Order Type */}
       <div className="mb-3">
-        <label className="text-xs text-text-secondary uppercase tracking-wider">
+        <label htmlFor="order-type-select" className="text-xs text-text-secondary uppercase tracking-wider">
           Order Type
         </label>
         <select
+          id="order-type-select"
           value={orderForm.type}
           onChange={(e) => handleTypeChange(e.target.value as any)}
           className="input w-full mt-1"
           data-testid="order-type-select"
+          aria-label="Order type selection"
         >
           <option value="limit">Limit</option>
           <option value="market">Market</option>
@@ -365,15 +476,17 @@ export function OrderForm() {
       {/* Stop Price Input (for stop orders) */}
       {(orderForm.type === 'stop_limit' || orderForm.type === 'stop_market') && (
         <div className="mb-3">
-          <label className="text-xs text-text-secondary uppercase tracking-wider">
+          <label htmlFor="stop-price-input" className="text-xs text-text-secondary uppercase tracking-wider">
             Stop Price (Trigger)
           </label>
           <input
+            id="stop-price-input"
             type="number"
             value={orderForm.stopPrice}
             onChange={(e) => handleInputChange('stopPrice', e.target.value)}
             placeholder="0.00"
             className="input w-full mt-1 font-mono"
+            aria-label="Stop price trigger value"
           />
         </div>
       )}
@@ -382,54 +495,61 @@ export function OrderForm() {
       {showPriceInput && (
         <div className="mb-3">
           <div className="flex justify-between items-center">
-            <label className="text-xs text-text-secondary uppercase tracking-wider">
+            <label htmlFor="price-input" className="text-xs text-text-secondary uppercase tracking-wider">
               {orderForm.type === 'stop_limit' ? 'Limit Price' : 'Price'}
             </label>
             <div className="flex gap-1">
               <button
                 onClick={() => adjustPrice(-0.5)}
-                className="px-2 py-0.5 text-xs bg-surface-elevated rounded hover:text-text-primary"
+                className="px-2 py-0.5 text-xs bg-surface-elevated rounded hover:text-text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                aria-label="Decrease price by 0.5"
               >
                 -
               </button>
               <button
                 onClick={() => adjustPrice(0.5)}
-                className="px-2 py-0.5 text-xs bg-surface-elevated rounded hover:text-text-primary"
+                className="px-2 py-0.5 text-xs bg-surface-elevated rounded hover:text-text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                aria-label="Increase price by 0.5"
               >
                 +
               </button>
             </div>
           </div>
           <input
+            id="price-input"
             type="number"
             value={orderForm.price}
             onChange={(e) => handleInputChange('price', e.target.value)}
             placeholder="0.00"
             className="input w-full mt-1 font-mono"
             data-testid="order-price-input"
+            aria-label="Order price"
           />
         </div>
       )}
 
       {/* Size Input */}
       <div className="mb-3">
-        <label className="text-xs text-text-secondary uppercase tracking-wider">
+        <label htmlFor="size-input" className="text-xs text-text-secondary uppercase tracking-wider">
           Size
         </label>
         <input
+          id="size-input"
           type="number"
           value={orderForm.size}
           onChange={(e) => handleInputChange('size', e.target.value)}
           placeholder="0.00"
           className="input w-full mt-1 font-mono"
           data-testid="order-size-input"
+          aria-label="Order size"
         />
         <div className="flex gap-1 mt-2">
           {['25%', '50%', '75%', '100%'].map((pct, idx) => (
             <button
               key={pct}
               onClick={() => handlePercentage([25, 50, 75, 100][idx])}
-              className="flex-1 py-1 text-xs text-text-secondary bg-surface-elevated rounded hover:text-text-primary"
+              className="flex-1 py-1 text-xs text-text-secondary bg-surface-elevated rounded hover:text-text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              aria-label={`Set size to ${pct} of available balance`}
             >
               {pct}
             </button>
@@ -440,16 +560,21 @@ export function OrderForm() {
       {/* Leverage */}
       <div className="mb-3">
         <div className="flex justify-between text-xs text-text-secondary uppercase tracking-wider">
-          <span>Leverage</span>
+          <span id="leverage-label">Leverage</span>
           <span className="text-text-primary">{orderForm.leverage}x</span>
         </div>
         <input
           type="range"
-          min="1"
-          max="50"
+          min={1}
+          max={50}
           value={orderForm.leverage}
           onChange={(e) => handleInputChange('leverage', parseInt(e.target.value))}
-          className="w-full mt-1"
+          className="range-input mt-1"
+          aria-labelledby="leverage-label"
+          aria-valuemin={1}
+          aria-valuemax={50}
+          aria-valuenow={orderForm.leverage}
+          aria-label="Leverage multiplier"
         />
       </div>
 
@@ -460,8 +585,9 @@ export function OrderForm() {
             type="checkbox"
             checked={orderForm.reduceOnly}
             onChange={(e) => handleInputChange('reduceOnly', e.target.checked)}
-            className="rounded"
+            className="checkbox"
             data-testid="reduce-only-checkbox"
+            aria-label="Reduce only - position will only decrease"
           />
           Reduce Only
         </label>
@@ -471,8 +597,9 @@ export function OrderForm() {
               type="checkbox"
               checked={orderForm.postOnly}
               onChange={(e) => handleInputChange('postOnly', e.target.checked)}
-              className="rounded"
+              className="checkbox"
               data-testid="post-only-checkbox"
+              aria-label="Post only - order will not match existing orders"
             />
             Post Only
           </label>
@@ -482,13 +609,15 @@ export function OrderForm() {
       {/* Time-in-Force */}
       {(orderForm.type === 'limit' || orderForm.type === 'stop_limit') && (
         <div className="mb-3">
-          <label className="text-xs text-text-secondary uppercase tracking-wider">
+          <label htmlFor="tif-select" className="text-xs text-text-secondary uppercase tracking-wider">
             Time-in-Force
           </label>
           <select
+            id="tif-select"
             value={orderForm.tif}
             onChange={(e) => handleInputChange('tif', e.target.value)}
             className="input w-full mt-1"
+            aria-label="Time in force selection"
           >
             <option value="GTC">Good Till Cancelled (GTC)</option>
             <option value="IOC">Immediate or Cancel (IOC)</option>
@@ -501,8 +630,9 @@ export function OrderForm() {
       <button
         onClick={handleSubmit}
         disabled={isSubmitting}
-        className={`${submitConfig.className} w-full py-3 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed`}
+        className={`${submitConfig.className} w-full py-3 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background ${orderForm.side === 'buy' ? 'focus-visible:ring-long' : 'focus-visible:ring-short'}`}
         data-testid="order-submit-button"
+        aria-label={isSubmitting ? 'Processing order' : `Submit ${orderForm.side} order`}
       >
         {isSubmitting ? 'Processing...' : submitConfig.text}
       </button>
@@ -513,6 +643,24 @@ export function OrderForm() {
           <span>Order Value</span>
           <span className="text-text-secondary font-mono">
             ${orderValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          </span>
+        </div>
+        <div className="flex justify-between">
+          <span>Required Margin</span>
+          <span className={`font-mono ${marginValidation.isValid ? 'text-text-secondary' : 'text-short'}`}>
+            ${marginValidation.requiredMargin.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          </span>
+        </div>
+        <div className="flex justify-between">
+          <span>Available Margin</span>
+          <span className="text-text-secondary font-mono">
+            ${marginValidation.availableMargin.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          </span>
+        </div>
+        <div className="flex justify-between">
+          <span>Leverage</span>
+          <span className="text-text-secondary font-mono">
+            {orderForm.leverage}x
           </span>
         </div>
         <div className="flex justify-between">

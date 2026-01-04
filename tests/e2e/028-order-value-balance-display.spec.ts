@@ -8,7 +8,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Feature #28: Order value and balance display calculations', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the application
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Clear localStorage to ensure clean state
     await page.evaluate(() => localStorage.clear());

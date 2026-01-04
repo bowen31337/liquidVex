@@ -7,7 +7,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Liquidation Calculator', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
     await page.waitForSelector('[data-testid="wallet-connect-button"]', { timeout: 10000 });
   });
 

@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Bottom Panel Simple Check', () => {
   test('should check if bottom panel exists in DOM', async ({ page }) => {
     // Navigate to the application
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Wait for page to load
     await page.waitForTimeout(5000);

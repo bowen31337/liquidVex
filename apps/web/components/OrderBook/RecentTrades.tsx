@@ -40,7 +40,7 @@ export function RecentTrades() {
         </div>
         <button
           onClick={clearTrades}
-          className="text-[10px] text-text-tertiary hover:text-text-primary"
+          className="text-[10px] text-text-tertiary hover:text-text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
           title="Clear trades"
         >
           Clear

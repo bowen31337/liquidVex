@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Favorites and Recently Traded Tests', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the application
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Wait for the page to load
     await page.waitForLoadState('networkidle');

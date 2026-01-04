@@ -7,12 +7,12 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Wallet Connection', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
   });
 
   test('Page loads correctly with wallet connect button', async ({ page }) => {
     // Step 1: Verify page loads
-    await expect(page).toHaveURL('http://localhost:3001/');
+    await expect(page).toHaveURL('http://localhost:3002/');
     await expect(page.locator('h1:has-text("liquidVex")')).toBeVisible();
 
     // Step 2: Verify wallet connect button exists in header

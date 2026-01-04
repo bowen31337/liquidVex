@@ -8,7 +8,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Feature 99 - Connection Status and Keyboard Shortcut Hints', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the application
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Wait for initial load
     await page.waitForLoadState('networkidle');

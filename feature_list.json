@@ -2738,9 +2738,11 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 0,
-    "last_dev_failure_at": null,
-    "dev_failure_reasons": [],
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-04T12:37:23.043180Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ],
     "is_stuck": false,
     "stuck_reason": null,
     "stuck_at": null
@@ -2788,8 +2790,11 @@
       "Step 15: Verify trade appears in Trade History"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T12:34:04.228921Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -2834,8 +2839,11 @@
       "Step 13: Verify all orders canceled successfully"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T12:33:44.186059Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -2852,8 +2860,11 @@
       "Step 9: Verify no stale data or mismatches between panels"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T12:35:00.950150Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -2967,8 +2978,15 @@
       "Step 5: Verify order can be submitted"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "last_dev_failure_at": null,
+    "dev_failure_reasons": [],
+    "is_stuck": false,
+    "stuck_reason": null,
+    "stuck_at": null
   },
   {
     "category": "functional",

@@ -13,6 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
+from config import settings, validate_environment, print_environment_info
 from routers import info, trade, account, websocket
 from rate_limiter import rate_limiter
 from validation_middleware import ValidationMiddleware
@@ -36,13 +37,26 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 
         return response
 
+# Validate environment configuration
+env_issues = validate_environment()
+if env_issues:
+    print("⚠️ Environment validation issues:")
+    for issue in env_issues:
+        print(f"  - {issue}")
+else:
+    print("✅ Environment configuration is valid")
+
+# Print environment info in development
+if settings.is_development:
+    print_environment_info()
+
 app = FastAPI(
     title="liquidVex API",
     description="Backend API for liquidVex - Hyperliquid DEX Trading Interface",
     version="0.1.0",
-    docs_url="/docs",
-    redoc_url="/redoc",
-    openapi_url="/openapi.json",
+    docs_url=settings.docs_url,
+    redoc_url=settings.redoc_url,
+    openapi_url=settings.openapi_url,
 )
 
 # Security Headers Middleware - Add security headers to all responses
@@ -109,19 +123,10 @@ app.add_middleware(RateLimitMiddleware)
 app.add_middleware(ValidationMiddleware)
 
 # CORS Configuration - Allow frontend origins with proper settings
-# In production, replace with specific allowed origins
-allowed_origins = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://localhost:3001",
-    "http://127.0.0.1:3001",
-    # Add production origins here when deployed
-    # "https://liquidvex.example.com",
-]
-
+# Configuration loaded from environment variables via settings
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,
+    allow_origins=settings.cors_origins,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=[

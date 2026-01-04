@@ -9,7 +9,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Feature 22: WalletConnect QR Code Flow', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
   });
 
   test('Wallet modal opens with connect button', async ({ page }) => {

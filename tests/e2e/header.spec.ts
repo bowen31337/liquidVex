@@ -8,7 +8,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Header Component', () => {
   test('Header displays logo, asset selector, and wallet connect button', async ({ page }) => {
     // Step 1: Navigate to the application
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Step 2: Verify logo is displayed on the left side of header
     const header = page.locator('header');
@@ -34,7 +34,7 @@ test.describe('Header Component', () => {
   });
 
   test('Header displays price with 24h change percentage', async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     const header = page.locator('header');
 

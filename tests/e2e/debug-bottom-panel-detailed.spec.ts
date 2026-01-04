@@ -11,7 +11,7 @@ test.describe('Bottom Panel Debug', () => {
     });
 
     // Navigate to the application
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
     await page.waitForLoadState('networkidle', { timeout: 30000 });
 
     // Check console errors

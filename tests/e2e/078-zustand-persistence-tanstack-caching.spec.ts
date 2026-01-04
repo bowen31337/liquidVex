@@ -13,7 +13,7 @@ test.describe('Feature 78 - Zustand Store Persistence and TanStack Query Caching
     });
 
     // Navigate to the application
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002');
 
     // Wait for initial load
     await page.waitForLoadState('networkidle');

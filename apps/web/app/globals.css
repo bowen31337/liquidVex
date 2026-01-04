@@ -6,15 +6,21 @@
   :root {
     --color-background: #0a0a0a;
     --color-surface: #171717;
-    --color-surface-elevated: #262626;
-    --color-border: #404040;
-    --color-text-primary: #f5f5f5;
-    --color-text-secondary: #a3a3a3;
-    --color-text-tertiary: #737373;
-    --color-long: #22c55e;
+    --color-surface-elevated: #1f1f1f;
+    --color-surface-hover: #232323;
+    --color-border: #4a4a4a;
+    --color-border-strong: #666666;
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #d1d1d1;
+    --color-text-tertiary: #a1a1a1;
+    --color-text-quaternary: #717171;
+    --color-long: #34d399;
     --color-short: #ef4444;
-    --color-accent: #3b82f6;
+    --color-accent: #60a5fa;
+    --color-focus-ring: #93c5fd;
     --color-warning: #f59e0b;
+    --color-success: #22c55e;
+    --color-error: #ef4444;
   }
 
   * {
@@ -65,6 +71,11 @@
 }
 
 @layer components {
+  /* Focus visible styles - WCAG compliant focus indicators */
+  .focus-visible {
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
   /* Panel base styling */
   .panel {
     @apply bg-surface border border-border rounded-lg;
@@ -74,70 +85,156 @@
     @apply bg-surface-elevated border border-border rounded-lg;
   }
 
+  .panel-hover {
+    @apply bg-surface-hover border border-border-strong rounded-lg;
+  }
+
   /* Data table styling */
   .data-table {
     @apply w-full text-data-sm font-mono;
   }
 
   .data-table th {
-    @apply text-text-tertiary text-xs uppercase tracking-wider font-medium text-left px-3 py-2;
+    @apply text-text-quaternary text-xs uppercase tracking-wider font-medium text-left px-3 py-2 border-b border-border;
   }
 
   .data-table td {
-    @apply px-3 py-2 text-text-primary;
+    @apply px-3 py-2 text-text-primary border-b border-surface;
   }
 
   .data-table tr:hover {
-    @apply bg-surface-elevated;
+    @apply bg-surface-hover;
+  }
+
+  .data-table tr:focus-within {
+    @apply outline-none ring-2 ring-focus-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Interactive row for keyboard navigation */
+  .interactive-row {
+    @apply cursor-pointer hover:bg-surface-hover transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
   }
 
   /* Button variants */
   .btn {
-    @apply px-4 py-2 rounded font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background;
+    @apply px-4 py-2 rounded font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
   }
 
   .btn-buy {
-    @apply bg-long hover:bg-long-muted text-white focus:ring-long;
+    @apply bg-long hover:bg-long-muted text-white focus-visible:ring-long;
   }
 
   .btn-sell {
-    @apply bg-short hover:bg-short-muted text-white focus:ring-short;
+    @apply bg-short hover:bg-short-muted text-white focus-visible:ring-short;
   }
 
   .btn-accent {
-    @apply bg-accent hover:bg-accent/80 text-white focus:ring-accent;
+    @apply bg-accent hover:bg-accent/80 text-white focus-visible:ring-accent;
   }
 
   .btn-secondary {
-    @apply bg-surface-elevated hover:bg-border text-text-primary focus:ring-border;
+    @apply bg-surface-elevated hover:bg-surface-hover text-text-primary focus-visible:ring-border-strong border border-border;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent hover:bg-surface-hover text-text-primary focus-visible:ring-border-strong border border-transparent;
+  }
+
+  .btn-danger {
+    @apply bg-error hover:bg-error/80 text-white focus-visible:ring-error border border-transparent;
+  }
+
+  /* Icon button with focus state */
+  .icon-btn {
+    @apply p-2 rounded transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background;
   }
 
   /* Input styling */
   .input {
     @apply bg-surface border border-border rounded px-3 py-2 text-text-primary
-           placeholder-text-tertiary focus:outline-none focus:ring-1 focus:ring-accent
-           focus:border-accent transition-colors;
+           placeholder-text-tertiary focus:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring
+           focus-visible:border-border-strong transition-colors;
+  }
+
+  .input-lg {
+    @apply bg-surface border border-border-strong rounded px-4 py-3 text-text-primary
+           placeholder-text-tertiary focus:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring
+           focus-visible:border-border-strong transition-colors;
   }
 
   .input-error {
-    @apply border-short focus:ring-short focus:border-short;
+    @apply border-short focus-visible:ring-short focus-visible:border-short;
+  }
+
+  .input-success {
+    @apply border-success focus-visible:ring-success focus-visible:border-success;
+  }
+
+  .input-disabled {
+    @apply bg-surface-elevated border-border text-text-tertiary cursor-not-allowed opacity-50;
+  }
+
+  /* Select dropdown styling */
+  .select {
+    @apply bg-surface border border-border rounded px-3 py-2 text-text-primary cursor-pointer
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:border-border-strong transition-colors;
+  }
+
+  .select-lg {
+    @apply bg-surface border border-border-strong rounded px-4 py-3 text-text-primary cursor-pointer
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:border-border-strong transition-colors;
+  }
+
+  /* Checkbox styling */
+  .checkbox {
+    @apply rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  .checkbox-lg {
+    @apply w-5 h-5 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  /* Range slider styling */
+  .range-input {
+    @apply w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring rounded;
+  }
+
+  /* Label styling with improved contrast */
+  .label {
+    @apply text-text-secondary text-xs uppercase tracking-wider font-medium mb-1;
+  }
+
+  .label-required {
+    @apply text-text-secondary text-xs uppercase tracking-wider font-medium mb-1 after:content-['*'] after:ml-1 after:text-error;
   }
 
   /* Trading-specific colors */
   .text-buy {
-    @apply text-long;
+    @apply text-long-strong;
   }
 
   .text-sell {
-    @apply text-short;
+    @apply text-short-strong;
+  }
+
+  .bg-buy {
+    @apply bg-long/10 border border-long/50;
+  }
+
+  .bg-sell {
+    @apply bg-short/10 border border-short/50;
   }
 
   .text-profit {
-    @apply text-long;
+    @apply text-success;
   }
 
   .text-loss {
-    @apply text-short;
+    @apply text-error;
+  }
+
+    .text-warning-color {
+    @apply text-[var(--color-warning)];
   }
 
   /* Skeleton loading */
@@ -147,6 +244,52 @@
 
   .skeleton-shimmer {
     @apply bg-gradient-to-r from-surface via-surface-elevated to-surface bg-[length:200%_100%] animate-shimmer;
+  }
+
+  /* Status indicators */
+  .status-online {
+    @apply w-2 h-2 bg-success rounded-full inline-block mr-2;
+  }
+
+  .status-offline {
+    @apply w-2 h-2 bg-error rounded-full inline-block mr-2;
+  }
+
+  .status-warning {
+    @apply w-2 h-2 bg-warning rounded-full inline-block mr-2;
+  }
+
+  /* Toast and notification colors */
+  .toast-success {
+    @apply bg-success-bg border border-success/20 text-success;
+  }
+
+  .toast-error {
+    @apply bg-error-bg border border-error/20 text-error;
+  }
+
+  .toast-warning {
+    @apply bg-warning-bg border border-warning/20 text-warning;
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    :root {
+      --color-border: #ffffff;
+      --color-text-primary: #ffffff;
+      --color-text-secondary: #ffffff;
+      --color-text-tertiary: #ffffff;
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 

@@ -30,8 +30,26 @@ export function TradeHistory() {
 
   const [currentPage, setCurrentPage] = useState(1);
 
+  // Check for test mode
+  const isTestMode = (() => {
+    if (typeof process !== 'undefined' &&
+        (process.env.NEXT_PUBLIC_TEST_MODE === 'true' || process.env.NODE_ENV === 'test')) {
+      return true;
+    }
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('testMode') === 'true' || urlParams.has('testMode');
+    }
+    return false;
+  })();
+
   // Load trade history when wallet connects
   useEffect(() => {
+    // In test mode, don't load from API (trades are added directly to store)
+    if (isTestMode) {
+      return;
+    }
+
     if (isConnected && address) {
       const loadHistory = async () => {
         try {
@@ -90,10 +108,10 @@ export function TradeHistory() {
         }
       };
       loadHistory();
-    } else {
+    } else if (!isTestMode) {
       setTradeHistory([]);
     }
-  }, [isConnected, address]);
+  }, [isConnected, address, isTestMode]);
 
   // Filter trades based on current filters
   const filteredTrades = useMemo(() => {
@@ -195,7 +213,7 @@ export function TradeHistory() {
     document.body.removeChild(link);
   };
 
-  if (!isConnected) {
+  if (!isConnected && !isTestMode) {
     return (
       <div className="p-4 text-center text-text-tertiary text-sm pointer-events-none" data-testid="trade-history">
         Connect your wallet to view trade history

@@ -133,7 +133,10 @@ export function AssetSelector() {
       <button
         data-testid="asset-selector-button"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-1.5 bg-surface-elevated hover:bg-surface border border-border rounded transition-colors"
+        className="flex items-center gap-2 px-3 py-1.5 bg-surface-elevated hover:bg-surface border border-border rounded transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+        aria-label="Select trading pair"
       >
         <span className="text-text-primary font-medium">
           {isLoading ? 'Loading...' : getDisplayName(assets.find(a => a.coin === selectedAsset)?.coin || selectedAsset)}
@@ -143,6 +146,7 @@ export function AssetSelector() {
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
+          aria-hidden="true"
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
@@ -155,10 +159,11 @@ export function AssetSelector() {
           <div
             className="fixed inset-0 z-10"
             onClick={() => setIsOpen(false)}
+            aria-hidden="true"
           />
 
           {/* Dropdown Content */}
-          <div data-testid="asset-selector-dropdown" className="absolute top-full left-0 mt-1 w-80 bg-surface-elevated border border-border rounded-lg shadow-lg z-20">
+          <div data-testid="asset-selector-dropdown" className="absolute top-full left-0 mt-1 w-80 bg-surface-elevated border border-border rounded-lg shadow-lg z-20" role="listbox" aria-label="Trading pairs list">
             {/* Search Input */}
             <div className="p-3 border-b border-border">
               <input
@@ -167,8 +172,9 @@ export function AssetSelector() {
                 placeholder="Search trading pairs..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-3 py-2 bg-surface border border-border rounded text-text-primary placeholder-text-tertiary focus:outline-none focus:border-accent"
+                className="w-full px-3 py-2 bg-surface border border-border rounded text-text-primary placeholder-text-tertiary focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:border-accent"
                 autoFocus
+                aria-label="Search trading pairs"
               />
             </div>
 
@@ -190,9 +196,12 @@ export function AssetSelector() {
                       setIsOpen(false);
                       setSearchTerm('');
                     }}
-                    className={`w-full px-4 py-3 hover:bg-surface transition-colors border-b border-border last:border-b-0 text-left ${
+                    className={`w-full px-4 py-3 hover:bg-surface transition-colors border-b border-border last:border-b-0 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                       selectedAsset === asset.coin ? 'bg-surface' : ''
                     }`}
+                    role="option"
+                    aria-selected={selectedAsset === asset.coin}
+                    aria-label={`${getDisplayName(asset.coin)}, ${asset.name}, price ${formatPrice(asset.price)}, leverage ${asset.maxLeverage}x`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex flex-col items-start">
@@ -222,20 +231,22 @@ export function AssetSelector() {
                             e.stopPropagation();
                             toggleFavorite(asset.coin);
                           }}
-                          className={`p-1 rounded transition-colors ${
+                          className={`p-1 rounded transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                             isFavorited(asset.coin)
                               ? 'text-amber-400 hover:text-amber-300'
                               : 'text-text-tertiary hover:text-text-secondary'
                           }`}
                           title={isFavorited(asset.coin) ? 'Remove from favorites' : 'Add to favorites'}
+                          aria-label={isFavorited(asset.coin) ? `Remove ${asset.coin} from favorites` : `Add ${asset.coin} to favorites`}
                         >
                           <svg
                             className="w-4 h-4"
                             fill={isFavorited(asset.coin) ? 'currentColor' : 'none'}
                             stroke="currentColor"
                             viewBox="0 0 24 24"
+                            aria-hidden="true"
                           >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 01-.364 1.118l-1.07 1.07c-.463.463-.463 1.215 0 1.678l1.07 1.07c.463.463 1.215.463 1.678 0l2.8-2.803a1.003 1.003 0 00.588-1.81l-3.462-3.463a1.003 1.003 0 00-.95-.69h-3.462a1.003 1.003 0 00-.95.69l-1.07 3.292a1.003 1.003 0 00.588 1.81l2.8 2.034a1 1 0 01.364 1.118l-1.07 1.07c-.463.463-.463 1.215 0 1.678l1.07 1.07c.463.463 1.215.463 1.678 0l2.8-2.803a1.003 1.003 0 00.588-1.81l-3.462-3.463a1.003 1.003 0 00-.95-.69h-3.462a1.003 1.003 0 00-.95.69l-1.07 3.292a1.003 1.003 0 01-1.678 0l-1.07-1.07a1 1 0 01-.364-1.118l2.8-2.803a1.003 1.003 0 00-.588-1.81l-3.462-3.463a1.003 1.003 0 00-.95-.69h-3.462a1.003 1.003 0 00-.95.69l1.07 3.292a1.003 1.003 0 01-1.678 0l-1.07-1.07c-.463-.463-.463-1.215 0-1.678l1.07-1.07a1.003 1.003 0 00-.588-1.81l-3.462-3.463a1.003 1.003 0 00-.95-.69h-3.462a1.003 1.003 0 00-.95.69l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 01-.364-1.118l1.07-1.07c.463-.463.463-1.215 0-1.678l-1.07-1.07c-.463-.463-.463-1.215 0-1.678l1.07-1.07a1 1 0 011.118-.364l2.8 2.034a1.003 1.003 0 001.81-.588l3.462-3.463a1.003 1.003 0 00.69-.95V1.927c0-.552.448-1 .999-.999z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 01-.364 1.118l-1.07 1.07c-.463.463-.463 1.215 0 1.678l1.07 1.07c.463.463 1.215.463 1.678 0l2.8-2.803a1.003 1.003 0 00.588-1.81l-3.462-3.463a1.003 1.003 0 00-.95-.69h-3.462a1.003 1.003 0 00-.95.69l-1.07 3.292a1.003 1.003 0 01-1.678 0l-1.07-1.07a1 1 0 01-.364-1.118l2.8-2.803a1.003 1.003 0 00-.588-1.81l-3.462-3.463a1.003 1.003 0 00-.95-.69h-3.462a1.003 1.003 0 00-.95.69l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 01-.364-1.118l1.07-1.07c.463-.463.463-1.215 0-1.678l-1.07-1.07c-.463-.463-.463-1.215 0-1.678l1.07-1.07a1 1 0 011.118-.364l2.8 2.034a1.003 1.003 0 001.81-.588l3.462-3.463a1.003 1.003 0 00.69-.95V1.927c0-.552.448-1 .999-.999z" />
                           </svg>
                         </button>
                       </div>

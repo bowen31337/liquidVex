@@ -38,6 +38,7 @@ export function useWallet() {
         window.removeEventListener('ethereum#initialized', checkMetaMask);
       };
     }
+    return undefined;
   }, []);
 
   const connectMetaMask = async () => {

@@ -8,31 +8,47 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Background colors
+        // Background colors - improved contrast
         background: '#0a0a0a',
         surface: '#171717',
-        'surface-elevated': '#262626',
+        'surface-elevated': '#1f1f1f', // Darker for better contrast
+        'surface-hover': '#232323', // Darker hover state
 
-        // Border colors
-        border: '#404040',
+        // Border colors - improved contrast
+        border: '#4a4a4a', // Lighter for better visibility
+        'border-strong': '#666666', // For important borders
 
-        // Text colors
-        'text-primary': '#f5f5f5',
-        'text-secondary': '#a3a3a3',
-        'text-tertiary': '#737373',
+        // Text colors - improved contrast ratios
+        'text-primary': '#ffffff', // White for best contrast
+        'text-secondary': '#d1d1d1', // Lighter gray for better contrast
+        'text-tertiary': '#a1a1a1', // Improved contrast vs background
+        'text-quaternary': '#717171', // For subtle text
 
-        // Trading colors
-        long: '#22c55e',
-        'long-muted': '#16a34a',
+        // Trading colors - improved contrast
+        long: '#34d399', // Lighter green for better contrast
+        'long-muted': '#22c55e',
+        'long-strong': '#10b981', // Darker for text on light backgrounds
         short: '#ef4444',
         'short-muted': '#dc2626',
+        'short-strong': '#b91c1c', // Darker for text on light backgrounds
 
-        // Accent colors
-        accent: '#3b82f6',
+        // Accent colors - improved contrast
+        accent: '#60a5fa', // Lighter blue for better contrast
+        'accent-strong': '#2563eb', // Darker for text
         warning: '#f59e0b',
+        'warning-strong': '#d97706', // Darker for text
+
+        // New accessibility-focused colors
+        'focus-ring': '#93c5fd', // Light blue for focus indicators
+        'success': '#22c55e',
+        'error': '#ef4444',
+        'info': '#3b82f6',
+        'warning-bg': '#fff3cd', // Light yellow for warnings
+        'error-bg': '#f8d7da', // Light red for errors
+        'success-bg': '#d1fae5', // Light green for success
 
         // Alias for buy/sell
-        buy: '#22c55e',
+        buy: '#34d399',
         sell: '#ef4444',
         profit: '#22c55e',
         loss: '#ef4444',

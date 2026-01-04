@@ -7,7 +7,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Order History Tests', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('http://localhost:3002?testMode=true');
     await page.waitForLoadState('networkidle');
 
     // Wait for app to initialize
@@ -16,7 +16,7 @@ test.describe('Order History Tests', () => {
 
   test('should display order history tab', async ({ page }) => {
     // Step 1: Navigate to bottom panel
-    const bottomPanel = page.locator('.border-t').first();
+    const bottomPanel = page.locator('[data-testid="bottom-panel"]');
     await expect(bottomPanel).toBeVisible();
 
     // Step 2: Click on Order History tab
@@ -25,13 +25,13 @@ test.describe('Order History Tests', () => {
     await orderHistoryTab.click();
 
     // Step 3: Verify order history section is displayed
-    const orderHistoryContent = bottomPanel.locator('text=/order history/i', { exact: false });
+    const orderHistoryContent = page.locator('[data-testid="order-history"]');
     await expect(orderHistoryContent).toBeVisible();
   });
 
   test('should display filter controls', async ({ page }) => {
     // Navigate to Order History tab
-    const bottomPanel = page.locator('.border-t').first();
+    const bottomPanel = page.locator('[data-testid="bottom-panel"]');
     const orderHistoryTab = bottomPanel.locator('button:has-text("Order History")');
     await orderHistoryTab.click();
 
@@ -54,7 +54,7 @@ test.describe('Order History Tests', () => {
 
   test('should apply date range filter', async ({ page }) => {
     // Navigate to Order History tab
-    const bottomPanel = page.locator('.border-t').first();
+    const bottomPanel = page.locator('[data-testid="bottom-panel"]');
     const orderHistoryTab = bottomPanel.locator('button:has-text("Order History")');
     await orderHistoryTab.click();
 
@@ -79,7 +79,7 @@ test.describe('Order History Tests', () => {
 
   test('should apply asset filter', async ({ page }) => {
     // Navigate to Order History tab
-    const bottomPanel = page.locator('.border-t').first();
+    const bottomPanel = page.locator('[data-testid="bottom-panel"]');
     const orderHistoryTab = bottomPanel.locator('button:has-text("Order History")');
     await orderHistoryTab.click();
 
@@ -107,7 +107,7 @@ test.describe('Order History Tests', () => {
 
   test('should apply status filter', async ({ page }) => {
     // Navigate to Order History tab
-    const bottomPanel = page.locator('.border-t').first();
+    const bottomPanel = page.locator('[data-testid="bottom-panel"]');
     const orderHistoryTab = bottomPanel.locator('button:has-text("Order History")');
     await orderHistoryTab.click();
 
@@ -139,7 +139,7 @@ test.describe('Order History Tests', () => {
 
   test('should show clear filters button when filters are active', async ({ page }) => {
     // Navigate to Order History tab
-    const bottomPanel = page.locator('.border-t').first();
+    const bottomPanel = page.locator('[data-testid="bottom-panel"]');
     const orderHistoryTab = bottomPanel.locator('button:has-text("Order History")');
     await orderHistoryTab.click();
 
@@ -166,7 +166,7 @@ test.describe('Order History Tests', () => {
 
   test('should display order count', async ({ page }) => {
     // Navigate to Order History tab
-    const bottomPanel = page.locator('.border-t').first();
+    const bottomPanel = page.locator('[data-testid="bottom-panel"]');
     const orderHistoryTab = bottomPanel.locator('button:has-text("Order History")');
     await orderHistoryTab.click();
 
@@ -180,7 +180,7 @@ test.describe('Order History Tests', () => {
 
   test('should handle empty state when no orders match filters', async ({ page }) => {
     // Navigate to Order History tab
-    const bottomPanel = page.locator('.border-t').first();
+    const bottomPanel = page.locator('[data-testid="bottom-panel"]');
     const orderHistoryTab = bottomPanel.locator('button:has-text("Order History")');
     await orderHistoryTab.click();
 
