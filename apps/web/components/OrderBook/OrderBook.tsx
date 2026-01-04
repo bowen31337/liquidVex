@@ -59,7 +59,7 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
   };
 
   // Get max cumulative for depth bar scaling
-  const getMaxCumulative = (bids: OrderBookLevel[], asks: OrderBookLevel[]) => {
+  const getMaxCumulative = (bids: any[], asks: any[]) => {
     const maxBid = bids.length > 0 ? Math.max(...bids.map(b => b.cumulative || b.sz)) : 0;
     const maxAsk = asks.length > 0 ? Math.max(...asks.map(a => a.cumulative || a.sz)) : 0;
     return Math.max(maxBid, maxAsk);

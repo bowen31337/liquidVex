@@ -17,7 +17,6 @@ import {
   ChartSkeleton,
   OrderBookSkeleton,
   RecentTradesSkeleton,
-  OrderFormSkeleton,
 } from '@/components/LoadingSkeleton';
 
 interface PanelSizes {
@@ -171,7 +170,7 @@ export function TradingGrid() {
       >
         <div className="h-full overflow-hidden p-1">
           <SectionErrorBoundary sectionName="Order Form">
-            <OrderFormSkeleton />
+            <OrderForm />
           </SectionErrorBoundary>
         </div>
       </div>

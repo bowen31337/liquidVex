@@ -101,7 +101,7 @@ export function SectionErrorBoundary({
  */
 export function withErrorBoundary<P extends object>(
   Component: React.ComponentType<P>,
-  fallback?: ReactNode,
+  _fallback?: ReactNode,
   sectionName?: string
 ) {
   return function WrappedComponent(props: P) {

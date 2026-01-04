@@ -32,11 +32,24 @@ export const LoadingSkeleton = memo(({
     circular: 'rounded-full',
   };
 
+  // Convert fractional strings to percentages for style
+  const getStyleWidth = (w: number | string) => {
+    if (typeof w === 'string') {
+      if (w === '1/3') return '33.333%';
+      if (w === '1/4') return '25%';
+      if (w === '1/2') return '50%';
+      if (w === '1/6') return '16.666%';
+      if (w === '100%') return '100%';
+      return w;
+    }
+    return `${w}px`;
+  };
+
   const skeletons = Array.from({ length: count }, (_, i) => (
     <div
       key={i}
       className={`${baseClasses} ${variantClasses[variant]} ${className}`}
-      style={{ width, height: typeof height === 'number' ? `${height}px` : height }}
+      style={{ width: getStyleWidth(width), height: typeof height === 'number' ? `${height}px` : height }}
     />
   ));
 

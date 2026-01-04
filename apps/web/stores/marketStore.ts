@@ -74,7 +74,17 @@ interface MarketState {
 
 export const useMarketStore = create<MarketState>((set, get) => ({
   selectedAsset: 'BTC',
-  setSelectedAsset: (asset) => set({ selectedAsset: asset }),
+  setSelectedAsset: (asset) => set({
+    selectedAsset: asset,
+    // Reset loading states when switching assets
+    isLoadingOrderBook: true,
+    isLoadingTrades: true,
+    isLoadingCandles: true,
+    // Clear existing data
+    orderBook: null,
+    trades: [],
+    candles: [],
+  }),
 
   // Aliases for compatibility
   selectedCoin: 'BTC',
