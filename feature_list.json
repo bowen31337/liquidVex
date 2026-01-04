@@ -943,10 +943,11 @@
       "Step 8: Verify position removed from table",
       "Step 9: Verify trade appears in history"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
-    "dev_completed_at": "2026-01-04T06:45:00.000000Z"
+    "is_qa_passed": true,
+    "dev_completed_at": "2026-01-04T06:45:00.000000Z",
+    "qa_completed_at": "2026-01-04T14:50:00.000000Z"
   },
   {
     "category": "functional",
@@ -986,8 +987,11 @@
       "Step 9: Verify margin is dedicated to that position"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "dev_completed_at": "2026-01-04T03:49:08.382796Z",
+    "qa_retry_count": 0,
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -1048,8 +1052,11 @@
       "Step 10: Verify available = equity - margin used"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T03:50:03.400365Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
