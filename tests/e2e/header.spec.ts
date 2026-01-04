@@ -19,8 +19,8 @@ test.describe('Header Component', () => {
     await expect(logo).toHaveCSS('font-weight', '600'); // font-semibold
 
     // Step 3: Verify asset selector dropdown is present
-    // The current implementation shows BTC-PERP as text
-    const assetSelector = header.locator('div.text-text-secondary:has-text("BTC-PERP")');
+    // The current implementation shows BTC-PERP in a button
+    const assetSelector = header.locator('button:has-text("BTC-PERP")');
     await expect(assetSelector).toBeVisible();
 
     // Step 4: Verify wallet connect button is displayed on the right

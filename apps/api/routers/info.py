@@ -47,6 +47,21 @@ class Candle(BaseModel):
     v: float  # Volume
 
 
+class OrderBookLevel(BaseModel):
+    """A single price level in the order book."""
+
+    px: float  # Price
+    sz: float  # Size
+    n: int  # Number of orders
+
+
+class OrderBookData(BaseModel):
+    """Order book data with bids and asks."""
+
+    bids: list[OrderBookLevel]
+    asks: list[OrderBookLevel]
+
+
 @router.get("/meta", response_model=ExchangeMeta)
 async def get_exchange_meta() -> ExchangeMeta:
     """
@@ -204,3 +219,43 @@ async def get_candles(
         base_price = c
 
     return candles
+
+
+@router.get("/orderbook/{coin}", response_model=OrderBookData)
+async def get_order_book(coin: str, limit: int = 20) -> OrderBookData:
+    """
+    Get current order book for a specific trading pair.
+
+    Args:
+        coin: The coin symbol
+        limit: Number of price levels to return (default 20)
+
+    Returns:
+        Order book with bids (buy orders) and asks (sell orders).
+    """
+    # Placeholder data - will connect to actual exchange
+    import random
+
+    coin = coin.upper()
+    base_price = 95000.0 if coin == "BTC" else 3500.0
+
+    # Generate mock order book data
+    bids = []
+    asks = []
+
+    for i in range(limit):
+        # Generate bids (below current price)
+        bid_price = base_price - (i + 1) * base_price * 0.0001
+        bid_size = random.uniform(0.1, 10.0)
+        bids.append(
+            OrderBookLevel(px=bid_price, sz=bid_size, n=random.randint(1, 20))
+        )
+
+        # Generate asks (above current price)
+        ask_price = base_price + (i + 1) * base_price * 0.0001
+        ask_size = random.uniform(0.1, 10.0)
+        asks.append(
+            OrderBookLevel(px=ask_price, sz=ask_size, n=random.randint(1, 20))
+        )
+
+    return OrderBookData(bids=bids, asks=asks)

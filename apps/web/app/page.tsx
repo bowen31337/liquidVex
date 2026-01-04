@@ -1,4 +1,5 @@
 import { AssetSelector } from '@/components/AssetSelector';
+import { OrderBook } from '@/components/OrderBook';
 
 export default function Home(): React.ReactElement {
   return (
@@ -45,12 +46,7 @@ export default function Home(): React.ReactElement {
         {/* Right Side - Order Book + Trades */}
         <div className="col-span-2 flex flex-col gap-1">
           {/* Order Book */}
-          <div className="panel p-2 flex-1">
-            <div className="text-xs font-medium text-text-secondary uppercase tracking-wider mb-2">
-              Order Book
-            </div>
-            <div className="text-text-tertiary text-xs">Order book levels will appear here</div>
-          </div>
+          <OrderBook coin="BTC" />
           {/* Recent Trades */}
           <div className="panel p-2 flex-1">
             <div className="text-xs font-medium text-text-secondary uppercase tracking-wider mb-2">
