@@ -15,7 +15,7 @@ test.describe('Chart Functionality Tests', () => {
   });
 
   test('should render chart with timeframe buttons', async ({ page }) => {
-    const chartPanel = page.locator('.chart-panel');
+    const chartPanel = page.locator('.chart-panel').first();
     await expect(chartPanel).toBeVisible();
 
     // Step 1: Verify chart container is visible

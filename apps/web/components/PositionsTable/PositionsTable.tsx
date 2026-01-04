@@ -112,18 +112,26 @@ export function PositionsTable() {
     return pnl;
   };
 
-  const formatNumber = (num: number, decimals = 2) => {
-    // Format with commas and specified decimals, trimming trailing zeros
-    const formatted = num.toLocaleString('en-US', {
-      minimumFractionDigits: 0,
+  // Format number with commas and fixed decimals (always shows decimals)
+  const formatFixedDecimals = (num: number, decimals: number) => {
+    return num.toLocaleString('en-US', {
+      minimumFractionDigits: decimals,
       maximumFractionDigits: decimals
     });
-    return formatted;
   };
 
+  // Format number with commas and variable decimals (trims trailing zeros)
+  const formatVariableDecimals = (num: number, maxDecimals: number) => {
+    return num.toLocaleString('en-US', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: maxDecimals
+    });
+  };
+
+  // Format PnL with sign and color
   const formatPnl = (pnl: number) => {
     const cls = pnl >= 0 ? 'text-long' : 'text-short';
-    return <span className={cls}>{pnl >= 0 ? '+' : ''}{formatNumber(pnl)}</span>;
+    return <span className={cls}>{pnl >= 0 ? '+' : ''}{formatFixedDecimals(pnl, 2)}</span>;
   };
 
   // Handle close position click
