@@ -116,28 +116,28 @@ test.describe('Feature 40: Positions Table with Real-time PnL', () => {
     const rows = await page.locator('tbody tr').count();
     expect(rows).toBe(2);
 
-    // Check first row (BTC Long)
+    // Check first row (BTC Long) - note: toLocaleString adds commas and decimals
     const firstRow = page.locator('tbody tr').first();
     await expect(firstRow.locator('td').nth(0)).toContainText('BTC'); // Symbol
     await expect(firstRow.locator('td').nth(1)).toContainText('LONG'); // Side
     await expect(firstRow.locator('td').nth(2)).toContainText('0.5'); // Size
-    await expect(firstRow.locator('td').nth(3)).toContainText('45000'); // Entry
-    await expect(firstRow.locator('td').nth(6)).toContainText('+100'); // Realized PnL
+    await expect(firstRow.locator('td').nth(3)).toContainText('45,000.00'); // Entry (with comma)
+    await expect(firstRow.locator('td').nth(6)).toContainText('+100.00'); // Realized PnL
     await expect(firstRow.locator('td').nth(7)).toContainText('10x'); // Leverage
-    await expect(firstRow.locator('td').nth(8)).toContainText('2250'); // Margin
-    await expect(firstRow.locator('td').nth(9)).toContainText('40000'); // Liq Price
+    await expect(firstRow.locator('td').nth(8)).toContainText('2,250.00'); // Margin (with comma)
+    await expect(firstRow.locator('td').nth(9)).toContainText('40,000.00'); // Liq Price (with comma)
     await expect(firstRow.locator('td').nth(10)).toContainText('CROSS'); // Margin Type
 
     // Check second row (ETH Short)
     const secondRow = page.locator('tbody tr').nth(1);
     await expect(secondRow.locator('td').nth(0)).toContainText('ETH'); // Symbol
     await expect(secondRow.locator('td').nth(1)).toContainText('SHORT'); // Side
-    await expect(secondRow.locator('td').nth(2)).toContainText('10'); // Size
-    await expect(secondRow.locator('td').nth(3)).toContainText('3000'); // Entry
-    await expect(secondRow.locator('td').nth(6)).toContainText('+50'); // Realized PnL
+    await expect(secondRow.locator('td').nth(2)).toContainText('10.0000'); // Size
+    await expect(secondRow.locator('td').nth(3)).toContainText('3,000.00'); // Entry (with comma)
+    await expect(secondRow.locator('td').nth(6)).toContainText('+50.00'); // Realized PnL
     await expect(secondRow.locator('td').nth(7)).toContainText('5x'); // Leverage
-    await expect(secondRow.locator('td').nth(8)).toContainText('6000'); // Margin
-    await expect(secondRow.locator('td').nth(9)).toContainText('3500'); // Liq Price
+    await expect(secondRow.locator('td').nth(8)).toContainText('6,000.00'); // Margin (with comma)
+    await expect(secondRow.locator('td').nth(9)).toContainText('3,500.00'); // Liq Price (with comma)
     await expect(secondRow.locator('td').nth(10)).toContainText('ISOLATED'); // Margin Type
   });
 
@@ -426,13 +426,13 @@ test.describe('Feature 40: Positions Table with Real-time PnL', () => {
     const firstRow = page.locator('tbody tr').first();
     const unrealizedPnlCell = firstRow.locator('td').nth(5);
     await expect(unrealizedPnlCell).toHaveClass(/text-long/);
-    await expect(unrealizedPnlCell).toContainText('+500');
+    await expect(unrealizedPnlCell).toContainText('+500.00');
 
     // Check negative PnL has short color
     const secondRow = page.locator('tbody tr').nth(1);
     const unrealizedPnlCell2 = secondRow.locator('td').nth(5);
     await expect(unrealizedPnlCell2).toHaveClass(/text-short/);
-    await expect(unrealizedPnlCell2).toContainText('-150');
+    await expect(unrealizedPnlCell2).toContainText('-150.00');
   });
 
   test('should display realized PnL with correct color coding', async ({ page }) => {

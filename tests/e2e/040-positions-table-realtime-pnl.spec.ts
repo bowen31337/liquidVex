@@ -18,10 +18,12 @@ test.describe('Feature 40: Positions Table with Real-time PnL', () => {
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1000);
 
-    // Clear any existing market data to ensure clean test state
+    // Clear any existing market data and positions to ensure clean test state
     await page.evaluate(() => {
       const marketStore = (window as any).stores.getMarketStoreState();
+      const orderStore = (window as any).stores.getOrderStoreState();
       marketStore.setAllMids({});
+      orderStore.setPositions([]);
     });
   });
 
@@ -254,9 +256,11 @@ test.describe('Feature 40: Positions Table with Real-time PnL', () => {
     await page.click('text=Positions');
     await page.waitForTimeout(500);
 
-    // Check realized PnL (column 6)
+    // Check realized PnL (column 6) - formatted with + and commas
     const realizedCell = page.locator('tbody tr').first().locator('td').nth(6);
-    await expect(realizedCell).toContainText('750');
+    const realizedText = await realizedCell.textContent();
+    expect(realizedText).toContain('+');
+    expect(realizedText).toMatch(/750|750\.00/);
     await expect(realizedCell).toHaveClass(/text-long/);
   });
 
@@ -284,7 +288,9 @@ test.describe('Feature 40: Positions Table with Real-time PnL', () => {
     await page.waitForTimeout(500);
 
     const realizedCell = page.locator('tbody tr').first().locator('td').nth(6);
-    await expect(realizedCell).toContainText('-300');
+    const realizedText = await realizedCell.textContent();
+    expect(realizedText).toContain('-');
+    expect(realizedText).toMatch(/300|300\.00/);
     await expect(realizedCell).toHaveClass(/text-short/);
   });
 
@@ -484,9 +490,11 @@ test.describe('Feature 40: Positions Table with Real-time PnL', () => {
     await page.click('text=Positions');
     await page.waitForTimeout(500);
 
-    // Check initial PnL
+    // Check initial PnL - (45500 - 45000) * 0.5 = 250
     const pnlCell = page.locator('tbody tr').first().locator('td').nth(5);
-    await expect(pnlCell).toContainText('250');
+    const initialPnl = await pnlCell.textContent();
+    expect(initialPnl).toContain('+');
+    expect(initialPnl).toMatch(/250|250\.00/);
 
     // Update mark price
     await page.evaluate(() => {
@@ -496,8 +504,10 @@ test.describe('Feature 40: Positions Table with Real-time PnL', () => {
 
     await page.waitForTimeout(500);
 
-    // Check updated PnL (should be 500 now)
-    await expect(pnlCell).toContainText('500');
+    // Check updated PnL - (46000 - 45000) * 0.5 = 500
+    const updatedPnl = await pnlCell.textContent();
+    expect(updatedPnl).toContain('+');
+    expect(updatedPnl).toMatch(/500|500\.00/);
   });
 
   test('should handle BTC-PERP naming convention for mark prices', async ({ page }) => {
