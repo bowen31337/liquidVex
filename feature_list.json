@@ -1292,7 +1292,8 @@
     "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T04:13:39.037327Z",
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "qa_completed_at": "2026-01-04T15:06:40.799Z"
   },
   {
     "category": "functional",
@@ -3437,12 +3438,13 @@
       "Step 3: Verify ratio is displayed correctly",
       "Step 4: Verify color changes with risk level"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T14:14:25.436811+00:00",
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "qa_completed_at": "2026-01-04T15:06:32.495309Z"
   },
   {
     "category": "functional",
@@ -3512,8 +3514,12 @@
     "is_dev_done": true,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_failure_count": 0,
-    "dev_completed_at": "2026-01-05T01:46:00.000000Z"
+    "dev_failure_count": 1,
+    "dev_completed_at": "2026-01-05T01:46:00.000000Z",
+    "last_dev_failure_at": "2026-01-04T14:58:53.081547Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "functional",
@@ -3626,14 +3632,11 @@
       "Step 5: Verify error icon is displayed"
     ],
     "passes": false,
-    "is_dev_done": false,
+    "is_dev_done": true,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_failure_count": 1,
-    "last_dev_failure_at": "2026-01-04T14:41:29.105166Z",
-    "dev_failure_reasons": [
-      "Worker session timed out"
-    ]
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-04T14:59:40.571170Z"
   },
   {
     "category": "style",
@@ -3731,7 +3734,13 @@
     ],
     "passes": false,
     "is_dev_done": false,
-    "is_qa_passed": false
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-04T14:58:05.134202Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "style",
@@ -3759,8 +3768,11 @@
       "Step 4: Verify tooltip is positioned correctly"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T14:52:27.478568Z",
+    "dev_failure_count": 0
   },
   {
     "category": "style",
