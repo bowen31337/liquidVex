@@ -21,17 +21,60 @@ const TIMEFRAMES = {
 
 type Timeframe = keyof typeof TIMEFRAMES;
 
+// RSI calculation utility
+function calculateRSI(prices: number[], period: number = 14): { time: number; value: number }[] {
+  if (prices.length < period + 1) {
+    return [];
+  }
+
+  const gains = [];
+  const losses = [];
+
+  // Calculate gains and losses
+  for (let i = 1; i < prices.length; i++) {
+    const change = prices[i] - prices[i - 1];
+    gains.push(Math.max(change, 0));
+    losses.push(Math.max(-change, 0));
+  }
+
+  const rsiValues: { time: number; value: number }[] = [];
+
+  // Calculate initial RSI
+  let avgGain = gains.slice(0, period).reduce((a, b) => a + b, 0) / period;
+  let avgLoss = losses.slice(0, period).reduce((a, b) => a + b, 0) / period;
+
+  let rs = avgGain / avgLoss;
+  let rsi = 100 - (100 / (1 + rs));
+  rsiValues.push({ time: prices[period], value: rsi });
+
+  // Calculate subsequent RSI values
+  for (let i = period; i < gains.length; i++) {
+    avgGain = (avgGain * (period - 1) + gains[i]) / period;
+    avgLoss = (avgLoss * (period - 1) + losses[i]) / period;
+
+    rs = avgGain / avgLoss;
+    rsi = 100 - (100 / (1 + rs));
+    rsiValues.push({ time: prices[i + 1], value: rsi });
+  }
+
+  return rsiValues;
+}
+
 export function Chart() {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
   const candleSeriesRef = useRef<ISeriesApi<'Candlestick'> | null>(null);
   const lineSeriesRef = useRef<ISeriesApi<'Line'> | null>(null);
+  const volumeSeriesRef = useRef<ISeriesApi<'Histogram'> | null>(null);
+  const rsiSeriesRef = useRef<ISeriesApi<'Line'> | null>(null);
 
   const [timeframe, setTimeframe] = useState<Timeframe>('1h');
   const [chartType, setChartType] = useState<'candles' | 'line'>('candles');
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isLoadingHistorical, setIsLoadingHistorical] = useState(false);
+  const [hasMoreHistorical, setHasMoreHistorical] = useState(true);
 
-  const { selectedAsset, candles, setCandles } = useMarketStore();
+  const { selectedAsset, candles, setCandles, indicators, setIndicators, candlesCache, setCandlesCache, getCandlesFromCache } = useMarketStore();
   const { getCandles } = useApi();
 
   // Check for test mode
@@ -61,6 +104,13 @@ export function Chart() {
   useEffect(() => {
     if (!chartContainerRef.current) return;
 
+    // In test mode, skip chart creation if no dimensions to prevent errors
+    if (isTestMode && (chartContainerRef.current.clientWidth === 0 || chartContainerRef.current.clientHeight === 0)) {
+      const { setIsLoadingCandles } = useMarketStore.getState();
+      setIsLoadingCandles(false);
+      return;
+    }
+
     // Clean up existing chart - check if already disposed
     if (chartRef.current) {
       try {
@@ -71,6 +121,8 @@ export function Chart() {
       chartRef.current = null;
       candleSeriesRef.current = null;
       lineSeriesRef.current = null;
+      volumeSeriesRef.current = null;
+      rsiSeriesRef.current = null;
     }
 
     const chart = createChart(chartContainerRef.current, {
@@ -95,7 +147,7 @@ export function Chart() {
 
     chartRef.current = chart;
 
-    // Create series
+    // Create main chart series
     if (chartType === 'candles') {
       const candleSeries = chart.addCandlestickSeries({
         upColor: '#22c55e',
@@ -113,6 +165,23 @@ export function Chart() {
       });
       lineSeriesRef.current = lineSeries;
       candleSeriesRef.current = null;
+    }
+
+    // Create indicator series
+    if (indicators.volume) {
+      const volumeSeries = chart.addHistogramSeries({
+        color: '#3b82f6',
+        priceFormat: { type: 'volume' },
+      });
+      volumeSeriesRef.current = volumeSeries;
+    }
+
+    if (indicators.rsi) {
+      const rsiSeries = chart.addLineSeries({
+        color: '#f59e0b',
+        lineWidth: 2,
+      });
+      rsiSeriesRef.current = rsiSeries;
     }
 
     // Handle resize
@@ -135,7 +204,47 @@ export function Chart() {
         // Chart was already disposed
       }
     };
-  }, [chartType]);
+  }, [chartType, indicators]);
+
+  // Helper function to update chart data
+  const updateChartData = () => {
+    if (candles.length === 0 || !chartRef.current) return;
+
+    const formatted = candles.map((c: any) => ({
+      time: Math.floor(c.t / 1000),
+      open: c.o,
+      high: c.h,
+      low: c.l,
+      close: c.c,
+    }));
+
+    if (candleSeriesRef.current && chartType === 'candles') {
+      candleSeriesRef.current.setData(formatted as any);
+    } else if (lineSeriesRef.current && chartType === 'line') {
+      const lineData = formatted.map((c: any) => ({
+        time: c.time,
+        value: c.close,
+      }));
+      lineSeriesRef.current.setData(lineData as any);
+    }
+
+    // Update volume indicator
+    if (volumeSeriesRef.current && indicators.volume) {
+      const volumeData = candles.map((c: any) => ({
+        time: Math.floor(c.t / 1000),
+        value: c.v,
+        color: c.c >= c.o ? '#22c55e' : '#ef4444',
+      }));
+      volumeSeriesRef.current.setData(volumeData as any);
+    }
+
+    // Update RSI indicator
+    if (rsiSeriesRef.current && indicators.rsi) {
+      const prices = candles.map((c: any) => c.c);
+      const rsiData = calculateRSI(prices);
+      rsiSeriesRef.current.setData(rsiData as any);
+    }
+  };
 
   // Load initial candle data
   useEffect(() => {
@@ -148,6 +257,20 @@ export function Chart() {
       }
 
       try {
+        // Check cache first for data persistence across timeframe changes
+        const cachedCandles = getCandlesFromCache(selectedAsset, timeframe);
+        if (cachedCandles && cachedCandles.length > 0) {
+          // Use cached data - instant display
+          setCandles(cachedCandles);
+
+          // Update chart with cached data
+          if (chartRef.current) {
+            updateChartData();
+          }
+          return;
+        }
+
+        // No cache hit - fetch from API
         const data = await getCandles(selectedAsset, timeframe, 500);
         // Sort data by time ascending for lightweight-charts (create new sorted array)
         const sortedData = [...data].sort((a: any, b: any) => a.t - b.t);
@@ -160,14 +283,12 @@ export function Chart() {
         }));
         setCandles(sortedData);
 
-        if (candleSeriesRef.current && chartType === 'candles') {
-          candleSeriesRef.current.setData(formatted as any);
-        } else if (lineSeriesRef.current && chartType === 'line') {
-          const lineData = formatted.map((c: any) => ({
-            time: c.time,
-            value: c.close,
-          }));
-          lineSeriesRef.current.setData(lineData as any);
+        // Store in cache for future use
+        setCandlesCache(selectedAsset, timeframe, sortedData);
+
+        // Update chart with initial data
+        if (chartRef.current) {
+          updateChartData();
         }
       } catch (err) {
         // On error, still stop loading to prevent infinite skeleton
@@ -181,32 +302,141 @@ export function Chart() {
     loadCandles();
   }, [selectedAsset, timeframe, chartType, isTestMode]);
 
-  // Update chart with new candles from WebSocket
+  // Handle historical data loading on scroll
   useEffect(() => {
-    if (candles.length === 0) return;
+    if (!chartRef.current || isTestMode || !hasMoreHistorical || isLoadingHistorical) {
+      return;
+    }
 
-    const latestCandle = candles[candles.length - 1];
-    const formatted = {
-      time: Math.floor(latestCandle.t / 1000), // Use number instead of Time type
-      open: latestCandle.o,
-      high: latestCandle.h,
-      low: latestCandle.l,
-      close: latestCandle.c,
+    const unsubscribe = chartRef.current.timeScale().subscribeVisibleLogicalRangeChange((range) => {
+      if (!range || range.from === null || range.to === null) return;
+
+      // Check if user is scrolling near the beginning of loaded data
+      // Load more historical data when getting close to the left edge
+      const visibleRangeWidth = range.to - range.from;
+      const threshold = range.from + (visibleRangeWidth * 0.1); // 10% from left edge
+
+      if (range.from <= threshold && candles.length > 0) {
+        loadHistoricalData();
+      }
+    });
+
+    return () => {
+      unsubscribe?.();
     };
+  }, [chartRef, candles, hasMoreHistorical, isLoadingHistorical, isTestMode, selectedAsset, timeframe]);
+
+  // Load historical candle data (before the current oldest candle)
+  const loadHistoricalData = async () => {
+    if (isLoadingHistorical || !hasMoreHistorical || candles.length === 0 || isTestMode) {
+      return;
+    }
+
+    setIsLoadingHistorical(true);
 
     try {
-      if (candleSeriesRef.current && chartType === 'candles') {
-        candleSeriesRef.current.update(formatted as any);
-      } else if (lineSeriesRef.current && chartType === 'line') {
-        lineSeriesRef.current.update({
-          time: formatted.time,
-          value: formatted.close,
-        } as any);
+      // Get the oldest candle timestamp
+      const oldestCandle = candles[0];
+      const oldestTimestamp = oldestCandle.t;
+
+      // Load 500 more candles ending before the oldest one
+      const endTime = oldestTimestamp - 1; // 1ms before the oldest candle
+      const startTime = endTime - (500 * TIMEFRAMES[timeframe] * 1000);
+
+      const historicalData = await getCandles(selectedAsset, timeframe, 500, startTime, endTime);
+
+      if (historicalData.length === 0) {
+        // No more historical data available
+        setHasMoreHistorical(false);
+      } else {
+        // Merge historical data with existing candles
+        // Create new array with historical data first, then existing data
+        const mergedData = [...historicalData, ...candles];
+        setCandles(mergedData);
+
+        // Update chart with merged data
+        if (chartRef.current) {
+          const formatted = mergedData.map((c: any) => ({
+            time: Math.floor(c.t / 1000),
+            open: c.o,
+            high: c.h,
+            low: c.l,
+            close: c.c,
+          }));
+
+          if (candleSeriesRef.current && chartType === 'candles') {
+            candleSeriesRef.current.setData(formatted as any);
+          } else if (lineSeriesRef.current && chartType === 'line') {
+            const lineData = formatted.map((c: any) => ({
+              time: c.time,
+              value: c.close,
+            }));
+            lineSeriesRef.current.setData(lineData as any);
+          }
+        }
+
+        // If we got fewer candles than requested, we've reached the beginning
+        if (historicalData.length < 500) {
+          setHasMoreHistorical(false);
+        }
       }
-    } catch (e) {
-      // Ignore update errors (e.g., out-of-order timestamps)
+    } catch (err) {
+      console.warn('Failed to load historical candles:', err);
+      // Don't set hasMoreHistorical to false on error, might be temporary
+    } finally {
+      setIsLoadingHistorical(false);
     }
+  };
+
+  // Handle chart with new candles from WebSocket
+  useEffect(() => {
+    if (candles.length === 0 || !chartRef.current) return;
+
+    updateChartData();
   }, [candles, chartType]);
+
+  // Handle indicator changes
+  useEffect(() => {
+    if (!chartRef.current) return;
+
+    // Remove existing indicators
+    if (volumeSeriesRef.current) {
+      chartRef.current.removeSeries(volumeSeriesRef.current);
+      volumeSeriesRef.current = null;
+    }
+    if (rsiSeriesRef.current) {
+      chartRef.current.removeSeries(rsiSeriesRef.current);
+      rsiSeriesRef.current = null;
+    }
+
+    // Create new indicators if enabled
+    if (indicators.volume) {
+      const volumeSeries = chartRef.current.addHistogramSeries({
+        color: '#3b82f6',
+        priceFormat: { type: 'volume' },
+      });
+      volumeSeriesRef.current = volumeSeries;
+      // Update volume data
+      const volumeData = candles.map((c: any) => ({
+        time: Math.floor(c.t / 1000),
+        value: c.v,
+        color: c.c >= c.o ? '#22c55e' : '#ef4444',
+      }));
+      volumeSeries.setData(volumeData as any);
+    }
+
+    if (indicators.rsi) {
+      const rsiSeries = chartRef.current.addLineSeries({
+        color: '#f59e0b',
+        lineWidth: 2,
+      });
+      rsiSeriesRef.current = rsiSeries;
+      // Update RSI data
+      const prices = candles.map((c: any) => c.c);
+      const rsiData = calculateRSI(prices);
+      rsiSeries.setData(rsiData as any);
+    }
+  }, [indicators]);
 
   // Toggle fullscreen
   const toggleFullscreen = () => {
@@ -245,6 +475,30 @@ export function Chart() {
         </div>
 
         <div className="flex gap-2">
+          <div className="flex gap-1">
+            <button
+              onClick={() => setIndicators({ volume: !indicators.volume })}
+              className={`px-2 py-1 text-xs rounded ${
+                indicators.volume
+                  ? 'bg-blue-600 text-white'
+                  : 'text-text-secondary hover:text-text-primary hover:bg-surface-elevated'
+              }`}
+              data-testid="indicator-volume-toggle"
+            >
+              Volume
+            </button>
+            <button
+              onClick={() => setIndicators({ rsi: !indicators.rsi })}
+              className={`px-2 py-1 text-xs rounded ${
+                indicators.rsi
+                  ? 'bg-amber-600 text-white'
+                  : 'text-text-secondary hover:text-text-primary hover:bg-surface-elevated'
+              }`}
+              data-testid="indicator-rsi-toggle"
+            >
+              RSI
+            </button>
+          </div>
           <button
             onClick={() => setChartType(chartType === 'candles' ? 'line' : 'candles')}
             className="px-2 py-1 text-xs text-text-secondary hover:text-text-primary hover:bg-surface-elevated rounded"
