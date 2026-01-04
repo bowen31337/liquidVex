@@ -502,3 +502,55 @@ Verified and marked complete WebSocket orderbook endpoint (Feature 62). The endp
 
 **Status:** Feature verified and marked complete.
 
+
+# Claude Progress Report - Session (Continued)
+
+## Additional Features Verified This Session
+
+### Feature #67: API POST /api/trade/cancel cancels existing order ✅
+### Feature #69: API POST /api/trade/cancel-all cancels all orders ✅
+
+**Implementation Status:** Both already implemented and working correctly.
+
+**Endpoints:**
+1. POST /api/trade/cancel - Cancel single order
+2. POST /api/trade/cancel-all - Cancel all orders (optionally filtered by coin)
+
+**Verification Results:**
+
+**Cancel Order (Feature #67):**
+- ✅ Step 1: Order placement for cancellation
+- ✅ Step 2: Order cancellation successful
+- ✅ Step 3: Response format validated
+- ✅ Step 4: Different order IDs work
+- ✅ Step 5: Signature parameter validated
+
+**Cancel All Orders (Feature #69):**
+- ✅ Step 1: Multiple orders placement
+- ✅ Step 2: Cancel all for specific coin
+- ✅ Step 3: Response format validated
+- ✅ Step 4: Cancel all without coin filter
+- ✅ Step 5: Different coin support
+
+**API Response Format:**
+```json
+{
+  "success": true,
+  "orderId": 12345,
+  "message": "Order canceled successfully"
+}
+```
+
+**Testing:**
+- Created comprehensive test scripts for both endpoints
+- Verified all request parameters
+- Validated response formats
+- Tested edge cases (different coins, no coin filter)
+
+**Code Location:**
+- `apps/api/routers/trade.py`
+- Functions: `cancel_order()`, `cancel_all_orders()`
+- Lines 132-188
+
+**Status:** Both features verified and marked complete.
+
