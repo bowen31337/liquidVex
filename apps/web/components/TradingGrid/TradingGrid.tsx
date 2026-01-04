@@ -106,46 +106,56 @@ export function TradingGrid() {
   };
 
   return (
-    <div className="flex gap-1 p-1 h-[calc(100vh-3.5rem-200px)]">
+    <div className="flex h-[calc(100vh-3.5rem-200px)] overflow-hidden">
       {/* Chart Panel */}
       <div
         className={`relative flex flex-col chart-panel ${isDragging ? 'select-none' : ''}`}
-        style={{ width: `${sizes.chart}%` }}
+        style={{ width: `${sizes.chart}%`, minWidth: '30%' }}
       >
-        <Chart />
-        {/* Vertical Resize Handle */}
+        <div className="flex-1 overflow-hidden p-1">
+          <Chart />
+        </div>
+        {/* Vertical Resize Handle - overlay on right edge */}
         <div
-          className="absolute right-0 top-0 w-1 h-full cursor-col-resize hover:bg-accent/50 transition-colors z-20"
+          className="absolute inset-y-0 right-0 w-3 cursor-col-resize hover:bg-accent/30 transition-colors z-30 flex items-center justify-center"
           onMouseDown={(e) => startDragging('chart', e)}
           data-testid="resize-handle-chart"
-        />
+          title="Drag to resize chart panel"
+        >
+          <div className="w-0.5 h-8 bg-border hover:bg-accent transition-colors rounded-full" />
+        </div>
       </div>
 
       {/* Middle Column: Order Book + Recent Trades */}
       <div
-        className={`relative flex flex-col gap-1 ${isDragging ? 'select-none' : ''}`}
-        style={{ width: `${sizes.orderBook}%` }}
+        className={`relative flex flex-col ${isDragging ? 'select-none' : ''}`}
+        style={{ width: `${sizes.orderBook}%`, minWidth: '10%' }}
       >
-        <div className="flex-1 min-h-0">
+        <div className="flex-1 overflow-hidden p-1">
           <OrderBook />
         </div>
-        <div className="flex-1 min-h-0">
+        <div className="flex-1 overflow-hidden p-1 border-t border-border">
           <RecentTrades />
         </div>
-        {/* Vertical Resize Handle */}
+        {/* Vertical Resize Handle - overlay on right edge */}
         <div
-          className="absolute right-0 top-0 w-1 h-full cursor-col-resize hover:bg-accent/50 transition-colors z-20"
+          className="absolute inset-y-0 right-0 w-3 cursor-col-resize hover:bg-accent/30 transition-colors z-30 flex items-center justify-center"
           onMouseDown={(e) => startDragging('orderBook', e)}
           data-testid="resize-handle-orderbook"
-        />
+          title="Drag to resize order book panel"
+        >
+          <div className="w-0.5 h-8 bg-border hover:bg-accent transition-colors rounded-full" />
+        </div>
       </div>
 
       {/* Order Entry Panel */}
       <div
-        className={`relative ${isDragging ? 'select-none' : ''}`}
-        style={{ width: `${sizes.orderEntry}%` }}
+        className={`relative flex-1 ${isDragging ? 'select-none' : ''}`}
+        style={{ minWidth: '15%' }}
       >
-        <OrderForm />
+        <div className="h-full overflow-hidden p-1">
+          <OrderForm />
+        </div>
       </div>
     </div>
   );

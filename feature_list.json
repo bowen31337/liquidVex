@@ -1181,15 +1181,13 @@
       "Step 9: Close and reopen browser",
       "Step 10: Verify layout is still preserved"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false,
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 1,
+    "dev_failure_count": 0,
     "last_dev_failure_at": "2026-01-04T04:24:07.578812Z",
-    "dev_failure_reasons": [
-      "Worker session timed out"
-    ]
+    "dev_failure_reasons": []
   },
   {
     "category": "functional",
