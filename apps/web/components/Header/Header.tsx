@@ -23,11 +23,10 @@ export function Header() {
     indexPrice,
     fundingRate,
     fundingCountdown,
-    wsConnected,
   } = useMarketStore();
 
   const wagmiWallet = useWalletSync();
-  const { address, isConnected, connecting, connectError, connectMetaMask, connectWalletConnect, disconnect } = wagmiWallet;
+  const { address, isConnected, isConnecting, disconnect } = wagmiWallet;
   const { getExchangeMeta } = useApi();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [walletModalOpen, setWalletModalOpen] = useState(false);
@@ -158,13 +157,13 @@ export function Header() {
         {/* Wallet Connect Button */}
         <button
           onClick={handleWalletClick}
-          disabled={connecting}
+          disabled={isConnecting}
           data-testid="wallet-connect-button"
           className={`btn btn-accent min-w-[140px] ${
             isConnected ? 'bg-long hover:bg-long-muted' : ''
           }`}
         >
-          {connecting
+          {isConnecting
             ? 'Connecting...'
             : isConnected
             ? truncateAddress(address || '')

@@ -7,7 +7,7 @@
 
 import { useEffect, useState } from 'react';
 import { useMarketStore } from '../stores/marketStore';
-import { OrderBookData, TradeData, CandleData, AllMidsData, UserStreamData } from '../types';
+import { OrderBookData, TradeData, CandleData, AllMidsData } from '../types';
 import { wsManager } from './useWebSocketManager';
 
 interface WebSocketOptions {
@@ -82,7 +82,7 @@ export function useWebSocket(url: string | null, options: WebSocketOptions = {})
 
   return {
     isConnected,
-    send: (data: any) => {
+    send: (_data: any) => {
       // For now, we don't support sending through the manager
       // This can be added later if needed
       return false;

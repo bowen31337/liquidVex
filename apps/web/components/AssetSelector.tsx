@@ -217,7 +217,6 @@ export function AssetSelector() {
                       <div className="flex items-center gap-2">
                         <button
                           data-testid="favorite-button"
-                          fill={isFavorited(asset.coin) ? 'currentColor' : 'none'}
                           onClick={(e) => {
                             e.stopPropagation();
                             toggleFavorite(asset.coin);

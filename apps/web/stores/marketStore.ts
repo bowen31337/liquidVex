@@ -3,7 +3,7 @@
  */
 
 import { create } from 'zustand';
-import { OrderBookData, TradeData, CandleData, AllMidsData, AssetInfo } from '../types';
+import { OrderBookData, TradeData, CandleData, AssetInfo } from '../types';
 
 interface MarketState {
   // Current selected asset
@@ -13,6 +13,14 @@ interface MarketState {
   // Aliases for compatibility
   selectedCoin: string;
   selectedTimeframe: string;
+
+  // Loading states
+  isLoadingOrderBook: boolean;
+  isLoadingTrades: boolean;
+  isLoadingCandles: boolean;
+  setIsLoadingOrderBook: (loading: boolean) => void;
+  setIsLoadingTrades: (loading: boolean) => void;
+  setIsLoadingCandles: (loading: boolean) => void;
 
   // Order book
   orderBook: OrderBookData | null;
@@ -72,16 +80,24 @@ export const useMarketStore = create<MarketState>((set, get) => ({
   selectedCoin: 'BTC',
   selectedTimeframe: '1h',
 
+  // Loading states
+  isLoadingOrderBook: true,
+  isLoadingTrades: true,
+  isLoadingCandles: true,
+  setIsLoadingOrderBook: (loading) => set({ isLoadingOrderBook: loading }),
+  setIsLoadingTrades: (loading) => set({ isLoadingTrades: loading }),
+  setIsLoadingCandles: (loading) => set({ isLoadingCandles: loading }),
+
   orderBook: null,
-  setOrderBook: (data) => set({ orderBook: data }),
+  setOrderBook: (data) => set({ orderBook: data, isLoadingOrderBook: false }),
 
   trades: [],
   addTrade: (trade) => {
     const state = get();
     const newTrades = [trade, ...state.trades].slice(0, 50); // Keep last 50
-    set({ trades: newTrades });
+    set({ trades: newTrades, isLoadingTrades: false });
   },
-  clearTrades: () => set({ trades: [] }),
+  clearTrades: () => set({ trades: [], isLoadingTrades: true }),
 
   currentPrice: 95420.50,
   priceChange24h: 2.34,
@@ -121,7 +137,7 @@ export const useMarketStore = create<MarketState>((set, get) => ({
   setWsConnected: (connected) => set({ wsConnected: connected }),
 
   candles: [],
-  setCandles: (candles) => set({ candles }),
+  setCandles: (candles) => set({ candles, isLoadingCandles: false }),
   addCandle: (candle) => {
     const state = get();
     // Normalize candle data from WebSocket message
@@ -149,9 +165,9 @@ export const useMarketStore = create<MarketState>((set, get) => ({
       newCandles = [...state.candles, normalizedCandle].slice(-500); // Keep last 500
     }
 
-    set({ candles: newCandles });
+    set({ candles: newCandles, isLoadingCandles: false });
   },
-  clearCandles: () => set({ candles: [] }),
+  clearCandles: () => set({ candles: [], isLoadingCandles: true }),
 
   // Placeholder functions - these are no-ops but prevent errors
   fetchAllMarkets: async () => {

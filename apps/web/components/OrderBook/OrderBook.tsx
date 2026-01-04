@@ -4,7 +4,7 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useMarketStore } from '../../stores/marketStore';
 import { useOrderStore } from '../../stores/orderStore';
 import { useWebSocket } from '../../hooks/useWebSocket';
@@ -16,7 +16,7 @@ interface OrderBookProps {
 }
 
 export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
-  const { orderBook, selectedAsset, setOrderBook } = useMarketStore();
+  const { orderBook, selectedAsset } = useMarketStore();
   const { setOrderForm } = useOrderStore();
   const [aggregation, setAggregation] = useState<number>(1); // Price grouping in decimals
   const [selectedPrecision, setSelectedPrecision] = useState<number>(2); // Price precision
@@ -50,7 +50,7 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
   };
 
   // Calculate cumulative volume for depth bars
-  const calculateCumulative = (levels: OrderBookLevel[], isAsk: boolean) => {
+  const calculateCumulative = (levels: OrderBookLevel[]) => {
     let cumulative = 0;
     return levels.map(level => {
       cumulative += level.sz;
@@ -86,8 +86,8 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
   // Prepare data for rendering
   const renderData = orderBook
     ? {
-        bids: calculateCumulative(groupLevels(orderBook.bids.slice(0, levels).reverse(), false), false),
-        asks: calculateCumulative(groupLevels(orderBook.asks.slice(0, levels), true), true),
+        bids: calculateCumulative(groupLevels(orderBook.bids.slice(0, levels).reverse(), false)),
+        asks: calculateCumulative(groupLevels(orderBook.asks.slice(0, levels), true)),
       }
     : { bids: [], asks: [] };
 

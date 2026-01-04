@@ -13,7 +13,7 @@ interface WalletModalProps {
 
 export function WalletModal({ isOpen, onClose }: WalletModalProps) {
   const wagmiWallet = useWalletSync();
-  const { connectMetaMask, connectWalletConnect, connectError, isConnecting } = wagmiWallet;
+  const { connectMetaMask, connectWalletConnect, connectError, isConnecting, isMetaMaskAvailable } = wagmiWallet;
 
   if (!isOpen) return null;
 
@@ -31,11 +31,20 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
         <div className="space-y-3">
           <button
             onClick={async () => {
-              await connectMetaMask();
-              onClose();
+              try {
+                if (!isMetaMaskAvailable) {
+                  throw new Error('MetaMask extension not detected. Please install MetaMask to connect.');
+                }
+                await connectMetaMask();
+                onClose();
+              } catch (error) {
+                console.error('MetaMask connection failed:', error);
+              }
             }}
-            disabled={isConnecting}
-            className="w-full p-3 bg-surface-elevated rounded-lg border border-border hover:bg-surface/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isConnecting || !isMetaMaskAvailable}
+            className={`w-full p-3 bg-surface-elevated rounded-lg border border-border hover:bg-surface/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+              !isMetaMaskAvailable ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -44,7 +53,9 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                 </div>
                 <div>
                   <div className="text-text-primary font-medium">MetaMask</div>
-                  <div className="text-text-tertiary text-sm">Browser extension</div>
+                  <div className="text-text-tertiary text-sm">
+                    {isMetaMaskAvailable ? 'Browser extension' : 'Extension not detected'}
+                  </div>
                 </div>
               </div>
               {isConnecting && <div className="w-4 h-4 border-2 border-text-tertiary border-t-long rounded-full animate-spin" />}
@@ -53,8 +64,12 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
 
           <button
             onClick={async () => {
-              await connectWalletConnect();
-              onClose();
+              try {
+                await connectWalletConnect();
+                onClose();
+              } catch (error) {
+                console.error('WalletConnect connection failed:', error);
+              }
             }}
             disabled={isConnecting}
             className="w-full p-3 bg-surface-elevated rounded-lg border border-border hover:bg-surface/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -72,6 +87,14 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
               {isConnecting && <div className="w-4 h-4 border-2 border-text-tertiary border-t-long rounded-full animate-spin" />}
             </div>
           </button>
+        </div>
+
+        <div className="mt-4 text-xs text-text-tertiary">
+          <div className="space-y-1">
+            <div>• Select MetaMask to connect your browser wallet</div>
+            <div>• Select WalletConnect to connect via QR code</div>
+            <div>• You will be prompted to switch to Arbitrum network if needed</div>
+          </div>
         </div>
 
         <button

@@ -4,11 +4,9 @@
 
 import { useEffect, useCallback } from 'react';
 import { useOrderStore } from '../stores/orderStore';
-import { useMarketStore } from '../stores/marketStore';
 
 export function useAccount(address?: string) {
   const { accountState, fetchAccountState, setAccountState } = useOrderStore();
-  const { selectedAsset } = useMarketStore();
 
   // Mock account data for demo purposes
   const mockAccountState = {

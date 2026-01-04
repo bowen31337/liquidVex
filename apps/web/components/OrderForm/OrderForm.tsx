@@ -4,7 +4,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useOrderStore } from '../../stores/orderStore';
 import { useWalletStore } from '../../stores/walletStore';
 import { useMarketStore } from '../../stores/marketStore';
@@ -15,7 +15,7 @@ import { useFavoritesActions } from '../../contexts/FavoritesContext';
 
 export function OrderForm() {
   const { orderForm, setOrderForm, resetOrderForm, addOpenOrder } = useOrderStore();
-  const { isConnected, address } = useWalletStore();
+  const { isConnected } = useWalletStore();
   const { currentPrice, selectedAsset } = useMarketStore();
   const { placeOrder } = useApi();
   const { success: showSuccess, error: showError } = useToast();

@@ -1,31 +1,3390 @@
 [
-  {
-    "category": "functional",
-    "description": "Complete application startup and initial render verification",
-    "steps": [
-      "Step 1: Navigate to the application root URL",
-      "Step 2: Wait for the page to fully load (check document.readyState)",
-      "Step 3: Verify the main trading interface is displayed",
-      "Step 4: Verify no JavaScript errors in console",
-      "Step 5: Verify header section renders with logo and navigation",
-      "Step 6: Verify chart panel renders with loading state or data",
-      "Step 7: Verify order book panel renders with bid/ask columns",
-      "Step 8: Verify recent trades panel renders",
-      "Step 9: Verify order entry panel renders with form fields",
-      "Step 10: Verify bottom panel with tabs renders",
-      "Step 11: Verify WebSocket connection status indicator is visible"
-    ],
-    "passes": true,
-    "is_dev_done": true,
-    "is_qa_passed": true,
-    "qa_retry_count": 0,
-    "dev_failure_count": 0,
-    "last_dev_failure_at": null,
-    "dev_failure_reasons": [],
-    "is_stuck": false,
-    "stuck_reason": null,
-    "stuck_at": null
-  },
+  [
+    {
+      "category": "functional",
+      "description": "Complete application startup and initial render verification",
+      "steps": [
+        "Step 1: Navigate to the application root URL",
+        "Step 2: Wait for the page to fully load (check document.readyState)",
+        "Step 3: Verify the main trading interface is displayed",
+        "Step 4: Verify no JavaScript errors in console",
+        "Step 5: Verify header section renders with logo and navigation",
+        "Step 6: Verify chart panel renders with loading state or data",
+        "Step 7: Verify order book panel renders with bid/ask columns",
+        "Step 8: Verify recent trades panel renders",
+        "Step 9: Verify order entry panel renders with form fields",
+        "Step 10: Verify bottom panel with tabs renders",
+        "Step 11: Verify WebSocket connection status indicator is visible"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 0,
+      "dev_failure_count": 0,
+      "last_dev_failure_at": null,
+      "dev_failure_reasons": [],
+      "is_stuck": false,
+      "stuck_reason": null,
+      "stuck_at": null
+    },
+    {
+      "category": "functional",
+      "description": "Header component displays logo, asset selector, and wallet connect button",
+      "steps": [
+        "Step 1: Navigate to the application",
+        "Step 2: Verify logo is displayed on the left side of header",
+        "Step 3: Verify asset selector dropdown is present",
+        "Step 4: Verify wallet connect button is displayed on the right"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 0,
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Asset selector comprehensive functionality test",
+      "steps": [
+        "Step 1: Navigate to the application",
+        "Step 2: Click on the asset selector dropdown",
+        "Step 3: Verify dropdown opens showing list of trading pairs",
+        "Step 4: Verify each pair shows coin name and relevant market data",
+        "Step 5: Type 'BTC' in the search field",
+        "Step 6: Verify only BTC-related pairs are shown",
+        "Step 7: Clear the search field",
+        "Step 8: Verify all pairs are shown again",
+        "Step 9: Type a non-existent pair name",
+        "Step 10: Verify 'No results' message is displayed",
+        "Step 11: Click outside dropdown",
+        "Step 12: Verify dropdown closes"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 0,
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Selecting a trading pair updates the entire interface",
+      "steps": [
+        "Step 1: Note the currently selected pair",
+        "Step 2: Open asset selector and click on a different pair",
+        "Step 3: Verify header shows new pair name",
+        "Step 4: Verify order book updates with new pair data",
+        "Step 5: Verify chart updates with new pair data",
+        "Step 6: Verify recent trades update with new pair data",
+        "Step 7: Verify order entry form shows correct pair"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 0,
+      "dev_failure_count": 3,
+      "last_dev_failure_at": "2026-01-04T02:26:11.967059Z",
+      "dev_failure_reasons": [
+        "All 1 API pairs failed for this request",
+        "All 1 API pairs failed for this request",
+        "All 1 API pairs failed for this request"
+      ],
+      "is_stuck": false,
+      "stuck_reason": "Max DEV failures exceeded. Last errors: ['All 1 API pairs failed for this request', 'All 1 API pairs failed for this request']",
+      "stuck_at": "2026-01-04T02:26:22.030166Z"
+    },
+    {
+      "category": "functional",
+      "description": "Current price displays in header with 24h change percentage",
+      "steps": [
+        "Step 1: Navigate to the application",
+        "Step 2: Verify current price is displayed in header",
+        "Step 3: Verify 24h change percentage is shown next to price",
+        "Step 4: Verify positive change shows green color",
+        "Step 5: Verify negative change shows red color"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 0,
+      "dev_failure_count": 3,
+      "last_dev_failure_at": "2026-01-04T02:26:13.615988Z",
+      "dev_failure_reasons": [
+        "All 1 API pairs failed for this request",
+        "All 1 API pairs failed for this request",
+        "All 1 API pairs failed for this request"
+      ],
+      "is_stuck": false,
+      "stuck_reason": "Max DEV failures exceeded. Last errors: ['All 1 API pairs failed for this request', 'All 1 API pairs failed for this request']",
+      "stuck_at": "2026-01-04T02:26:20.786522Z"
+    },
+    {
+      "category": "functional",
+      "description": "Mark price and index price display in header",
+      "steps": [
+        "Step 1: Navigate to the application",
+        "Step 2: Locate mark price display in header",
+        "Step 3: Verify mark price shows a valid number",
+        "Step 4: Locate index price display",
+        "Step 5: Verify index price shows a valid number",
+        "Step 6: Verify both prices update in real-time"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 0,
+      "dev_failure_count": 3,
+      "last_dev_failure_at": "2026-01-04T02:26:14.354889Z",
+      "dev_failure_reasons": [
+        "All 1 API pairs failed for this request",
+        "All 1 API pairs failed for this request",
+        "All 1 API pairs failed for this request"
+      ],
+      "is_stuck": false,
+      "stuck_reason": null,
+      "stuck_at": null
+    },
+    {
+      "category": "functional",
+      "description": "Funding rate display shows current rate and countdown",
+      "steps": [
+        "Step 1: Navigate to the application",
+        "Step 2: Locate funding rate display in header",
+        "Step 3: Verify funding rate percentage is shown",
+        "Step 4: Verify countdown timer to next funding is displayed",
+        "Step 5: Verify countdown decrements in real-time"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 0,
+      "dev_failure_count": 3,
+      "last_dev_failure_at": "2026-01-04T02:26:14.529456Z",
+      "dev_failure_reasons": [
+        "All 1 API pairs failed for this request",
+        "All 1 API pairs failed for this request",
+        "All 1 API pairs failed for this request"
+      ],
+      "is_stuck": false,
+      "stuck_reason": null,
+      "stuck_at": null
+    },
+    {
+      "category": "functional",
+      "description": "WebSocket connection establishes successfully on page load",
+      "steps": [
+        "Step 1: Open browser developer tools Network tab",
+        "Step 2: Navigate to the application",
+        "Step 3: Verify WebSocket connection is established",
+        "Step 4: Verify connection status indicator shows connected (green)",
+        "Step 5: Verify data starts flowing through WebSocket"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 0,
+      "dev_failure_count": 3,
+      "last_dev_failure_at": "2026-01-04T02:26:11.661433Z",
+      "dev_failure_reasons": [
+        "All 1 API pairs failed for this request",
+        "All 1 API pairs failed for this request",
+        "All 1 API pairs failed for this request"
+      ],
+      "is_stuck": false,
+      "stuck_reason": null,
+      "stuck_at": null
+    },
+    {
+      "category": "functional",
+      "description": "WebSocket auto-reconnect after connection loss full flow",
+      "steps": [
+        "Step 1: Navigate to the application and verify connection",
+        "Step 2: Verify data is flowing via WebSocket",
+        "Step 3: Simulate network disconnection",
+        "Step 4: Verify connection status shows disconnected (red)",
+        "Step 5: Verify UI displays reconnecting message",
+        "Step 6: Restore network connection",
+        "Step 7: Wait for reconnection attempt (up to 5 seconds)",
+        "Step 8: Verify WebSocket reconnects successfully",
+        "Step 9: Verify connection status returns to connected (green)",
+        "Step 10: Verify data flow resumes with correct values",
+        "Step 11: Verify no data loss or corruption occurred"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 0,
+      "dev_failure_count": 0,
+      "dev_completed_at": "2026-01-04T02:27:00.933175Z"
+    },
+    {
+      "category": "functional",
+      "description": "Order book complete functionality verification",
+      "steps": [
+        "Step 1: Navigate to order book panel",
+        "Step 2: Verify bid prices are shown on left/bottom (green)",
+        "Step 3: Verify ask prices are shown on right/top (red)",
+        "Step 4: Verify prices are sorted correctly (descending for bids, ascending for asks)",
+        "Step 5: Verify each price level shows size column",
+        "Step 6: Verify sizes are displayed in appropriate decimal precision",
+        "Step 7: Verify total cumulative volume is displayed",
+        "Step 8: Verify depth bars are displayed behind price levels",
+        "Step 9: Verify bid depth bars are green-shaded",
+        "Step 10: Verify ask depth bars are red-shaded",
+        "Step 11: Verify bar length corresponds to cumulative volume",
+        "Step 12: Verify prices update in real-time"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 0,
+      "dev_failure_count": 0,
+      "dev_completed_at": "2026-01-04T02:27:00.854429Z",
+      "last_qa_at": "2026-01-04T14:00:00.000000Z"
+    },
+    {
+      "category": "functional",
+      "description": "Order book spread displays correctly between bids and asks",
+      "steps": [
+        "Step 1: Navigate to order book panel",
+        "Step 2: Locate spread display between bid and ask sections",
+        "Step 3: Verify spread shows absolute price difference",
+        "Step 4: Verify spread percentage is also displayed",
+        "Step 5: Verify spread updates in real-time"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 0,
+      "dev_failure_count": 0,
+      "dev_completed_at": "2026-01-04T02:27:00.607011Z",
+      "last_qa_at": "2026-01-04T14:00:00.000000Z"
+    },
+    {
+      "category": "functional",
+      "description": "Clicking order book price level populates order form",
+      "steps": [
+        "Step 1: Navigate to order book panel",
+        "Step 2: Click on a bid price level",
+        "Step 3: Verify order form price field is populated with clicked price",
+        "Step 4: Click on an ask price level",
+        "Step 5: Verify order form price field updates to new price"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 1,
+      "dev_failure_count": 0,
+      "dev_completed_at": "2026-01-04T02:44:29.331327Z"
+    },
+    {
+      "category": "functional",
+      "description": "Order book price precision and aggregation controls",
+      "steps": [
+        "Step 1: Navigate to order book panel",
+        "Step 2: Locate price precision control",
+        "Step 3: Change precision to 2 decimal places",
+        "Step 4: Verify prices are grouped accordingly",
+        "Step 5: Change precision to 4 decimal places",
+        "Step 6: Verify more granular price levels appear",
+        "Step 7: Locate aggregation dropdown",
+        "Step 8: Select higher aggregation level",
+        "Step 9: Verify price levels are consolidated",
+        "Step 10: Verify volume sums are correct",
+        "Step 11: Select lower aggregation",
+        "Step 12: Verify more price levels appear"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 0,
+      "dev_failure_count": 0,
+      "dev_completed_at": "2026-01-04T02:27:01.315238Z"
+    },
+    {
+      "category": "functional",
+      "description": "Order book imbalance indicator shows bid/ask pressure",
+      "steps": [
+        "Step 1: Navigate to order book panel",
+        "Step 2: Locate imbalance indicator",
+        "Step 3: Verify indicator shows relative bid vs ask volume",
+        "Step 4: Verify indicator updates with market changes"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 0,
+      "dev_failure_count": 0,
+      "dev_completed_at": "2026-01-04T02:27:01.061397Z"
+    },
+    {
+      "category": "functional",
+      "description": "Recent trades feed displays in real-time with direction colors",
+      "steps": [
+        "Step 1: Navigate to recent trades panel",
+        "Step 2: Verify trades are displayed in chronological order",
+        "Step 3: Verify each trade shows price, size, and time",
+        "Step 4: Verify new trades appear at top of list",
+        "Step 5: Verify trades animate in smoothly",
+        "Step 6: Identify a buy trade",
+        "Step 7: Verify buy trade is colored green",
+        "Step 8: Identify a sell trade",
+        "Step 9: Verify sell trade is colored red"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 0,
+      "dev_failure_count": 0,
+      "dev_completed_at": "2026-01-04T02:27:01.154147Z",
+      "last_qa_at": "2026-01-04T14:00:00.000000Z"
+    },
+    {
+      "category": "functional",
+      "description": "TradingView chart complete functionality test",
+      "steps": [
+        "Step 1: Navigate to chart panel",
+        "Step 2: Verify chart loads and displays candlesticks",
+        "Step 3: Verify candles show OHLC data correctly",
+        "Step 4: Verify green candles for bullish periods",
+        "Step 5: Verify red candles for bearish periods",
+        "Step 6: Verify chart updates with new data",
+        "Step 7: Use mouse wheel to zoom in",
+        "Step 8: Verify chart zooms in showing fewer candles",
+        "Step 9: Use mouse wheel to zoom out",
+        "Step 10: Verify chart zooms out showing more candles",
+        "Step 11: Click and drag on chart area",
+        "Step 12: Verify chart pans to show historical data"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 0,
+      "dev_failure_count": 1,
+      "dev_completed_at": "2026-01-04T13:55:00.000000Z",
+      "last_qa_at": "2026-01-04T14:00:00.000000Z",
+      "last_dev_failure_at": "2026-01-04T03:26:59.604637Z",
+      "dev_failure_reasons": [
+        "Worker session timed out"
+      ]
+    },
+    {
+      "category": "functional",
+      "description": "Chart timeframe selector with all intervals",
+      "steps": [
+        "Step 1: Navigate to chart panel",
+        "Step 2: Locate timeframe selector",
+        "Step 3: Click on 1m timeframe",
+        "Step 4: Verify chart updates to 1-minute candles",
+        "Step 5: Click on 5m timeframe",
+        "Step 6: Verify chart updates to 5-minute candles",
+        "Step 7: Click on 15m timeframe",
+        "Step 8: Verify chart updates to 15-minute candles",
+        "Step 9: Click on 1h timeframe",
+        "Step 10: Verify chart updates to 1-hour candles",
+        "Step 11: Click on 4h timeframe",
+        "Step 12: Verify chart updates to 4-hour candles",
+        "Step 13: Click on 1d timeframe",
+        "Step 14: Verify chart updates to daily candles"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T02:27:03.616700Z",
+      "dev_failure_count": 0,
+      "last_qa_at": "2026-01-04T03:27:49Z"
+    },
+    {
+      "category": "functional",
+      "description": "Chart displays price and time scales correctly",
+      "steps": [
+        "Step 1: Navigate to chart panel",
+        "Step 2: Locate price scale on right side",
+        "Step 3: Verify price levels are displayed",
+        "Step 4: Verify current price is highlighted",
+        "Step 5: Verify scale adjusts with zoom",
+        "Step 6: Locate time scale on bottom",
+        "Step 7: Verify time labels are displayed",
+        "Step 8: Verify labels match selected timeframe",
+        "Step 9: Verify scale updates with pan/zoom"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T02:35:37.043488Z",
+      "dev_failure_count": 0,
+      "last_qa_at": "2026-01-04T03:27:49Z"
+    },
+    {
+      "category": "functional",
+      "description": "Chart crosshair and interactions",
+      "steps": [
+        "Step 1: Navigate to chart panel",
+        "Step 2: Move mouse over chart area",
+        "Step 3: Verify crosshair lines appear",
+        "Step 4: Verify price label shows at cursor height",
+        "Step 5: Verify time label shows at cursor position"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T02:39:44.988860Z",
+      "dev_failure_count": 0,
+      "last_qa_at": "2026-01-04T03:27:49Z"
+    },
+    {
+      "category": "functional",
+      "description": "Chart full-screen and type toggle",
+      "steps": [
+        "Step 1: Navigate to chart panel",
+        "Step 2: Locate full-screen toggle button",
+        "Step 3: Click to enter full-screen mode",
+        "Step 4: Verify chart expands to fill screen",
+        "Step 5: Click to exit full-screen mode",
+        "Step 6: Verify chart returns to normal size",
+        "Step 7: Locate chart type toggle",
+        "Step 8: Switch to line chart",
+        "Step 9: Verify chart displays line instead of candles",
+        "Step 10: Switch back to candlestick",
+        "Step 11: Verify candles are displayed again"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 0,
+      "dev_failure_count": 1,
+      "dev_completed_at": "2026-01-04T13:55:00.000000Z",
+      "last_qa_at": "2026-01-04T14:00:00.000000Z",
+      "last_dev_failure_at": "2026-01-04T03:27:03.473362Z",
+      "dev_failure_reasons": [
+        "Worker session timed out"
+      ]
+    },
+    {
+      "category": "functional",
+      "description": "Complete MetaMask wallet connection flow",
+      "steps": [
+        "Step 1: Ensure MetaMask extension is installed",
+        "Step 2: Navigate to the application",
+        "Step 3: Locate wallet connect button in header",
+        "Step 4: Click the wallet connect button",
+        "Step 5: Verify connection modal opens",
+        "Step 6: Verify wallet options are displayed (MetaMask, WalletConnect)",
+        "Step 7: Select MetaMask option",
+        "Step 8: Approve connection in MetaMask popup",
+        "Step 9: Verify wallet address is displayed in header (truncated)",
+        "Step 10: Verify connection status shows connected",
+        "Step 11: Hover over address to see full address tooltip",
+        "Step 12: Verify wallet balance displays correctly"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 1,
+      "dev_completed_at": "2026-01-04T02:43:16.854748Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "WalletConnect QR code flow",
+      "steps": [
+        "Step 1: Click wallet connect button",
+        "Step 2: Select WalletConnect option",
+        "Step 3: Verify QR code modal appears",
+        "Step 4: Verify QR code is scannable",
+        "Step 5: Verify modal can be closed"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T02:39:22.918023Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Network detection and switching flow",
+      "steps": [
+        "Step 1: Connect wallet on wrong network (e.g., Ethereum mainnet)",
+        "Step 2: Verify network warning is displayed",
+        "Step 3: Click switch network button",
+        "Step 4: Verify MetaMask prompts for network switch",
+        "Step 5: Approve network switch",
+        "Step 6: Verify correct network is now selected",
+        "Step 7: Verify warning disappears"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T02:37:08.766740Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Wallet disconnect functionality",
+      "steps": [
+        "Step 1: Connect wallet successfully",
+        "Step 2: Click on wallet address/icon",
+        "Step 3: Click disconnect option",
+        "Step 4: Verify wallet disconnects",
+        "Step 5: Verify connect button reappears",
+        "Step 6: Verify balance and address are hidden"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T02:48:53.671654Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Order entry form complete UI test",
+      "steps": [
+        "Step 1: Navigate to order entry panel",
+        "Step 2: Verify buy/sell toggle tabs are visible",
+        "Step 3: Verify buy tab is green-styled",
+        "Step 4: Verify sell tab is red-styled",
+        "Step 5: Click Buy tab and verify active",
+        "Step 6: Click Sell tab and verify active",
+        "Step 7: Locate order type selector",
+        "Step 8: Select Limit order type",
+        "Step 9: Verify price input field is visible",
+        "Step 10: Select Market order type",
+        "Step 11: Verify price input field is hidden",
+        "Step 12: Select Stop order type",
+        "Step 13: Verify trigger price field appears"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T02:52:42.670846Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Order entry price and size inputs",
+      "steps": [
+        "Step 1: Navigate to order entry form with Limit selected",
+        "Step 2: Click on price input field",
+        "Step 3: Type a valid price (e.g., 50000.50)",
+        "Step 4: Verify price is displayed correctly",
+        "Step 5: Verify invalid characters are rejected",
+        "Step 6: Click increment button",
+        "Step 7: Verify price increases by tick size",
+        "Step 8: Click decrement button",
+        "Step 9: Verify price decreases by tick size",
+        "Step 10: Click on size input field",
+        "Step 11: Type a valid size (e.g., 0.5)",
+        "Step 12: Verify size is displayed correctly"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T02:59:32.198804Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Percentage buttons and leverage slider functionality",
+      "steps": [
+        "Step 1: Connect wallet and ensure balance is available",
+        "Step 2: Navigate to order entry form",
+        "Step 3: Click 25% button",
+        "Step 4: Verify size is 25% of max position",
+        "Step 5: Click 50% button",
+        "Step 6: Verify size is 50% of max position",
+        "Step 7: Click 75% button",
+        "Step 8: Verify size is 75% of max position",
+        "Step 9: Click 100% button",
+        "Step 10: Verify size is maximum possible",
+        "Step 11: Locate leverage slider",
+        "Step 12: Drag slider to 5x",
+        "Step 13: Verify leverage display shows 5x",
+        "Step 14: Drag slider to 20x",
+        "Step 15: Verify leverage display shows 20x"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T02:50:47.548061Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Order options checkboxes (reduce-only, post-only)",
+      "steps": [
+        "Step 1: Navigate to order entry form",
+        "Step 2: Locate reduce-only checkbox",
+        "Step 3: Verify checkbox is unchecked by default",
+        "Step 4: Click to enable reduce-only",
+        "Step 5: Verify checkbox is checked",
+        "Step 6: Verify order preview shows reduce-only flag",
+        "Step 7: Select Limit order type",
+        "Step 8: Locate post-only checkbox",
+        "Step 9: Verify checkbox is available for limit orders",
+        "Step 10: Click to enable post-only",
+        "Step 11: Verify checkbox is checked"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T02:53:39.366243Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Order value and balance display calculations",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Navigate to order entry form",
+        "Step 3: Enter price (e.g., 50000)",
+        "Step 4: Enter size (e.g., 0.1)",
+        "Step 5: Verify order value shows 5000 USD",
+        "Step 6: Change size to 0.2",
+        "Step 7: Verify order value updates to 10000 USD",
+        "Step 8: Verify available balance is displayed",
+        "Step 9: Verify balance matches account state"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T03:01:37.326485Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Complete limit buy order placement flow",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Navigate to order entry form",
+        "Step 3: Select Buy tab",
+        "Step 4: Verify submit button is green",
+        "Step 5: Select Limit order type",
+        "Step 6: Enter price below current market price",
+        "Step 7: Enter valid size",
+        "Step 8: Click buy button",
+        "Step 9: Verify confirmation modal appears",
+        "Step 10: Verify modal shows order type, side, price, size",
+        "Step 11: Confirm order",
+        "Step 12: Sign transaction in wallet",
+        "Step 13: Verify success notification appears",
+        "Step 14: Verify order appears in open orders"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T03:22:36.418547Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Complete limit sell order placement flow",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Navigate to order entry form",
+        "Step 3: Select Sell tab",
+        "Step 4: Verify submit button is red",
+        "Step 5: Select Limit order type",
+        "Step 6: Enter price above current market price",
+        "Step 7: Enter valid size",
+        "Step 8: Click sell button",
+        "Step 9: Verify confirmation modal appears",
+        "Step 10: Confirm order",
+        "Step 11: Sign transaction in wallet",
+        "Step 12: Verify success notification appears",
+        "Step 13: Verify order appears in open orders"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T03:03:52.348478Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Market order execution flow",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Select Buy tab",
+        "Step 3: Select Market order type",
+        "Step 4: Enter valid size",
+        "Step 5: Click buy button",
+        "Step 6: Sign transaction in wallet",
+        "Step 7: Verify order executes immediately",
+        "Step 8: Verify position is created or updated",
+        "Step 9: Verify trade appears in trade history"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_failure_count": 0,
+      "notes": "Implementation complete. Market orders work with limitPx=0.0. Tests passing for chromium.",
+      "dev_completed_at": "2026-01-04T03:42:52.376056Z"
+    },
+    {
+      "category": "functional",
+      "description": "Stop-limit order placement flow",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Select Stop-Limit order type",
+        "Step 3: Enter trigger price",
+        "Step 4: Enter limit price",
+        "Step 5: Enter size",
+        "Step 6: Click submit button",
+        "Step 7: Sign transaction in wallet",
+        "Step 8: Verify order appears in open orders with pending trigger status"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T03:03:51.178367Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Stop-market order placement flow",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Select Stop-Market order type",
+        "Step 3: Enter trigger price",
+        "Step 4: Enter size",
+        "Step 5: Click submit button",
+        "Step 6: Sign transaction in wallet",
+        "Step 7: Verify order appears in open orders"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T03:18:40.646529Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Take-profit and stop-loss order attachment",
+      "steps": [
+        "Step 1: Create a position first",
+        "Step 2: Navigate to order entry form",
+        "Step 3: Select take-profit order type",
+        "Step 4: Enter take-profit price",
+        "Step 5: Submit order",
+        "Step 6: Verify take-profit order is linked to position",
+        "Step 7: Select stop-loss order type",
+        "Step 8: Enter stop-loss price",
+        "Step 9: Submit order",
+        "Step 10: Verify stop-loss order is linked to position"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T03:24:05.932461Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Time-in-force (GTC, IOC, FOK) functionality",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Place limit order with GTC selected",
+        "Step 3: Verify order remains in open orders",
+        "Step 4: Wait several minutes",
+        "Step 5: Verify order is still open",
+        "Step 6: Place limit order with IOC at unfavorable price",
+        "Step 7: Verify order is immediately canceled or partially filled",
+        "Step 8: Verify any unfilled portion does not remain in open orders",
+        "Step 9: Place large limit order with FOK at unfavorable price",
+        "Step 10: Verify order is completely canceled",
+        "Step 11: Verify no partial fill occurred"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "notes": "TIF selector implemented for limit and stop-limit orders. GTC, IOC, FOK options available.",
+      "qa_retry_count": 0,
+      "dev_failure_count": 1,
+      "last_dev_failure_at": "2026-01-04T03:33:51.268453Z",
+      "dev_failure_reasons": [
+        "Worker session timed out"
+      ]
+    },
+    {
+      "category": "functional",
+      "description": "Order validation prevents invalid orders",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Try to submit order with zero size",
+        "Step 3: Verify validation error is shown",
+        "Step 4: Try to submit order with negative price",
+        "Step 5: Verify validation error is shown",
+        "Step 6: Try to submit order exceeding balance",
+        "Step 7: Verify validation error is shown"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T03:12:30.797212Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Open orders table complete functionality",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Place multiple orders",
+        "Step 3: Navigate to Open Orders tab",
+        "Step 4: Verify all orders are displayed",
+        "Step 5: Verify each order shows coin, side, type, price, size, status",
+        "Step 6: Locate a specific order",
+        "Step 7: Click cancel button on the order",
+        "Step 8: Sign cancellation in wallet",
+        "Step 9: Verify order is removed from open orders",
+        "Step 10: Verify cancellation notification appears"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T03:27:41.556097Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Batch order cancellation flow",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Place multiple orders (at least 3)",
+        "Step 3: Navigate to Open Orders tab",
+        "Step 4: Verify all orders are visible",
+        "Step 5: Click 'Cancel All' button",
+        "Step 6: Verify confirmation modal appears",
+        "Step 7: Confirm cancellation",
+        "Step 8: Sign in wallet",
+        "Step 9: Verify all orders are canceled",
+        "Step 10: Verify open orders table is empty"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "notes": "Added Cancel All button to OrdersTable header. Uses cancelAllOrders API endpoint.",
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T03:36:53.855090Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Order modification flow",
+      "steps": [
+        "Step 1: Connect wallet and place a limit order",
+        "Step 2: Navigate to Open Orders tab",
+        "Step 3: Click modify button on the order",
+        "Step 4: Verify modification modal opens",
+        "Step 5: Change price value",
+        "Step 6: Change size value",
+        "Step 7: Submit modification",
+        "Step 8: Sign in wallet",
+        "Step 9: Verify order shows updated values",
+        "Step 10: Verify modification success notification"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T03:22:46.099405Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Positions table with real-time PnL",
+      "steps": [
+        "Step 1: Connect wallet with existing positions",
+        "Step 2: Navigate to Positions tab",
+        "Step 3: Verify positions are displayed",
+        "Step 4: Verify each position shows coin, side, size, entry price, current price, PnL",
+        "Step 5: Observe PnL column",
+        "Step 6: Verify PnL changes as market price moves",
+        "Step 7: Verify positive PnL is green",
+        "Step 8: Verify negative PnL is red",
+        "Step 9: Locate liquidation price column",
+        "Step 10: Verify liquidation price is displayed correctly"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "notes": "PositionsTable now shows real-time mark prices from allMids WebSocket. Calculates real-time PnL based on entry price and current mark price.",
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T03:42:59.050725Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "One-click position close flow",
+      "steps": [
+        "Step 1: Connect wallet with open position",
+        "Step 2: Navigate to Positions tab",
+        "Step 3: Click close button on position",
+        "Step 4: Verify confirmation modal appears",
+        "Step 5: Confirm close action",
+        "Step 6: Sign in wallet",
+        "Step 7: Verify position is closed",
+        "Step 8: Verify position removed from table",
+        "Step 9: Verify trade appears in history"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "dev_completed_at": "2026-01-04T06:45:00.000000Z",
+      "qa_completed_at": "2026-01-04T14:50:00.000000Z"
+    },
+    {
+      "category": "functional",
+      "description": "Position size modification (add/reduce)",
+      "steps": [
+        "Step 1: Connect wallet with open position",
+        "Step 2: Click modify/add button on position",
+        "Step 3: Enter additional size to add",
+        "Step 4: Submit modification",
+        "Step 5: Sign in wallet",
+        "Step 6: Verify position size increased",
+        "Step 7: Click reduce button on position",
+        "Step 8: Enter size to reduce",
+        "Step 9: Submit modification",
+        "Step 10: Sign in wallet",
+        "Step 11: Verify position size decreased"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T03:41:32.395482Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Cross and isolated margin modes",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Ensure cross margin mode is active",
+        "Step 3: Open a position",
+        "Step 4: Verify position shows 'cross' margin type",
+        "Step 5: Verify margin is shared across positions",
+        "Step 6: Switch to isolated margin mode",
+        "Step 7: Open another position",
+        "Step 8: Verify new position shows 'isolated' margin type",
+        "Step 9: Verify margin is dedicated to that position"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "dev_completed_at": "2026-01-04T03:49:08.382796Z",
+      "qa_retry_count": 0,
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Order history displays and filtering",
+      "steps": [
+        "Step 1: Connect wallet with trading history",
+        "Step 2: Navigate to Order History tab",
+        "Step 3: Verify historical orders are displayed",
+        "Step 4: Verify filled orders show filled status",
+        "Step 5: Verify canceled orders show canceled status",
+        "Step 6: Apply date range filter",
+        "Step 7: Verify only items in range are shown",
+        "Step 8: Apply asset filter",
+        "Step 9: Verify only filtered asset orders are shown",
+        "Step 10: Clear filters",
+        "Step 11: Verify all items are shown again"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "dev_completed_at": "2026-01-04T03:40:44Z",
+      "qa_retry_count": 0,
+      "dev_failure_count": 1,
+      "last_dev_failure_at": "2026-01-04T03:57:41.642702Z",
+      "dev_failure_reasons": [
+        "Worker session timed out"
+      ]
+    },
+    {
+      "category": "functional",
+      "description": "Trade history with pagination and export",
+      "steps": [
+        "Step 1: Connect wallet with trading history",
+        "Step 2: Navigate to Trade History tab",
+        "Step 3: Verify trades are displayed",
+        "Step 4: Verify each trade shows time, pair, side, price, size, fee",
+        "Step 5: Verify pagination controls are visible",
+        "Step 6: Click next page",
+        "Step 7: Verify new page of trades loads",
+        "Step 8: Click previous page",
+        "Step 9: Verify previous page loads",
+        "Step 10: Click export button",
+        "Step 11: Select export format (CSV)",
+        "Step 12: Verify file downloads",
+        "Step 13: Open file and verify data integrity"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T03:54:56.551598Z",
+      "dev_failure_count": 0,
+      "last_dev_failure_at": null,
+      "dev_failure_reasons": [],
+      "is_stuck": false,
+      "stuck_reason": null,
+      "stuck_at": null
+    },
+    {
+      "category": "functional",
+      "description": "Account state displays (equity, margin, balance)",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Locate account equity display",
+        "Step 3: Verify equity shows total account value",
+        "Step 4: Verify equity updates with position changes",
+        "Step 5: Locate margin used display",
+        "Step 6: Verify margin used shows correct amount",
+        "Step 7: Open new position",
+        "Step 8: Verify margin used increases",
+        "Step 9: Locate available balance display",
+        "Step 10: Verify available = equity - margin used"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T03:50:03.400365Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Withdrawable balance and account settings",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Locate withdrawable balance display",
+        "Step 3: Verify withdrawable amount is shown",
+        "Step 4: Verify withdrawable respects margin requirements",
+        "Step 5: Navigate to account settings",
+        "Step 6: Locate leverage setting",
+        "Step 7: Change account leverage",
+        "Step 8: Verify new leverage applies to new positions"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T04:00:49.058140Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Funding payment history display",
+      "steps": [
+        "Step 1: Connect wallet with funding history",
+        "Step 2: Navigate to Funding History section",
+        "Step 3: Verify funding payments are listed",
+        "Step 4: Verify each payment shows time, asset, amount"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T03:59:01.794367Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Liquidation price calculator functionality",
+      "steps": [
+        "Step 1: Navigate to liquidation calculator",
+        "Step 2: Enter position size",
+        "Step 3: Enter entry price",
+        "Step 4: Enter leverage",
+        "Step 5: Verify liquidation price is calculated",
+        "Step 6: Modify inputs and verify recalculation"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_failure_count": 0,
+      "dev_completed_at": "2026-01-04T04:33:44.751884Z"
+    },
+    {
+      "category": "functional",
+      "description": "Favorites/watchlist persistence",
+      "steps": [
+        "Step 1: Open asset selector",
+        "Step 2: Click star icon on a trading pair",
+        "Step 3: Verify pair is added to favorites",
+        "Step 4: Navigate to favorites tab",
+        "Step 5: Verify favorited pair appears",
+        "Step 6: Refresh the page",
+        "Step 7: Open asset selector",
+        "Step 8: Verify favorites are persisted",
+        "Step 9: Click star again to unfavorite",
+        "Step 10: Verify pair is removed from favorites"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 0,
+      "dev_failure_count": 0,
+      "dev_completed_at": "2026-01-04T04:41:39.882343Z"
+    },
+    {
+      "category": "functional",
+      "description": "Recently traded pairs persistence",
+      "steps": [
+        "Step 1: Trade on several different pairs",
+        "Step 2: Note the recently traded pairs",
+        "Step 3: Refresh the page",
+        "Step 4: Open asset selector",
+        "Step 5: Verify recently traded section shows correct pairs"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 0,
+      "dev_failure_count": 0,
+      "last_dev_failure_at": null,
+      "dev_failure_reasons": []
+    },
+    {
+      "category": "functional",
+      "description": "Panel resize and layout persistence",
+      "steps": [
+        "Step 1: Navigate to main trading interface",
+        "Step 2: Locate panel resize handle between chart and order book",
+        "Step 3: Drag handle to resize panels",
+        "Step 4: Verify panels resize smoothly",
+        "Step 5: Verify content adjusts appropriately",
+        "Step 6: Note the new layout dimensions",
+        "Step 7: Refresh the page",
+        "Step 8: Verify layout is preserved",
+        "Step 9: Close and reopen browser",
+        "Step 10: Verify layout is still preserved"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 0,
+      "dev_failure_count": 1,
+      "last_dev_failure_at": "2026-01-04T04:54:13.494204Z",
+      "dev_failure_reasons": [
+        "Worker session timed out"
+      ]
+    },
+    {
+      "category": "functional",
+      "description": "Settings modal and options",
+      "steps": [
+        "Step 1: Locate settings gear icon in header",
+        "Step 2: Click settings icon",
+        "Step 3: Verify settings modal opens",
+        "Step 4: Verify display settings are available",
+        "Step 5: Verify notification settings are available",
+        "Step 6: Change a setting",
+        "Step 7: Save settings",
+        "Step 8: Refresh page",
+        "Step 9: Verify settings are persisted"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T04:13:39.037327Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Keyboard shortcuts for trading",
+      "steps": [
+        "Step 1: Enable keyboard shortcuts in settings",
+        "Step 2: Fill in order form",
+        "Step 3: Press keyboard shortcut for buy",
+        "Step 4: Verify order is submitted",
+        "Step 5: Fill in sell order",
+        "Step 6: Press keyboard shortcut for sell",
+        "Step 7: Verify sell order is submitted",
+        "Step 8: Place several orders",
+        "Step 9: Press keyboard shortcut for cancel all",
+        "Step 10: Verify all orders are canceled"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T04:16:20.438268Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Toast notifications for all order events",
+      "steps": [
+        "Step 1: Place an order",
+        "Step 2: Verify success toast appears",
+        "Step 3: Cancel an order",
+        "Step 4: Verify cancellation toast appears",
+        "Step 5: Verify toasts auto-dismiss after timeout",
+        "Step 6: Attempt an invalid operation",
+        "Step 7: Verify error notification appears",
+        "Step 8: Verify error message is descriptive",
+        "Step 9: Verify notification can be dismissed manually"
+      ],
+      "passes": false,
+      "is_dev_done": true,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T04:24:02.995827Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Connection status indicator states",
+      "steps": [
+        "Step 1: Navigate to the application",
+        "Step 2: Locate connection status indicator",
+        "Step 3: Verify indicator is green when connected",
+        "Step 4: Disconnect network",
+        "Step 5: Verify indicator turns red",
+        "Step 6: Reconnect network",
+        "Step 7: Verify indicator returns to green"
+      ],
+      "passes": true,
+      "is_dev_done": true,
+      "is_qa_passed": true,
+      "qa_retry_count": 0,
+      "dev_completed_at": "2026-01-04T04:24:20.678603Z",
+      "qa_completed_at": "2026-01-04T15:25:00.000000Z",
+      "dev_failure_count": 0
+    },
+    {
+      "category": "functional",
+      "description": "Loading skeletons and error boundaries",
+      "steps": [
+        "Step 1: Throttle network to slow speed",
+        "Step 2: Navigate to the application",
+        "Step 3: Verify skeleton loaders appear for order book",
+        "Step 4: Verify skeleton loaders appear for chart",
+        "Step 5: Verify skeletons replaced by real data when loaded",
+        "Step 6: Simulate a component error",
+        "Step 7: Verify error boundary catches the error",
+        "Step 8: Verify user-friendly error message is displayed",
+        "Step 9: Verify rest of application continues to function"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_failure_count": 1,
+      "last_dev_failure_at": "2026-01-04T04:43:39.135052Z",
+      "dev_failure_reasons": [
+        "Worker session timed out"
+      ]
+    },
+    {
+      "category": "functional",
+      "description": "API GET /api/info/meta returns exchange metadata",
+      "steps": [
+        "Step 1: Send GET request to /api/info/meta",
+        "Step 2: Verify response status is 200",
+        "Step 3: Verify response contains asset list",
+        "Step 4: Verify response contains exchange info"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_failure_count": 1,
+      "last_dev_failure_at": "2026-01-04T04:46:20.534124Z",
+      "dev_failure_reasons": [
+        "Worker session timed out"
+      ]
+    },
+    {
+      "category": "functional",
+      "description": "API GET /api/info/asset/:coin returns single asset info",
+      "steps": [
+        "Step 1: Send GET request to /api/info/asset/BTC",
+        "Step 2: Verify response status is 200",
+        "Step 3: Verify response contains BTC market info",
+        "Step 4: Test with invalid coin",
+        "Step 5: Verify 404 error for invalid coin"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "API GET /api/info/funding/:coin returns funding rate history",
+      "steps": [
+        "Step 1: Send GET request to /api/info/funding/BTC",
+        "Step 2: Verify response status is 200",
+        "Step 3: Verify response contains funding rate array",
+        "Step 4: Verify each entry has timestamp and rate"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false,
+      "qa_retry_count": 0,
+      "dev_failure_count": 1,
+      "last_dev_failure_at": "2026-01-04T04:54:21.898805Z",
+      "dev_failure_reasons": [
+        "Worker session timed out"
+      ]
+    },
+    {
+      "category": "functional",
+      "description": "API GET /api/info/candles/:coin returns OHLCV data",
+      "steps": [
+        "Step 1: Send GET request to /api/info/candles/BTC?interval=1h",
+        "Step 2: Verify response status is 200",
+        "Step 3: Verify response contains candle array",
+        "Step 4: Verify each candle has OHLCV fields",
+        "Step 5: Test different intervals"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "WebSocket /ws/orderbook/:coin streams order book updates",
+      "steps": [
+        "Step 1: Establish WebSocket connection to /ws/orderbook/BTC",
+        "Step 2: Verify initial snapshot received",
+        "Step 3: Verify delta updates received over time",
+        "Step 4: Verify data format matches OrderBookLevel interface"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "WebSocket /ws/trades/:coin streams trade updates",
+      "steps": [
+        "Step 1: Establish WebSocket connection to /ws/trades/BTC",
+        "Step 2: Verify trade stream receives data",
+        "Step 3: Verify each trade has required fields",
+        "Step 4: Verify trades match Trade interface"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "WebSocket /ws/candles/:coin/:interval streams candle updates",
+      "steps": [
+        "Step 1: Establish WebSocket connection to /ws/candles/BTC/1m",
+        "Step 2: Verify candle updates are received",
+        "Step 3: Verify update frequency matches interval",
+        "Step 4: Verify candle data format is correct"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "WebSocket /ws/allMids streams all mid prices",
+      "steps": [
+        "Step 1: Establish WebSocket connection to /ws/allMids",
+        "Step 2: Verify mid price updates for all assets",
+        "Step 3: Verify update frequency is reasonable",
+        "Step 4: Verify prices are valid numbers"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "API POST /api/trade/place creates new order",
+      "steps": [
+        "Step 1: Prepare signed order payload",
+        "Step 2: Send POST request to /api/trade/place",
+        "Step 3: Verify response status is 200",
+        "Step 4: Verify response contains order ID",
+        "Step 5: Verify order appears in open orders"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "API POST /api/trade/cancel cancels existing order",
+      "steps": [
+        "Step 1: Place an order first",
+        "Step 2: Prepare signed cancel payload",
+        "Step 3: Send POST request to /api/trade/cancel",
+        "Step 4: Verify response status is 200",
+        "Step 5: Verify order is no longer in open orders"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "API POST /api/trade/modify modifies existing order",
+      "steps": [
+        "Step 1: Place an order first",
+        "Step 2: Prepare signed modify payload with new price",
+        "Step 3: Send POST request to /api/trade/modify",
+        "Step 4: Verify response status is 200",
+        "Step 5: Verify order shows updated price"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "API POST /api/trade/cancel-all cancels all orders",
+      "steps": [
+        "Step 1: Place multiple orders",
+        "Step 2: Prepare signed cancel-all payload",
+        "Step 3: Send POST request to /api/trade/cancel-all",
+        "Step 4: Verify response status is 200",
+        "Step 5: Verify all orders are canceled"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "API GET /api/account endpoints",
+      "steps": [
+        "Step 1: Send GET request to /api/account/state/{wallet_address}",
+        "Step 2: Verify response status is 200",
+        "Step 3: Verify response contains equity, margin, available balance",
+        "Step 4: Verify response matches AccountState interface",
+        "Step 5: Send GET request to /api/account/positions/{wallet_address}",
+        "Step 6: Verify positions array is returned",
+        "Step 7: Send GET request to /api/account/orders/{wallet_address}",
+        "Step 8: Verify orders array is returned",
+        "Step 9: Send GET request to /api/account/history/{wallet_address}",
+        "Step 10: Verify order and trade history is returned"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "WebSocket /ws/user/:address streams user account updates",
+      "steps": [
+        "Step 1: Establish WebSocket connection to /ws/user/{wallet_address}",
+        "Step 2: Verify order fill updates received",
+        "Step 3: Verify position updates received",
+        "Step 4: Verify balance updates received"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "CORS and security headers",
+      "steps": [
+        "Step 1: Make API request from frontend origin",
+        "Step 2: Verify request succeeds",
+        "Step 3: Verify CORS headers are present in response",
+        "Step 4: Test from unauthorized origin",
+        "Step 5: Verify CORS error for unauthorized origin"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Rate limiting prevents excessive API calls",
+      "steps": [
+        "Step 1: Make rapid consecutive API calls",
+        "Step 2: Verify rate limit response after threshold",
+        "Step 3: Wait for rate limit reset",
+        "Step 4: Verify calls succeed again"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Input validation and security",
+      "steps": [
+        "Step 1: Send request with missing required fields",
+        "Step 2: Verify 400 error with validation message",
+        "Step 3: Send request with invalid data types",
+        "Step 4: Verify 400 error with validation message",
+        "Step 5: Send request with SQL injection attempt",
+        "Step 6: Verify request is sanitized and rejected",
+        "Step 7: Send trading request with valid signature",
+        "Step 8: Verify request succeeds",
+        "Step 9: Send request with invalid signature",
+        "Step 10: Verify 401 error for invalid signature"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Private key security verification",
+      "steps": [
+        "Step 1: Inspect all backend code for private key handling",
+        "Step 2: Verify no storage of private keys",
+        "Step 3: Inspect network requests during wallet operations",
+        "Step 4: Verify private keys never sent to backend"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Session token expiration",
+      "steps": [
+        "Step 1: Connect wallet and establish session",
+        "Step 2: Note session token",
+        "Step 3: Wait for session timeout period",
+        "Step 4: Attempt API call with expired token",
+        "Step 5: Verify 401 error and re-authentication required"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Zustand store persistence and TanStack Query caching",
+      "steps": [
+        "Step 1: Change some settings in the app",
+        "Step 2: Refresh the page",
+        "Step 3: Verify settings are preserved",
+        "Step 4: Clear localStorage",
+        "Step 5: Verify settings reset to defaults",
+        "Step 6: Make initial API request",
+        "Step 7: Verify response is cached",
+        "Step 8: Trigger cache invalidation event",
+        "Step 9: Verify fresh data is fetched",
+        "Step 10: Verify stale data is replaced"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "WebSocket and React performance optimization",
+      "steps": [
+        "Step 1: Connect to WebSocket stream",
+        "Step 2: Monitor CPU usage during heavy updates",
+        "Step 3: Verify no message queue backup",
+        "Step 4: Verify UI remains responsive",
+        "Step 5: Profile component render times",
+        "Step 6: Verify useMemo used for expensive calculations",
+        "Step 7: Verify useCallback used for stable callbacks",
+        "Step 8: Verify unnecessary re-renders are prevented"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Bottom panel tab navigation and state",
+      "steps": [
+        "Step 1: Navigate to bottom panel",
+        "Step 2: Click Positions tab",
+        "Step 3: Verify positions content is shown",
+        "Step 4: Click Open Orders tab",
+        "Step 5: Verify open orders content is shown",
+        "Step 6: Click Order History tab",
+        "Step 7: Verify order history content is shown",
+        "Step 8: Click Trade History tab",
+        "Step 9: Verify trade history content is shown",
+        "Step 10: Switch trading pairs",
+        "Step 11: Verify selected tab remains selected",
+        "Step 12: Refresh page",
+        "Step 13: Verify tab selection persists"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Application uses correct background colors per design system",
+      "steps": [
+        "Step 1: Navigate to the application",
+        "Step 2: Inspect main background color",
+        "Step 3: Verify background is #0a0a0a (deep black)",
+        "Step 4: Inspect panel/card backgrounds",
+        "Step 5: Verify surfaces are #171717",
+        "Step 6: Open a modal",
+        "Step 7: Verify modal background is #262626",
+        "Step 8: Open a dropdown",
+        "Step 9: Verify dropdown background is #262626",
+        "Step 10: Inspect panel borders",
+        "Step 11: Verify border color is #404040"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Text colors follow design system hierarchy",
+      "steps": [
+        "Step 1: Navigate to the application",
+        "Step 2: Inspect main text elements",
+        "Step 3: Verify primary text color is #f5f5f5",
+        "Step 4: Inspect secondary labels and descriptions",
+        "Step 5: Verify secondary text color is #a3a3a3",
+        "Step 6: Inspect timestamps and minor labels",
+        "Step 7: Verify tertiary text color is #737373"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Buy/sell action colors per design system",
+      "steps": [
+        "Step 1: Navigate to order entry form",
+        "Step 2: Select Buy tab",
+        "Step 3: Verify buy button is #22c55e (neon green)",
+        "Step 4: Check order book bid prices",
+        "Step 5: Verify bid colors are green",
+        "Step 6: Select Sell tab",
+        "Step 7: Verify sell button is #ef4444 (neon red)",
+        "Step 8: Check order book ask prices",
+        "Step 9: Verify ask colors are red",
+        "Step 10: Have an open position with profit",
+        "Step 11: Verify PnL is displayed in green",
+        "Step 12: Check position with loss",
+        "Step 13: Verify loss PnL is displayed in red"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Accent and warning colors",
+      "steps": [
+        "Step 1: Navigate to the application",
+        "Step 2: Locate links",
+        "Step 3: Verify link color is #3b82f6 (accent blue)",
+        "Step 4: Locate secondary buttons",
+        "Step 5: Verify button color is #3b82f6",
+        "Step 6: Trigger a warning condition",
+        "Step 7: Verify warning text/icon is #f59e0b (amber)"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Typography follows design system (UI and data fonts)",
+      "steps": [
+        "Step 1: Navigate to the application",
+        "Step 2: Inspect font-family of UI elements",
+        "Step 3: Verify font is Inter or fallback system font",
+        "Step 4: Inspect font-family of price displays",
+        "Step 5: Verify monospace font is used (JetBrains Mono or Fira Code)",
+        "Step 6: Check order book prices",
+        "Step 7: Verify monospace font",
+        "Step 8: Check position PnL values",
+        "Step 9: Verify monospace font"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Typography weights and sizes",
+      "steps": [
+        "Step 1: Navigate to the application",
+        "Step 2: Inspect header elements",
+        "Step 3: Verify font-weight is 600 (semibold)",
+        "Step 4: Verify sizes are text-sm to text-base",
+        "Step 5: Inspect label elements",
+        "Step 6: Verify font-weight is medium",
+        "Step 7: Verify text size is xs",
+        "Step 8: Verify text-transform is uppercase",
+        "Step 9: Verify letter-spacing is wider",
+        "Step 10: Navigate to positions or orders table",
+        "Step 11: Verify table uses monospace font",
+        "Step 12: Verify text size is xs to sm"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Input fields and button styling",
+      "steps": [
+        "Step 1: Navigate to order entry form",
+        "Step 2: Inspect input field styles",
+        "Step 3: Verify dark background color",
+        "Step 4: Verify border is visible but subtle",
+        "Step 5: Hover over buy button",
+        "Step 6: Verify hover state change is visible",
+        "Step 7: Hover over sell button",
+        "Step 8: Verify hover state change is visible",
+        "Step 9: Test other buttons for hover states"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Toggle buttons and table row states",
+      "steps": [
+        "Step 1: Navigate to buy/sell toggle",
+        "Step 2: Click buy tab",
+        "Step 3: Verify buy tab shows active state",
+        "Step 4: Click sell tab",
+        "Step 5: Verify sell tab shows active state",
+        "Step 6: Navigate to orders or positions table",
+        "Step 7: Hover over a table row",
+        "Step 8: Verify hover state highlights the row",
+        "Step 9: Move to different row",
+        "Step 10: Verify hover moves correctly"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Order book depth bar visualization",
+      "steps": [
+        "Step 1: Navigate to order book panel",
+        "Step 2: Verify bid side has green depth bars",
+        "Step 3: Verify ask side has red depth bars",
+        "Step 4: Verify bars represent volume proportionally"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Animations for order book and trades",
+      "steps": [
+        "Step 1: Observe order book",
+        "Step 2: Wait for new order to arrive",
+        "Step 3: Verify subtle flash animation on new row",
+        "Step 4: Navigate to recent trades panel",
+        "Step 5: Observe new trade arriving",
+        "Step 6: Verify trade slides in from top",
+        "Step 7: Verify animation is smooth"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Price tick animation and button feedback",
+      "steps": [
+        "Step 1: Observe current price display",
+        "Step 2: Wait for price increase",
+        "Step 3: Verify brief green flash",
+        "Step 4: Wait for price decrease",
+        "Step 5: Verify brief red flash",
+        "Step 6: Click on a button",
+        "Step 7: Verify button press effect (scale or color change)",
+        "Step 8: Test on multiple button types"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Panel resize and loading animations",
+      "steps": [
+        "Step 1: Drag panel resize handle",
+        "Step 2: Verify panels resize smoothly",
+        "Step 3: Verify no jarring jumps",
+        "Step 4: Throttle network to see loading states",
+        "Step 5: Observe skeleton loader",
+        "Step 6: Verify shimmer effect is visible"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Toast, modal, and dropdown animations",
+      "steps": [
+        "Step 1: Trigger a toast notification",
+        "Step 2: Verify toast slides/fades in",
+        "Step 3: Wait for auto-dismiss",
+        "Step 4: Verify toast slides/fades out",
+        "Step 5: Click to open a modal",
+        "Step 6: Verify modal animates in (fade and/or scale)",
+        "Step 7: Close modal",
+        "Step 8: Verify modal animates out",
+        "Step 9: Click to open dropdown",
+        "Step 10: Verify dropdown animates open",
+        "Step 11: Click outside to close",
+        "Step 12: Verify dropdown animates closed"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Chart dark theme consistency",
+      "steps": [
+        "Step 1: Navigate to chart panel",
+        "Step 2: Verify chart background matches app theme",
+        "Step 3: Verify chart text colors match theme",
+        "Step 4: Verify candlestick colors match design system"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Header and main grid layout per spec",
+      "steps": [
+        "Step 1: Navigate to the application",
+        "Step 2: Verify logo is positioned on left",
+        "Step 3: Verify wallet connect is on right",
+        "Step 4: Verify asset selector is visible",
+        "Step 5: Verify price display is visible",
+        "Step 6: Navigate to main trading view",
+        "Step 7: Verify chart takes approximately 60% width",
+        "Step 8: Verify order book is positioned on right",
+        "Step 9: Verify recent trades below order book",
+        "Step 10: Verify order entry panel on far right"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Order book panel layout per spec",
+      "steps": [
+        "Step 1: Navigate to order book panel",
+        "Step 2: Verify bid size on left",
+        "Step 3: Verify price in center",
+        "Step 4: Verify ask size on right",
+        "Step 5: Verify spread display between bids/asks"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Order entry panel layout per spec",
+      "steps": [
+        "Step 1: Navigate to order entry panel",
+        "Step 2: Verify buy/sell toggle at top",
+        "Step 3: Verify order type selector",
+        "Step 4: Verify price input below type",
+        "Step 5: Verify size input with percentage buttons",
+        "Step 6: Verify submit button at bottom"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Bottom panel tabs labeling",
+      "steps": [
+        "Step 1: Navigate to bottom panel",
+        "Step 2: Verify Positions tab label is clear",
+        "Step 3: Verify Open Orders tab label is clear",
+        "Step 4: Verify Order History tab label is clear",
+        "Step 5: Verify Trade History tab label is clear"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Connection status and keyboard shortcut hints visibility",
+      "steps": [
+        "Step 1: Navigate to the application",
+        "Step 2: Locate connection status indicator",
+        "Step 3: Verify green dot when connected",
+        "Step 4: Verify indicator is easily visible",
+        "Step 5: Hover over buttons with shortcuts",
+        "Step 6: Verify tooltip shows shortcut key"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Responsive layout at 1920x1080",
+      "steps": [
+        "Step 1: Set viewport to 1920x1080",
+        "Step 2: Navigate to the application",
+        "Step 3: Verify all panels are visible",
+        "Step 4: Verify no horizontal scrolling needed",
+        "Step 5: Verify text is readable"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Responsive layout at 1366x768",
+      "steps": [
+        "Step 1: Set viewport to 1366x768",
+        "Step 2: Navigate to the application",
+        "Step 3: Verify all panels are visible or collapsible",
+        "Step 4: Verify functionality is accessible",
+        "Step 5: Verify text is readable"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Tablet layout adaptation (1024px)",
+      "steps": [
+        "Step 1: Set viewport width to 1024px",
+        "Step 2: Navigate to the application",
+        "Step 3: Verify panels collapse or stack appropriately",
+        "Step 4: Verify all features remain accessible"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Full-screen chart and compact modes",
+      "steps": [
+        "Step 1: Navigate to chart panel",
+        "Step 2: Click full-screen toggle",
+        "Step 3: Verify chart fills screen",
+        "Step 4: Verify other panels are hidden",
+        "Step 5: Exit full-screen",
+        "Step 6: Verify panels return",
+        "Step 7: Enable compact mode in settings",
+        "Step 8: Verify reduced padding throughout",
+        "Step 9: Verify more information fits on screen",
+        "Step 10: Verify text remains readable"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "UI updates within 100ms of market data change",
+      "steps": [
+        "Step 1: Set up performance measurement",
+        "Step 2: Trigger market data update via WebSocket",
+        "Step 3: Measure time until UI reflects change",
+        "Step 4: Verify update time is under 100ms",
+        "Step 5: Repeat for multiple update types"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "API latency for order operations under 500ms",
+      "steps": [
+        "Step 1: Place order and measure round-trip time",
+        "Step 2: Verify total latency under 500ms",
+        "Step 3: Test cancel operation latency",
+        "Step 4: Verify cancel under 500ms",
+        "Step 5: Test modify operation latency"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Order book renders 50+ levels without lag",
+      "steps": [
+        "Step 1: Configure order book to show 50+ levels",
+        "Step 2: Observe rendering performance",
+        "Step 3: Scroll through levels",
+        "Step 4: Verify no UI lag or stuttering",
+        "Step 5: Verify updates remain smooth"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Chart loads within 2 seconds",
+      "steps": [
+        "Step 1: Clear browser cache",
+        "Step 2: Navigate to the application",
+        "Step 3: Measure time until chart renders",
+        "Step 4: Verify chart loads under 2 seconds",
+        "Step 5: Test different timeframes"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Memory usage remains stable during extended use",
+      "steps": [
+        "Step 1: Open browser memory profiler",
+        "Step 2: Use application for 30+ minutes",
+        "Step 3: Monitor memory usage",
+        "Step 4: Verify no significant memory growth",
+        "Step 5: Verify no memory leaks in WebSocket handlers"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Backend handles 50+ concurrent WebSocket connections",
+      "steps": [
+        "Step 1: Create load test script",
+        "Step 2: Establish 50 concurrent WebSocket connections",
+        "Step 3: Verify all connections receive data",
+        "Step 4: Monitor backend resource usage",
+        "Step 5: Verify no connection drops"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Graceful degradation when API is unavailable",
+      "steps": [
+        "Step 1: Navigate to application",
+        "Step 2: Block API endpoint",
+        "Step 3: Verify user-friendly error message",
+        "Step 4: Verify cached data is shown if available",
+        "Step 5: Verify retry mechanism activates"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Order state consistency with blockchain",
+      "steps": [
+        "Step 1: Place order via UI",
+        "Step 2: Query order status from blockchain",
+        "Step 3: Verify UI status matches blockchain",
+        "Step 4: Cancel order via UI",
+        "Step 5: Verify blockchain reflects cancellation"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "No duplicate order submissions on double-click",
+      "steps": [
+        "Step 1: Fill in order form",
+        "Step 2: Rapidly double-click submit button",
+        "Step 3: Verify only one order is created",
+        "Step 4: Check open orders for duplicates"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "PnL calculations are mathematically accurate",
+      "steps": [
+        "Step 1: Create position with known entry price",
+        "Step 2: Note current market price",
+        "Step 3: Calculate expected PnL manually",
+        "Step 4: Compare with UI displayed PnL",
+        "Step 5: Verify values match within rounding tolerance"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Proper error messages for various failure types",
+      "steps": [
+        "Step 1: Trigger insufficient balance error",
+        "Step 2: Verify descriptive error message",
+        "Step 3: Trigger network error",
+        "Step 4: Verify network error message",
+        "Step 5: Trigger invalid input error",
+        "Step 6: Verify validation error message"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Backend startup completes without errors",
+      "steps": [
+        "Step 1: Start backend server",
+        "Step 2: Check startup logs for errors",
+        "Step 3: Verify all routes are registered",
+        "Step 4: Verify database connection (if applicable)",
+        "Step 5: Verify external service connections"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Frontend build and dev server",
+      "steps": [
+        "Step 1: Run frontend build command",
+        "Step 2: Check build output for errors",
+        "Step 3: Verify no TypeScript errors",
+        "Step 4: Verify build output is generated",
+        "Step 5: Run frontend dev server command",
+        "Step 6: Verify server starts without errors",
+        "Step 7: Navigate to development URL",
+        "Step 8: Verify hot module replacement works"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Environment variables loaded correctly",
+      "steps": [
+        "Step 1: Set up environment variables",
+        "Step 2: Start application",
+        "Step 3: Verify frontend reads NEXT_PUBLIC_API_URL",
+        "Step 4: Verify frontend reads NEXT_PUBLIC_WS_URL",
+        "Step 5: Verify backend reads necessary env vars"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Turborepo build orchestration",
+      "steps": [
+        "Step 1: Run turbo build command",
+        "Step 2: Verify all packages build in correct order",
+        "Step 3: Verify caching works for unchanged packages",
+        "Step 4: Verify incremental builds work"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Python and TypeScript type checking passes",
+      "steps": [
+        "Step 1: Run mypy on backend code",
+        "Step 2: Verify no type errors",
+        "Step 3: Verify all functions have type hints",
+        "Step 4: Run TypeScript compiler in strict mode",
+        "Step 5: Verify no type errors",
+        "Step 6: Verify no implicit any",
+        "Step 7: Verify all functions have return types"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Linting passes without errors",
+      "steps": [
+        "Step 1: Run Biome/ESLint on frontend",
+        "Step 2: Verify no linting errors",
+        "Step 3: Run Python linter on backend",
+        "Step 4: Verify no linting errors"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Backend and frontend unit tests pass",
+      "steps": [
+        "Step 1: Run pytest on backend",
+        "Step 2: Verify all tests pass",
+        "Step 3: Check test coverage",
+        "Step 4: Verify coverage meets minimum threshold",
+        "Step 5: Run Vitest on frontend",
+        "Step 6: Verify all tests pass",
+        "Step 7: Check frontend test coverage"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "E2E tests for critical user flows pass",
+      "steps": [
+        "Step 1: Run Playwright E2E tests",
+        "Step 2: Verify wallet connection flow passes",
+        "Step 3: Verify order placement flow passes",
+        "Step 4: Verify position management flow passes"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "OpenAPI documentation is accessible",
+      "steps": [
+        "Step 1: Start backend server",
+        "Step 2: Navigate to /docs endpoint",
+        "Step 3: Verify Swagger UI loads",
+        "Step 4: Verify all endpoints are documented",
+        "Step 5: Navigate to /redoc endpoint",
+        "Step 6: Verify ReDoc UI loads",
+        "Step 7: Request /openapi.json",
+        "Step 8: Verify valid JSON is returned",
+        "Step 9: Verify schema matches OpenAPI 3.0 spec"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Accessibility: focus states and color contrast",
+      "steps": [
+        "Step 1: Navigate using Tab key",
+        "Step 2: Verify focus ring is visible on interactive elements",
+        "Step 3: Test on buttons, inputs, and links",
+        "Step 4: Verify focus order is logical",
+        "Step 5: Test primary text on background",
+        "Step 6: Verify contrast ratio meets 4.5:1 (WCAG AA)",
+        "Step 7: Test secondary text contrast",
+        "Step 8: Test button text contrast"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Screen reader and keyboard accessibility",
+      "steps": [
+        "Step 1: Enable screen reader",
+        "Step 2: Perform order submission",
+        "Step 3: Verify success is announced",
+        "Step 4: Navigate to position with PnL",
+        "Step 5: Verify PnL is readable",
+        "Step 6: Navigate entire interface with keyboard only",
+        "Step 7: Verify all buttons are reachable",
+        "Step 8: Verify all inputs are focusable",
+        "Step 9: Verify dropdowns work with keyboard",
+        "Step 10: Verify modals can be closed with Escape"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Complete trading flow: connect, place order, manage position, close",
+      "steps": [
+        "Step 1: Navigate to the application",
+        "Step 2: Click wallet connect button",
+        "Step 3: Connect MetaMask wallet",
+        "Step 4: Verify wallet balance is displayed",
+        "Step 5: Select a trading pair from asset selector",
+        "Step 6: Verify chart, order book, and trades load for the pair",
+        "Step 7: Fill in a market buy order",
+        "Step 8: Submit order and sign transaction",
+        "Step 9: Verify order executes and position is created",
+        "Step 10: Navigate to Positions tab",
+        "Step 11: Verify position shows with correct details and live PnL",
+        "Step 12: Click close position button",
+        "Step 13: Confirm and sign the close transaction",
+        "Step 14: Verify position is closed and removed from list",
+        "Step 15: Verify trade appears in Trade History"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Complete limit order workflow with modification and cancellation",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Select Limit order type",
+        "Step 3: Enter a price significantly below market",
+        "Step 4: Enter order size",
+        "Step 5: Submit order and sign",
+        "Step 6: Verify order appears in Open Orders",
+        "Step 7: Click modify on the order",
+        "Step 8: Change the price closer to market",
+        "Step 9: Submit modification and sign",
+        "Step 10: Verify order shows updated price",
+        "Step 11: Click cancel on the order",
+        "Step 12: Confirm and sign cancellation",
+        "Step 13: Verify order is removed from Open Orders",
+        "Step 14: Verify order appears in Order History as canceled"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Multi-pair trading session: switch pairs and place orders on each",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Select BTC pair from asset selector",
+        "Step 3: Verify interface loads BTC data",
+        "Step 4: Place a limit buy order on BTC",
+        "Step 5: Verify order in Open Orders",
+        "Step 6: Switch to ETH pair",
+        "Step 7: Verify interface updates to ETH data",
+        "Step 8: Place a limit sell order on ETH",
+        "Step 9: Verify order in Open Orders",
+        "Step 10: Navigate to Open Orders tab",
+        "Step 11: Verify both BTC and ETH orders are listed",
+        "Step 12: Cancel all orders",
+        "Step 13: Verify all orders canceled successfully"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Real-time data synchronization across all panels",
+      "steps": [
+        "Step 1: Navigate to the application",
+        "Step 2: Verify WebSocket is connected",
+        "Step 3: Observe order book receiving updates",
+        "Step 4: Observe recent trades receiving new trades",
+        "Step 5: Observe chart updating with price movements",
+        "Step 6: Observe header price updating",
+        "Step 7: Wait for several seconds",
+        "Step 8: Verify all panels show consistent, synchronized data",
+        "Step 9: Verify no stale data or mismatches between panels"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Error recovery and resilience testing",
+      "steps": [
+        "Step 1: Connect wallet and place an order",
+        "Step 2: Simulate network interruption during order placement",
+        "Step 3: Verify error is displayed",
+        "Step 4: Restore network",
+        "Step 5: Retry order placement",
+        "Step 6: Verify order succeeds after retry",
+        "Step 7: Simulate WebSocket disconnection",
+        "Step 8: Verify reconnection occurs automatically",
+        "Step 9: Verify data resumes flowing",
+        "Step 10: Verify no duplicate data or missed updates"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "24h volume statistics display and update",
+      "steps": [
+        "Step 1: Navigate to the application",
+        "Step 2: Locate 24h volume display",
+        "Step 3: Verify volume is shown in correct format",
+        "Step 4: Switch trading pairs",
+        "Step 5: Verify volume updates for new pair"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Open interest display for perpetuals",
+      "steps": [
+        "Step 1: Navigate to the application",
+        "Step 2: Locate open interest display",
+        "Step 3: Verify open interest shows valid number",
+        "Step 4: Verify display updates in real-time"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Maximum leverage limits enforced per asset",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Select an asset with known max leverage",
+        "Step 3: Try to set leverage above maximum",
+        "Step 4: Verify leverage is capped at maximum",
+        "Step 5: Switch to different asset",
+        "Step 6: Verify max leverage updates for new asset"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Minimum order size validation",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Enter order size below minimum",
+        "Step 3: Verify validation error displays",
+        "Step 4: Enter order size at minimum",
+        "Step 5: Verify order can be submitted"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Price decimal precision per asset",
+      "steps": [
+        "Step 1: Navigate to order entry",
+        "Step 2: Enter price with excess decimals",
+        "Step 3: Verify price is truncated to valid precision",
+        "Step 4: Verify order book prices match precision"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Size decimal precision per asset",
+      "steps": [
+        "Step 1: Navigate to order entry",
+        "Step 2: Enter size with excess decimals",
+        "Step 3: Verify size is truncated to valid precision",
+        "Step 4: Verify position sizes match precision"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Order submission with insufficient margin rejected",
+      "steps": [
+        "Step 1: Connect wallet with low balance",
+        "Step 2: Try to place large order exceeding margin",
+        "Step 3: Verify insufficient margin error",
+        "Step 4: Reduce order size to within margin",
+        "Step 5: Verify order can be submitted"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Reduce-only order validation with no position",
+      "steps": [
+        "Step 1: Connect wallet with no open positions",
+        "Step 2: Enable reduce-only checkbox",
+        "Step 3: Try to submit order",
+        "Step 4: Verify error about no position to reduce"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Post-only order rejected when would cross spread",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Enable post-only",
+        "Step 3: Enter buy price at or above best ask",
+        "Step 4: Submit order",
+        "Step 5: Verify order rejected as would cross spread"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Order form clears after successful submission",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Fill in order form",
+        "Step 3: Submit and sign order",
+        "Step 4: Verify order succeeds",
+        "Step 5: Verify form fields are cleared or reset"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Order confirmation can be cancelled",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Fill in order form",
+        "Step 3: Click submit",
+        "Step 4: Verify confirmation modal appears",
+        "Step 5: Click cancel in modal",
+        "Step 6: Verify order is not submitted",
+        "Step 7: Verify form data is retained"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Wallet rejection handling",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Fill in order form",
+        "Step 3: Click submit",
+        "Step 4: Reject the transaction in wallet",
+        "Step 5: Verify user-friendly rejection message",
+        "Step 6: Verify form can be resubmitted"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Multiple orders can be placed in quick succession",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Place first order",
+        "Step 3: Immediately place second order",
+        "Step 4: Verify both orders appear in open orders",
+        "Step 5: Verify no UI blocking between orders"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Order fills trigger position update",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Note current positions",
+        "Step 3: Place market order",
+        "Step 4: Verify position updates immediately after fill",
+        "Step 5: Verify WebSocket user updates received"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Partial fills reflected correctly in order status",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Place large limit order",
+        "Step 3: Wait for partial fill",
+        "Step 4: Verify filled quantity shown",
+        "Step 5: Verify remaining quantity shown"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Position entry price calculation after multiple fills",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Open position with first order",
+        "Step 3: Add to position with second order at different price",
+        "Step 4: Verify average entry price is calculated correctly"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Unrealized PnL calculation accuracy",
+      "steps": [
+        "Step 1: Open position with known entry price",
+        "Step 2: Note position size",
+        "Step 3: Get current mark price",
+        "Step 4: Calculate expected PnL manually",
+        "Step 5: Verify UI PnL matches calculation"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Realized PnL updates after position close",
+      "steps": [
+        "Step 1: Open position and note entry",
+        "Step 2: Close position at different price",
+        "Step 3: Verify realized PnL shows in account",
+        "Step 4: Verify amount matches expected calculation"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Liquidation warning when approaching liquidation price",
+      "steps": [
+        "Step 1: Create leveraged position",
+        "Step 2: Monitor price movement toward liquidation",
+        "Step 3: Verify warning appears when close to liquidation",
+        "Step 4: Verify warning color/styling indicates danger"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Trading pair switch preserves order form state",
+      "steps": [
+        "Step 1: Fill in order form for pair A",
+        "Step 2: Switch to pair B",
+        "Step 3: Switch back to pair A",
+        "Step 4: Verify form values are preserved"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Chart indicator overlay toggle",
+      "steps": [
+        "Step 1: Navigate to chart",
+        "Step 2: Locate indicator options",
+        "Step 3: Enable a volume indicator",
+        "Step 4: Verify indicator displays on chart",
+        "Step 5: Disable indicator",
+        "Step 6: Verify indicator is removed"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Chart drawing tools basic functionality",
+      "steps": [
+        "Step 1: Navigate to chart",
+        "Step 2: Select line drawing tool",
+        "Step 3: Draw line on chart",
+        "Step 4: Verify line persists",
+        "Step 5: Delete the line",
+        "Step 6: Verify line is removed"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Chart data persistence across timeframe changes",
+      "steps": [
+        "Step 1: Load chart on 1h timeframe",
+        "Step 2: Switch to 4h timeframe",
+        "Step 3: Switch back to 1h",
+        "Step 4: Verify previous data is cached/loads quickly"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Historical candle data loads on chart scroll",
+      "steps": [
+        "Step 1: Navigate to chart",
+        "Step 2: Pan left to show historical data",
+        "Step 3: Verify additional candles load",
+        "Step 4: Continue panning",
+        "Step 5: Verify more data loads on demand"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Recent trades show trade size formatting",
+      "steps": [
+        "Step 1: Navigate to recent trades",
+        "Step 2: Verify small trades show full precision",
+        "Step 3: Verify large trades abbreviate appropriately",
+        "Step 4: Verify formatting is consistent"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Recent trades timestamp formatting",
+      "steps": [
+        "Step 1: Navigate to recent trades",
+        "Step 2: Verify timestamps show time only for today",
+        "Step 3: Verify older trades show date if applicable"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Order book total volume at price level",
+      "steps": [
+        "Step 1: Navigate to order book",
+        "Step 2: Hover over price level",
+        "Step 3: Verify tooltip shows detailed volume info",
+        "Step 4: Verify number of orders at level"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Order book center on current price button",
+      "steps": [
+        "Step 1: Scroll order book away from spread",
+        "Step 2: Locate center/reset button",
+        "Step 3: Click button",
+        "Step 4: Verify view centers on current price"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Account margin ratio display",
+      "steps": [
+        "Step 1: Connect wallet with positions",
+        "Step 2: Locate margin ratio indicator",
+        "Step 3: Verify ratio is displayed correctly",
+        "Step 4: Verify color changes with risk level"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Deposit flow navigation",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Click deposit button",
+        "Step 3: Verify deposit modal or page opens",
+        "Step 4: Verify deposit instructions displayed"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Withdrawal flow navigation",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Click withdrawal button",
+        "Step 3: Verify withdrawal modal opens",
+        "Step 4: Verify available withdrawal amount shown"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Session key creation for reduced signing",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Navigate to session key settings",
+        "Step 3: Create session key",
+        "Step 4: Sign session key creation",
+        "Step 5: Verify subsequent orders don't require signing"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Session key revocation",
+      "steps": [
+        "Step 1: Create session key first",
+        "Step 2: Navigate to session management",
+        "Step 3: Revoke session key",
+        "Step 4: Verify subsequent orders require signing again"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Asset info modal shows market details",
+      "steps": [
+        "Step 1: Navigate to asset selector",
+        "Step 2: Click info icon on asset",
+        "Step 3: Verify modal shows market details",
+        "Step 4: Verify max leverage, tick size, min size displayed"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "All trading pairs load from exchange metadata",
+      "steps": [
+        "Step 1: Navigate to asset selector",
+        "Step 2: Verify all expected pairs are listed",
+        "Step 3: Verify pair data matches exchange metadata"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Price alert notification system",
+      "steps": [
+        "Step 1: Set price alert for current asset",
+        "Step 2: Wait for price to reach alert level",
+        "Step 3: Verify notification is triggered",
+        "Step 4: Verify alert can be dismissed"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Sound notifications for order fills",
+      "steps": [
+        "Step 1: Enable sound notifications in settings",
+        "Step 2: Place order and wait for fill",
+        "Step 3: Verify sound plays on fill",
+        "Step 4: Disable sounds",
+        "Step 5: Verify no sound on next fill"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Dark mode is the only theme (no light mode)",
+      "steps": [
+        "Step 1: Navigate to settings",
+        "Step 2: Verify no theme toggle exists",
+        "Step 3: Verify application is always in dark mode"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Loading state shows skeleton for all data panels",
+      "steps": [
+        "Step 1: Throttle network",
+        "Step 2: Navigate to application",
+        "Step 3: Verify order book shows skeleton",
+        "Step 4: Verify trades show skeleton",
+        "Step 5: Verify chart shows loading state",
+        "Step 6: Verify positions table shows skeleton"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Error state styling for failed data loads",
+      "steps": [
+        "Step 1: Block API endpoint",
+        "Step 2: Navigate to application",
+        "Step 3: Verify error state has appropriate styling",
+        "Step 4: Verify retry button is visible",
+        "Step 5: Verify error icon is displayed"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Empty state styling for no data",
+      "steps": [
+        "Step 1: Connect new wallet with no history",
+        "Step 2: Navigate to order history",
+        "Step 3: Verify empty state message displayed",
+        "Step 4: Verify empty state has appropriate styling"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Disabled button styling",
+      "steps": [
+        "Step 1: Navigate to order form",
+        "Step 2: Leave required fields empty",
+        "Step 3: Verify submit button is visually disabled",
+        "Step 4: Verify button has reduced opacity or greyed out"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Input focus ring styling",
+      "steps": [
+        "Step 1: Navigate to order form",
+        "Step 2: Tab to price input",
+        "Step 3: Verify focus ring is visible",
+        "Step 4: Verify ring uses accent color"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Validation error styling on inputs",
+      "steps": [
+        "Step 1: Navigate to order form",
+        "Step 2: Enter invalid value",
+        "Step 3: Verify input border turns red",
+        "Step 4: Verify error message is red text",
+        "Step 5: Fix value",
+        "Step 6: Verify normal styling returns"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Success state styling",
+      "steps": [
+        "Step 1: Place successful order",
+        "Step 2: Verify success notification uses green color",
+        "Step 3: Verify checkmark icon displayed"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Scrollbar styling in data tables",
+      "steps": [
+        "Step 1: Navigate to order book with many levels",
+        "Step 2: Verify custom scrollbar styling",
+        "Step 3: Verify scrollbar matches dark theme"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Modal overlay and backdrop styling",
+      "steps": [
+        "Step 1: Open any modal",
+        "Step 2: Verify semi-transparent backdrop",
+        "Step 3: Verify modal is centered",
+        "Step 4: Verify backdrop click closes modal"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Tooltip styling and positioning",
+      "steps": [
+        "Step 1: Hover over element with tooltip",
+        "Step 2: Verify tooltip appears",
+        "Step 3: Verify tooltip uses elevated surface color",
+        "Step 4: Verify tooltip is positioned correctly"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Tab component active state styling",
+      "steps": [
+        "Step 1: Navigate to bottom panel",
+        "Step 2: Click different tabs",
+        "Step 3: Verify active tab has distinct styling",
+        "Step 4: Verify inactive tabs are muted"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Percentage button row styling",
+      "steps": [
+        "Step 1: Navigate to order form",
+        "Step 2: Locate 25/50/75/100% buttons",
+        "Step 3: Verify buttons are evenly spaced",
+        "Step 4: Click a button",
+        "Step 5: Verify active state styling"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Slider component track and thumb styling",
+      "steps": [
+        "Step 1: Navigate to leverage slider",
+        "Step 2: Verify track uses appropriate colors",
+        "Step 3: Verify thumb is visible and styled",
+        "Step 4: Drag slider",
+        "Step 5: Verify smooth visual feedback"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Checkbox styling (reduce-only, post-only)",
+      "steps": [
+        "Step 1: Navigate to order form",
+        "Step 2: Locate checkbox components",
+        "Step 3: Verify unchecked state styling",
+        "Step 4: Click to check",
+        "Step 5: Verify checked state uses accent color"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Select/dropdown component styling",
+      "steps": [
+        "Step 1: Navigate to order type selector",
+        "Step 2: Verify closed state styling",
+        "Step 3: Click to open",
+        "Step 4: Verify dropdown menu styling",
+        "Step 5: Verify option hover state"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Number input with increment buttons styling",
+      "steps": [
+        "Step 1: Navigate to price input",
+        "Step 2: Verify increment/decrement buttons visible",
+        "Step 3: Verify buttons are appropriately sized",
+        "Step 4: Verify hover states on buttons"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Logo renders correctly at different sizes",
+      "steps": [
+        "Step 1: View logo in header at normal size",
+        "Step 2: Resize viewport smaller",
+        "Step 3: Verify logo remains crisp",
+        "Step 4: Verify logo scales appropriately"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Icon consistency throughout application",
+      "steps": [
+        "Step 1: Survey icons across application",
+        "Step 2: Verify consistent icon style (outlined vs filled)",
+        "Step 3: Verify consistent icon sizes",
+        "Step 4: Verify icons use correct colors"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Divider and separator styling",
+      "steps": [
+        "Step 1: Locate dividers between sections",
+        "Step 2: Verify divider uses border color",
+        "Step 3: Verify consistent divider thickness"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Card shadow and elevation consistency",
+      "steps": [
+        "Step 1: View modals and elevated elements",
+        "Step 2: Verify consistent shadow styling",
+        "Step 3: Verify elevation hierarchy is clear"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Table header styling",
+      "steps": [
+        "Step 1: Navigate to positions table",
+        "Step 2: Verify header row styling",
+        "Step 3: Verify header text is uppercase and muted",
+        "Step 4: Verify header is sticky on scroll"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Table cell padding and alignment",
+      "steps": [
+        "Step 1: Navigate to data tables",
+        "Step 2: Verify consistent cell padding",
+        "Step 3: Verify numeric columns are right-aligned",
+        "Step 4: Verify text columns are left-aligned"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Table row alternating backgrounds",
+      "steps": [
+        "Step 1: Navigate to history tables",
+        "Step 2: Verify zebra striping if implemented",
+        "Step 3: Verify hover state distinct from stripe"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Badge/tag styling for order status",
+      "steps": [
+        "Step 1: Navigate to order history",
+        "Step 2: Verify status badges are styled",
+        "Step 3: Verify filled status uses positive color",
+        "Step 4: Verify canceled status uses muted color"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Browser refresh preserves connected wallet",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Verify connection displayed",
+        "Step 3: Refresh browser",
+        "Step 4: Verify wallet remains connected"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Browser back/forward navigation handling",
+      "steps": [
+        "Step 1: Navigate through app",
+        "Step 2: Click browser back button",
+        "Step 3: Verify app handles navigation correctly",
+        "Step 4: Click forward button",
+        "Step 5: Verify state is maintained"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "URL routing for trading pairs",
+      "steps": [
+        "Step 1: Navigate to specific pair via URL",
+        "Step 2: Verify correct pair is loaded",
+        "Step 3: Switch pairs in UI",
+        "Step 4: Verify URL updates accordingly"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Copy to clipboard functionality",
+      "steps": [
+        "Step 1: Connect wallet",
+        "Step 2: Click copy address button",
+        "Step 3: Verify address copied to clipboard",
+        "Step 4: Verify copy confirmation shown"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "External link opens in new tab",
+      "steps": [
+        "Step 1: Locate external link (e.g., docs)",
+        "Step 2: Click link",
+        "Step 3: Verify link opens in new tab",
+        "Step 4: Verify original tab remains open"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Help/documentation link available",
+      "steps": [
+        "Step 1: Locate help icon or link",
+        "Step 2: Click help",
+        "Step 3: Verify documentation opens or displays"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "functional",
+      "description": "Application handles concurrent WebSocket messages",
+      "steps": [
+        "Step 1: Connect to application",
+        "Step 2: Monitor WebSocket traffic",
+        "Step 3: Verify concurrent messages are processed",
+        "Step 4: Verify no message loss under load",
+        "Step 5: Verify UI remains responsive"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    },
+    {
+      "category": "style",
+      "description": "Responsive breakpoints handle edge cases smoothly",
+      "steps": [
+        "Step 1: Slowly resize viewport from desktop to tablet width",
+        "Step 2: Verify no layout jumps or glitches",
+        "Step 3: Verify content reflows smoothly",
+        "Step 4: Verify no overlapping elements"
+      ],
+      "passes": false,
+      "is_dev_done": false,
+      "is_qa_passed": false
+    }
+  ],
   {
     "category": "functional",
     "description": "Header component displays logo, asset selector, and wallet connect button",
@@ -1185,9 +4544,11 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 0,
-    "last_dev_failure_at": "2026-01-04T04:24:07.578812Z",
-    "dev_failure_reasons": []
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-04T04:54:13.494204Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "functional",
@@ -1341,7 +4702,13 @@
     ],
     "passes": false,
     "is_dev_done": false,
-    "is_qa_passed": false
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-04T04:54:21.898805Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "functional",

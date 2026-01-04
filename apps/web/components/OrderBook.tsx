@@ -49,10 +49,6 @@ export function OrderBook({ coin = 'BTC' }: { coin?: string }) {
     return size.toFixed(4);
   };
 
-  const calculateTotalSize = (levels: OrderBookLevel[]) => {
-    return levels.reduce((sum, level) => sum + level.sz, 0);
-  };
-
   const getMaxSize = (levels: OrderBookLevel[]) => {
     return Math.max(...levels.map(level => level.sz));
   };

@@ -11,6 +11,14 @@ import { Chart } from '@/components/Chart/Chart';
 import { OrderBook } from '@/components/OrderBook/OrderBook';
 import { RecentTrades } from '@/components/OrderBook/RecentTrades';
 import { OrderForm } from '@/components/OrderForm/OrderForm';
+import { useMarketStore } from '@/stores/marketStore';
+import { SectionErrorBoundary } from '@/components/ErrorBoundary';
+import {
+  ChartSkeleton,
+  OrderBookSkeleton,
+  RecentTradesSkeleton,
+  OrderFormSkeleton,
+} from '@/components/LoadingSkeleton';
 
 interface PanelSizes {
   chart: number;
@@ -50,6 +58,9 @@ export function TradingGrid() {
     return DEFAULT_SIZES;
   });
   const [isDragging, setIsDragging] = useState(false);
+
+  // Get loading states from store
+  const { isLoadingCandles, isLoadingOrderBook, isLoadingTrades } = useMarketStore();
 
   // Save sizes when they change
   useEffect(() => {
@@ -112,7 +123,9 @@ export function TradingGrid() {
         style={{ width: `${sizes.chart}%`, minWidth: '30%' }}
       >
         <div className="flex-1 overflow-hidden p-1">
-          <Chart />
+          <SectionErrorBoundary sectionName="Chart">
+            {isLoadingCandles ? <ChartSkeleton /> : <Chart />}
+          </SectionErrorBoundary>
         </div>
         {/* Vertical Resize Handle - overlay on right edge */}
         <div
@@ -131,10 +144,14 @@ export function TradingGrid() {
         style={{ width: `${sizes.orderBook}%`, minWidth: '10%' }}
       >
         <div className="flex-1 overflow-hidden p-1">
-          <OrderBook />
+          <SectionErrorBoundary sectionName="Order Book">
+            {isLoadingOrderBook ? <OrderBookSkeleton /> : <OrderBook />}
+          </SectionErrorBoundary>
         </div>
         <div className="flex-1 overflow-hidden p-1 border-t border-border">
-          <RecentTrades />
+          <SectionErrorBoundary sectionName="Recent Trades">
+            {isLoadingTrades ? <RecentTradesSkeleton /> : <RecentTrades />}
+          </SectionErrorBoundary>
         </div>
         {/* Vertical Resize Handle - overlay on right edge */}
         <div
@@ -153,7 +170,9 @@ export function TradingGrid() {
         style={{ minWidth: '15%' }}
       >
         <div className="h-full overflow-hidden p-1">
-          <OrderForm />
+          <SectionErrorBoundary sectionName="Order Form">
+            <OrderFormSkeleton />
+          </SectionErrorBoundary>
         </div>
       </div>
     </div>

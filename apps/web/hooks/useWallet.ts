@@ -5,10 +5,11 @@
 import { useAccount, useConnect, useDisconnect, useBalance, useSwitchChain } from 'wagmi';
 import { arbitrum } from 'viem/chains';
 import { metaMask, walletConnect } from 'wagmi/connectors';
+import { useState, useEffect } from 'react';
 
 export function useWallet() {
   const account = useAccount();
-  const { connect, connectors, error: connectError, isPending: isConnecting } = useConnect();
+  const { connect, error: connectError, isPending: isConnecting } = useConnect();
   const { disconnect } = useDisconnect();
   const { switchChain } = useSwitchChain();
   const { data: balance, isLoading: balanceLoading } = useBalance({
@@ -16,21 +17,75 @@ export function useWallet() {
     chainId: arbitrum.id,
   });
 
+  // State for MetaMask availability
+  const [isMetaMaskAvailable, setIsMetaMaskAvailable] = useState(false);
+
+  // Check MetaMask availability on mount
+  useEffect(() => {
+    const checkMetaMask = () => {
+      const hasMetaMask = typeof window !== 'undefined' &&
+        (window as any).ethereum !== undefined &&
+        (window as any).ethereum.isMetaMask === true;
+      setIsMetaMaskAvailable(hasMetaMask);
+    };
+
+    checkMetaMask();
+
+    // Listen for MetaMask availability changes
+    if (typeof window !== 'undefined') {
+      window.addEventListener('ethereum#initialized', checkMetaMask);
+      return () => {
+        window.removeEventListener('ethereum#initialized', checkMetaMask);
+      };
+    }
+  }, []);
+
   const connectMetaMask = async () => {
-    const connector = metaMask();
-    await connect({ connector });
+    if (!isMetaMaskAvailable) {
+      throw new Error('MetaMask extension not detected. Please install MetaMask to connect.');
+    }
+
+    try {
+      const connector = metaMask();
+      await connect({ connector });
+    } catch (error) {
+      console.error('MetaMask connection failed:', error);
+      throw error;
+    }
   };
 
   const connectWalletConnect = async () => {
-    const connector = walletConnect({
-      projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'default',
-    });
-    await connect({ connector });
+    try {
+      const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'default';
+
+      if (projectId === 'default' || !projectId) {
+        throw new Error('WalletConnect project ID not configured. Please set NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID environment variable.');
+      }
+
+      const connector = walletConnect({
+        projectId,
+        metadata: {
+          name: 'liquidVex',
+          description: 'Hyperliquid DEX Trading Interface',
+          url: 'https://liquidvex.example.com',
+          icons: ['https://liquidvex.example.com/icon.png']
+        }
+      });
+      await connect({ connector });
+    } catch (error) {
+      console.error('WalletConnect connection failed:', error);
+      throw error;
+    }
   };
 
   const switchToArbitrum = async () => {
     if (account.chain?.id !== arbitrum.id) {
-      await switchChain({ chainId: arbitrum.id });
+      try {
+        await switchChain({ chainId: arbitrum.id });
+      } catch (error) {
+        console.error('Failed to switch to Arbitrum:', error);
+        throw error;
+      }
     }
   };
 
@@ -40,6 +95,7 @@ export function useWallet() {
     isConnected: account.isConnected,
     chain: account.chain,
     isConnecting,
+    isMetaMaskAvailable,
 
     // Connection methods
     connectMetaMask,

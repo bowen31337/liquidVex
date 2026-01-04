@@ -4,7 +4,6 @@
 
 import { create } from 'zustand';
 import { useWallet } from '../hooks/useWallet';
-import { useEffect } from 'react';
 
 interface WalletState {
   address: string | null;

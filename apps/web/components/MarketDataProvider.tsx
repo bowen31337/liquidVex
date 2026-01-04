@@ -14,7 +14,6 @@ export function MarketDataProvider({ children }: { children: React.ReactNode }) 
   const {
     selectedAsset,
     selectedTimeframe,
-    setAllMids,
     setWsConnected,
   } = useMarketStore();
 
@@ -46,7 +45,7 @@ export function MarketDataProvider({ children }: { children: React.ReactNode }) 
     // Fetch all available markets on mount
     const initMarkets = async () => {
       try {
-        const meta = await getExchangeMeta();
+        await getExchangeMeta();
         // Could store asset list here if needed
       } catch (err) {
         console.warn('Could not fetch exchange meta:', err);
@@ -57,14 +56,14 @@ export function MarketDataProvider({ children }: { children: React.ReactNode }) 
     // Fetch initial data for selected coin
     const initAssetData = async () => {
       try {
-        const info = await getAssetInfo(selectedAsset);
+        await getAssetInfo(selectedAsset);
         // Could store asset info if needed
       } catch (err) {
         console.warn('Could not fetch asset info:', err);
       }
 
       try {
-        const candles = await getCandles(selectedAsset, selectedTimeframe, 500);
+        await getCandles(selectedAsset, selectedTimeframe, 500);
         // Chart component handles candles via its own hook
       } catch (err) {
         console.warn('Could not fetch candles:', err);

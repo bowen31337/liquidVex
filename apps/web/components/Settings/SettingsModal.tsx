@@ -6,7 +6,6 @@
 
 import { useState } from 'react';
 import { Modal } from '../Modal/Modal';
-import { formatCurrency } from '../../lib/utils';
 
 interface SettingsModalProps {
   isOpen: boolean;

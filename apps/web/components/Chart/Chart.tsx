@@ -31,7 +31,7 @@ export function Chart() {
   const [chartType, setChartType] = useState<'candles' | 'line'>('candles');
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  const { selectedAsset, candles, setCandles, addCandle } = useMarketStore();
+  const { selectedAsset, candles, setCandles } = useMarketStore();
   const { getCandles } = useApi();
 
   // Connect to candle WebSocket
@@ -140,13 +140,13 @@ export function Chart() {
         setCandles(sortedData);
 
         if (candleSeriesRef.current && chartType === 'candles') {
-          candleSeriesRef.current.setData(formatted);
+          candleSeriesRef.current.setData(formatted as any);
         } else if (lineSeriesRef.current && chartType === 'line') {
           const lineData = formatted.map((c: any) => ({
             time: c.time,
             value: c.close,
           }));
-          lineSeriesRef.current.setData(lineData);
+          lineSeriesRef.current.setData(lineData as any);
         }
       } catch (err) {
         // Silently ignore candle loading errors
@@ -171,12 +171,12 @@ export function Chart() {
 
     try {
       if (candleSeriesRef.current && chartType === 'candles') {
-        candleSeriesRef.current.update(formatted);
+        candleSeriesRef.current.update(formatted as any);
       } else if (lineSeriesRef.current && chartType === 'line') {
         lineSeriesRef.current.update({
           time: formatted.time,
           value: formatted.close,
-        });
+        } as any);
       }
     } catch (e) {
       // Ignore update errors (e.g., out-of-order timestamps)
