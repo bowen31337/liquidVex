@@ -1386,3 +1386,146 @@ This session successfully completed testing and verification of **Feature 74 (Ra
 The project now has **42 passing features (20.9%)**, up from 38 in the previous session. Both rate limiting and input validation security features are implemented and ready for production use.
 
 **Next session priority:** Restart backend and verify Feature 75 tests pass, then continue with pending frontend features.
+
+# Claude Progress Report - Session (DEV AGENT)
+
+## Session Summary
+Implemented bottom panel tab navigation and state persistence (Feature #79). Added Zustand persist middleware for localStorage-based tab state persistence. Created comprehensive E2E test suite with 8 test cases covering all aspects of tab persistence.
+
+## Current Project Status
+
+### Progress Metrics
+- **Features Complete (passing)**: 41/201 (20.4%)
+- **Features Dev Done**: 78/201 (38.8%) 
+- **Features Pending**: 123/201 (61.2%)
+
+### Feature Implemented This Session
+
+#### Feature #79: Bottom panel tab navigation and state persistence
+
+**Implementation:**
+
+1. **Created Persisted UI Store:**
+   - Split UI state from transient order data
+   - Created separate useUIStore using Zustand persist middleware
+   - Configured localStorage persistence with key 'liquidvex-ui-storage'
+   - Used createJSONStorage for type-safe serialization
+   - Added partialize to only persist activeTab field
+
+2. **Updated Components:**
+   - Modified BottomPanel to use persisted useUIStore for activeTab
+   - Kept useOrderStore for transient data (positions, orders)
+   - Added data-testid attributes to all bottom panel components
+
+3. **Created E2E Test Suite:**
+   - tests/e2e/079-bottom-panel-tab-persistence.spec.ts (8 tests)
+   - Tests cover tab visibility, switching, persistence, and reset
+
+**Status:** Implementation complete. Ready for QA validation.
+
+
+# Claude Progress Report - Session 23 (DEV AGENT)
+
+## Session Summary
+Verified Feature 25 (Order entry price and size inputs) and marked as passing. Created comprehensive E2E test suite to validate all input handling requirements.
+
+## Current Project Status
+
+### Progress Metrics
+- **Features Complete (passing)**: 42/201 (20.9%)
+- **Features Dev Done**: 77/201 (38.3%)
+- **Features Pending**: 124/201 (61.7%)
+
+### Feature Verified This Session
+
+#### Feature 25: Order entry price and size inputs ✅
+
+**Implementation Status:** Already implemented and working correctly.
+
+**Test Results:**
+- ✅ 8/12 tests passing (Chromium + Firefox)
+- ⚠️ 4/12 tests skipped (WebKit - missing system dependencies)
+- All core functionality verified working
+
+**Test Coverage:**
+
+1. **Price Input Validation:**
+   - ✅ Accepts valid price values (50000.50)
+   - ✅ Rejects invalid characters (letters)
+   - ✅ Increments price by tick size (+0.5)
+   - ✅ Decrements price by tick size (-0.5)
+   - ✅ Displays price correctly with proper formatting
+
+2. **Size Input Validation:**
+   - ✅ Accepts valid size values (0.5, 1.2345)
+   - ✅ Handles whole numbers (10)
+   - ✅ Handles very small decimals (0.001)
+   - ✅ Displays size correctly with proper formatting
+   - ✅ Can be cleared and re-entered
+
+3. **Order Type Visibility:**
+   - ✅ Price input visible for Limit orders
+   - ✅ Price input hidden for Market orders
+   - ✅ Price input visible for Stop-Limit orders
+   - ✅ Price input hidden for Stop-Market orders
+
+4. **Stop Price Input:**
+   - ✅ Stop price field appears for stop orders
+   - ✅ Stop price field accepts input values
+   - ✅ Works for both stop-limit and stop-market orders
+
+**Test File:** `tests/e2e/025-order-entry-price-size-inputs.spec.ts`
+
+**Test Cases:**
+1. `should handle price input correctly` - Validates all price input scenarios
+2. `should handle size input correctly` - Validates all size input scenarios
+3. `should handle price input visibility based on order type` - Tests field visibility
+4. `should handle stop price input for stop orders` - Tests stop price functionality
+
+**Code Locations:**
+- `apps/web/components/OrderForm/OrderForm.tsx` - Main order form component
+- Input fields with increment/decrement buttons
+- Form validation and value display logic
+
+**Status:** Feature verified and marked complete. All requirements satisfied.
+
+---
+
+## Next Steps
+
+**Recommended Features to Verify Next:**
+
+There are 35 features that are dev-done but not yet verified (passing). Priority candidates:
+
+1. **Order Options (Feature 27):** Reduce-only and post-only checkboxes
+2. **Order Value Display (Feature 28):** Balance calculations and value display
+3. **Limit Order Placement (Feature 30):** Complete limit buy order flow
+4. **Market Order Execution (Feature 31):** Market order execution flow
+5. **Stop Orders (Features 32-33):** Stop-limit and stop-market order placement
+
+**Technical Debt:**
+- Frontend server port conflicts (multiple instances on different ports)
+- Environment configuration needs standardization
+- WebKit dependencies missing for full test coverage
+
+**Session Statistics:**
+- Duration: ~1 hour
+- Features Verified: 1
+- Tests Created: 4 test cases (12 total with browsers)
+- Git Commits: 1
+- Lines of Test Code Added: ~160
+
+---
+
+## Infrastructure Notes
+
+**Server Status:**
+- Backend API: Running on port 8001 ✅
+- Frontend Web: Port conflicts (3000/3001) ⚠️
+- Environment: Updated to use port 8001 for API
+
+**Configuration Changes:**
+- Updated `.env` to point API to localhost:8001
+- Multiple Next.js instances running (port conflicts)
+- Need to standardize server startup process
+
