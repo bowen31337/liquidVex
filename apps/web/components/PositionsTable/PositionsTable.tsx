@@ -48,8 +48,9 @@ export function PositionsTable() {
       return () => clearInterval(interval);
     } else {
       setPositions([]);
+      return undefined;
     }
-  }, [isConnected, address]);
+  }, [isConnected, address, getPositions, setPositions]);
 
   // Update mark prices from allMids (real-time updates)
   useEffect(() => {

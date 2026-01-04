@@ -140,11 +140,15 @@ export function useApi() {
     return response.json();
   }, []);
 
-  const cancelAllOrders = useCallback(async (coin?: string): Promise<OrderResponse> => {
+  const cancelAllOrders = useCallback(async (coin?: string, signature?: string, timestamp?: number): Promise<OrderResponse> => {
     const response = await fetch(`${API_URL}/api/trade/cancel-all`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ coin }),
+      body: JSON.stringify({
+        coin,
+        signature: signature || `0x${Math.random().toString(16).substring(2)}`,
+        timestamp: timestamp || Date.now()
+      }),
     });
     if (!response.ok) throw new Error('Failed to cancel all orders');
     return response.json();

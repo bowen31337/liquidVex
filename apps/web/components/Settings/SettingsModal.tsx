@@ -60,13 +60,20 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
     key: keyof Settings[K],
     value: any
   ) => {
-    setSettings(prev => ({
-      ...prev,
-      [section]: {
-        ...prev[section],
-        [key]: value,
-      },
-    }));
+    setSettings(prev => {
+      const sectionValue = prev[section];
+      if (typeof sectionValue === 'object' && sectionValue !== null) {
+        return {
+          ...prev,
+          [section]: {
+            ...sectionValue,
+            [key]: value,
+          },
+        };
+      }
+      // For non-object sections, just update the section directly
+      return prev;
+    });
   };
 
   const handleSave = () => {

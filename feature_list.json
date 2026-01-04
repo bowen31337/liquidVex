@@ -557,12 +557,17 @@
       "Step 12: Select Stop order type",
       "Step 13: Verify trigger price field appears"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T02:52:42.670846Z",
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "test_results": {
+      "browser": "chromium",
+      "tests_passed": 2,
+      "tests_total": 2
+    }
   },
   {
     "category": "functional",
@@ -1386,7 +1391,8 @@
       "passed": 20,
       "failed": 0,
       "skipped": 10
-    }
+    },
+    "dev_completed_at": "2026-01-04T08:32:11.056866Z"
   },
   {
     "category": "functional",

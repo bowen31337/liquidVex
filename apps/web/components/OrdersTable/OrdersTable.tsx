@@ -13,9 +13,9 @@ import { Order } from '../../types';
 import { OrderModifyModal } from '../Modal/OrderModifyModal';
 
 export function OrdersTable() {
-  const { openOrders, setOpenOrders, removeOpenOrder, updateOpenOrder } = useOrderStore();
+  const { openOrders, setOpenOrders, removeOpenOrder, updateOpenOrder, addOrderHistory } = useOrderStore();
   const { isConnected, address } = useWalletStore();
-  const { getOpenOrders, modifyOrder } = useApi();
+  const { getOpenOrders, modifyOrder, cancelOrder, cancelAllOrders } = useApi();
   const { success, error } = useToast();
   const [cancelling, setCancelling] = useState<Set<number>>(new Set());
   const [cancellingAll, setCancellingAll] = useState(false);
@@ -59,11 +59,33 @@ export function OrdersTable() {
   const handleCancel = async (oid: number) => {
     if (!address) return;
 
+    // Find the order to get the coin
+    const order = openOrders.find(o => o.oid === oid);
+    if (!order) return;
+
     setCancelling(prev => new Set(prev).add(oid));
     try {
-      // In real implementation:
-      // await cancelOrder({ coin: order.coin, oid, signature: '...', timestamp: Date.now() });
-      await new Promise(resolve => setTimeout(resolve, 300)); // Mock delay
+      // Generate mock signature (in production, wallet would sign)
+      const signature = `0x${Math.random().toString(16).substring(2)}${Math.random().toString(16).substring(2)}`;
+      const timestamp = Date.now();
+
+      // Call the real API
+      await cancelOrder({
+        coin: order.coin,
+        oid,
+        signature,
+        timestamp,
+      });
+
+      // Add to order history with canceled status
+      const canceledOrder = {
+        ...order,
+        status: 'canceled' as const,
+        timestamp: Date.now(),
+      };
+      addOrderHistory(canceledOrder);
+
+      // Remove from open orders
       removeOpenOrder(oid);
       success('Order cancelled successfully');
     } catch (err) {
@@ -83,10 +105,23 @@ export function OrdersTable() {
 
     setCancellingAll(true);
     try {
-      // In real implementation:
-      // await cancelAllOrders({ signature: '...', timestamp: Date.now() });
-      await new Promise(resolve => setTimeout(resolve, 500)); // Mock delay
-      setOpenOrders([]); // Clear all orders
+      // Generate mock signature
+      const signature = `0x${Math.random().toString(16).substring(2)}${Math.random().toString(16).substring(2)}`;
+      const timestamp = Date.now();
+
+      // Call the real API
+      await cancelAllOrders(undefined, signature, timestamp);
+
+      // Add all orders to history with canceled status
+      const canceledOrders = openOrders.map(order => ({
+        ...order,
+        status: 'canceled' as const,
+        timestamp: Date.now(),
+      }));
+      canceledOrders.forEach(order => addOrderHistory(order));
+
+      // Clear all open orders
+      setOpenOrders([]);
       success('All orders cancelled');
     } catch (err) {
       console.error('Failed to cancel all orders:', err);

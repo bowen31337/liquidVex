@@ -175,7 +175,7 @@ export function TradeHistory() {
       trade.side === 'B' ? 'Buy' : 'Sell',
       formatNumber(trade.px),
       formatNumber(trade.sz, 4),
-      formatNumber(trade.fee),
+      trade.fee !== undefined ? formatNumber(trade.fee) : 'N/A',
       trade.hash,
     ]);
 
@@ -299,7 +299,7 @@ export function TradeHistory() {
                     </td>
                     <td>{formatNumber(trade.px)}</td>
                     <td>{formatNumber(trade.sz, 4)}</td>
-                    <td>{formatNumber(trade.fee)}</td>
+                    <td>{trade.fee !== undefined ? formatNumber(trade.fee) : 'N/A'}</td>
                     <td className="text-text-tertiary">{trade.hash}</td>
                   </tr>
                 ))}

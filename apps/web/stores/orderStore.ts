@@ -37,6 +37,7 @@ interface OrderState {
   // Order history
   orderHistory: Order[];
   setOrderHistory: (orders: Order[]) => void;
+  addOrderHistory: (order: Order) => void;
   clearOrderHistory: () => void;
 
   // Trade history
@@ -77,6 +78,7 @@ export const useOrderStore = create<OrderState>((set) => ({
 
   orderHistory: [],
   setOrderHistory: (orders) => set({ orderHistory: orders }),
+  addOrderHistory: (order) => set((state) => ({ orderHistory: [...state.orderHistory, order] })),
   clearOrderHistory: () => set({ orderHistory: [] }),
 
   tradeHistory: [],

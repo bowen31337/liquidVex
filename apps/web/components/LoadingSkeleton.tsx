@@ -61,7 +61,7 @@ LoadingSkeleton.displayName = 'LoadingSkeleton';
  * Chart loading skeleton - simulates candlestick chart
  */
 export const ChartSkeleton = () => (
-  <div className="panel p-2 flex flex-col h-full">
+  <div className="panel p-2 flex flex-col h-full" data-testid="chart-skeleton">
     <div className="flex items-center justify-between mb-2">
       <div className="flex gap-2">
         <LoadingSkeleton width={40} height={20} className="rounded" />
@@ -83,7 +83,7 @@ export const ChartSkeleton = () => (
  * OrderBook loading skeleton
  */
 export const OrderBookSkeleton = () => (
-  <div className="panel p-2 flex flex-col h-full">
+  <div className="panel p-2 flex flex-col h-full" data-testid="orderbook-skeleton">
     <div className="flex items-center justify-between mb-2">
       <LoadingSkeleton width={80} height={16} className="rounded" />
       <div className="flex gap-2">
@@ -125,7 +125,7 @@ export const OrderBookSkeleton = () => (
  * OrderForm loading skeleton
  */
 export const OrderFormSkeleton = () => (
-  <div className="panel p-3 flex flex-col h-full">
+  <div className="panel p-3 flex flex-col h-full" data-testid="orderform-skeleton">
     {/* Buy/Sell toggle */}
     <div className="flex mb-4 gap-2">
       <LoadingSkeleton width="1/2" height={40} className="rounded" />
@@ -182,7 +182,7 @@ export const OrderFormSkeleton = () => (
  * RecentTrades loading skeleton
  */
 export const RecentTradesSkeleton = () => (
-  <div className="panel p-2 flex flex-col h-full">
+  <div className="panel p-2 flex flex-col h-full" data-testid="recenttrades-skeleton">
     <div className="mb-2">
       <LoadingSkeleton width={100} height={16} className="rounded" />
     </div>

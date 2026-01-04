@@ -61,15 +61,23 @@ export function MarketDataProvider({ children }: { children: React.ReactNode }) 
       } catch (err) {
         console.warn('Could not fetch asset info:', err);
       }
-
-      try {
-        await getCandles(selectedAsset, selectedTimeframe, 500);
-        // Chart component handles candles via its own hook
-      } catch (err) {
-        console.warn('Could not fetch candles:', err);
-      }
     };
     initAssetData();
+
+    // Fetch candles separately - this triggers the loading state transition
+    const fetchCandles = async () => {
+      try {
+        const { setCandles } = useMarketStore.getState();
+        const data = await getCandles(selectedAsset, selectedTimeframe, 500);
+        setCandles(data);
+      } catch (err) {
+        console.warn('Could not fetch candles:', err);
+        // Even on error, stop loading to prevent infinite skeleton
+        const { setIsLoadingCandles } = useMarketStore.getState();
+        setIsLoadingCandles(false);
+      }
+    };
+    fetchCandles();
   }, [getExchangeMeta, getAssetInfo, getCandles, selectedAsset, selectedTimeframe]);
 
   // Update connection status based on any active connection

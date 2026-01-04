@@ -14,6 +14,7 @@ from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from routers import info, trade, account, websocket
+from rate_limiter import rate_limiter
 
 
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
@@ -45,6 +46,42 @@ app = FastAPI(
 
 # Security Headers Middleware - Add security headers to all responses
 app.add_middleware(SecurityHeadersMiddleware)
+
+
+class RateLimitMiddleware(BaseHTTPMiddleware):
+    """Middleware to enforce rate limiting on all API endpoints."""
+
+    async def dispatch(self, request: Request, call_next):
+        """Process request and enforce rate limits."""
+        # Skip rate limiting for health checks and documentation
+        if request.url.path in ["/", "/health", "/docs", "/redoc", "/openapi.json"]:
+            return await call_next(request)
+
+        # Get client IP
+        ip = request.client.host if request.client else "unknown"
+
+        # Check forwarded header if behind proxy
+        forwarded_for = request.headers.get("X-Forwarded-For")
+        if forwarded_for:
+            ip = forwarded_for.split(",")[0].strip()
+
+        # Check rate limit
+        from rate_limiter import check_rate_limit
+        await check_rate_limit(request)
+
+        # Add rate limit info to response headers
+        response = await call_next(request)
+
+        stats = rate_limiter.get_stats(ip)
+        response.headers["X-RateLimit-Limit"] = str(stats["limit_per_minute"])
+        response.headers["X-RateLimit-Remaining"] = str(stats["remaining_minute"])
+        response.headers["X-RateLimit-Window"] = "1 minute"
+
+        return response
+
+
+# Rate Limiting Middleware - Prevent excessive API calls
+app.add_middleware(RateLimitMiddleware)
 
 # CORS Configuration - Allow frontend origins with proper settings
 # In production, replace with specific allowed origins
