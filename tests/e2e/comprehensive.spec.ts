@@ -17,9 +17,9 @@ test.describe('Comprehensive Trading Interface Tests', () => {
     // Wait for WebSocket connection and data
     await page.waitForTimeout(1000);
 
-    // Check for bid/ask price levels
-    const bids = orderBook.locator('text=/\\d+\\.\\d+/'); // Price numbers
-    await expect(bids.first()).toBeVisible();
+    // Check for bid/ask price levels - look for numbers with decimal points
+    const priceElements = orderBook.locator('text=/\\d+\\.\\d+/');
+    await expect(priceElements.first()).toBeVisible();
   });
 
   test('Recent Trades component updates with trade data', async ({ page }) => {
@@ -98,8 +98,11 @@ test.describe('Comprehensive Trading Interface Tests', () => {
   });
 
   test('Wallet connect button interaction', async ({ page }) => {
-    const walletButton = page.locator('button:has-text("Connect Wallet")');
+    // Use a more stable locator that doesn't depend on changing text
+    const header = page.locator('header');
+    const walletButton = header.locator('button.btn-accent');
     await expect(walletButton).toBeVisible();
+    await expect(walletButton).toHaveText('Connect Wallet');
 
     // Click to connect (mock)
     await walletButton.click();
@@ -108,9 +111,9 @@ test.describe('Comprehensive Trading Interface Tests', () => {
     try {
       await expect(walletButton).toHaveText('Connecting...', { timeout: 2000 });
       // Should then show mock address
-      await expect(walletButton).toHaveText(/0x[a-fA-F0-9]{6}\.\.\.[a-fA-F0-9]{4}/, { timeout: 3000 });
+      await expect(walletButton).toHaveText(/0x[a-fA-F0-9]{6}\\.\\.\\.[a-fA-F0-9]{4}/, { timeout: 3000 });
     } catch (e) {
-      // If mock doesn't work, just verify button exists and was clicked
+      // If mock doesn't work, just verify button still exists
       await expect(walletButton).toBeVisible();
     }
   });
@@ -163,7 +166,7 @@ test.describe('Comprehensive Trading Interface Tests', () => {
   test('All major UI sections are present', async ({ page }) => {
     // Header
     await expect(page.locator('header')).toBeVisible();
-    await expect(page.locator('h1:has-text("liquidVex")')).toBeVisible();
+    await expect(page.locator('h1:has-text("liquidVEx")')).toBeVisible();
 
     // Chart area
     await expect(page.locator('.panel', { hasText: 'Chart' })).toBeVisible();

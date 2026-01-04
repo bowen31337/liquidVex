@@ -47,7 +47,7 @@ export function PositionsTable() {
   if (!isConnected) {
     return (
       <div className="p-4 text-center text-text-tertiary text-sm">
-        Connect your wallet to view positions
+        Connect your wallet to view positions and orders
       </div>
     );
   }

@@ -205,6 +205,7 @@ export function OrderForm() {
             onChange={(e) => handleInputChange('price', e.target.value)}
             placeholder="0.00"
             className="input w-full mt-1 font-mono"
+            data-testid="order-price-input"
           />
         </div>
       )}

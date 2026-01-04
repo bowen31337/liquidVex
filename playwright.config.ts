@@ -31,7 +31,7 @@ export default defineConfig({
     },
   ],
 
-  webServer: {
+  webServer: process.env.SKIP_WEB_SERVER ? undefined : {
     command: 'cd apps/web && pnpm dev --port 3000',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,

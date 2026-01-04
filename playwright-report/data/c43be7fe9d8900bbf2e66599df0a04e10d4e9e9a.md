@@ -18,14 +18,14 @@
         - button "Close" [ref=e19] [cursor=pointer]:
           - img [ref=e21]
       - heading "Unhandled Runtime Error" [level=1] [ref=e24]
-      - paragraph [ref=e25]: "Error: Object is disposed"
+      - paragraph [ref=e25]: "Error: Cannot update oldest data, last time=[object Object], new time=[object Object]"
     - generic [ref=e26]:
       - heading "Source" [level=2] [ref=e27]
       - generic [ref=e28]:
-        - link "components/Chart/Chart.tsx (52:24) @ remove" [ref=e30] [cursor=pointer]:
-          - generic [ref=e31]: components/Chart/Chart.tsx (52:24) @ remove
+        - link "components/Chart/Chart.tsx (173:31) @ update" [ref=e30] [cursor=pointer]:
+          - generic [ref=e31]: components/Chart/Chart.tsx (173:31) @ update
           - img [ref=e32]
-        - generic [ref=e36]: "50 | // Clean up existing chart 51 | if (chartRef.current) { > 52 | chartRef.current.remove(); | ^ 53 | chartRef.current = null; 54 | } 55 |"
+        - generic [ref=e36]: "171 | 172 | if (candleSeriesRef.current && chartType === 'candles') { > 173 | candleSeriesRef.current.update(formatted); | ^ 174 | } else if (lineSeriesRef.current && chartType === 'line') { 175 | lineSeriesRef.current.update({ 176 | time: formatted.time,"
       - heading "Call Stack" [level=2] [ref=e37]
       - button "Show collapsed frames" [ref=e38] [cursor=pointer]
 ```

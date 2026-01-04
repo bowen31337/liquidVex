@@ -130,7 +130,7 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
                   {/* Size (Left) */}
                   <div className="flex-1 text-short z-10">{formatSize(level.sz)}</div>
                   {/* Price (Center) */}
-                  <div className="flex-1 text-center text-text-primary z-10 font-medium">
+                  <div className="flex-1 text-center text-text-primary z-10 font-medium" data-testid="ask-price">
                     {formatPrice(level.px)}
                   </div>
                   {/* Empty (Right for symmetry) */}
@@ -164,7 +164,7 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
                   {/* Empty (Left for symmetry) */}
                   <div className="flex-1"></div>
                   {/* Price (Center) */}
-                  <div className="flex-1 text-center text-text-primary z-10 font-medium">
+                  <div className="flex-1 text-center text-text-primary z-10 font-medium" data-testid="bid-price">
                     {formatPrice(level.px)}
                   </div>
                   {/* Size (Right) */}

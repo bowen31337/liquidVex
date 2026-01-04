@@ -128,14 +128,16 @@ export function Chart() {
     const loadCandles = async () => {
       try {
         const data = await getCandles(selectedAsset, timeframe, 500);
-        const formatted = data.map((c: any) => ({
+        // Sort data by time ascending for lightweight-charts (create new sorted array)
+        const sortedData = [...data].sort((a: any, b: any) => a.t - b.t);
+        const formatted = sortedData.map((c: any) => ({
           time: Math.floor(c.t / 1000) as Time,
           open: c.o,
           high: c.h,
           low: c.l,
           close: c.c,
         }));
-        setCandles(data);
+        setCandles(sortedData);
 
         if (candleSeriesRef.current && chartType === 'candles') {
           candleSeriesRef.current.setData(formatted);

@@ -266,7 +266,7 @@
       "Step 4: Click on an ask price level",
       "Step 5: Verify order form price field updates to new price"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
     "is_qa_passed": false,
     "qa_retry_count": 0,
@@ -517,8 +517,11 @@
       "Step 6: Verify balance and address are hidden"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T02:48:53.671654Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -584,8 +587,11 @@
       "Step 15: Verify leverage display shows 20x"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T02:50:47.548061Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",

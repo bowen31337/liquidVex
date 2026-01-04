@@ -41,7 +41,7 @@ export interface OrderBookLevel {
 }
 
 export interface OrderBookData {
-  type: 'orderbook_snapshot' | 'orderbook_update';
+  type: 'orderbook_snapshot' | 'orderbook_update' | 'orderbook';
   coin: string;
   bids: OrderBookLevel[];
   asks: OrderBookLevel[];

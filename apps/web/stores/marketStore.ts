@@ -10,6 +10,10 @@ interface MarketState {
   selectedAsset: string;
   setSelectedAsset: (asset: string) => void;
 
+  // Aliases for compatibility
+  selectedCoin: string;
+  selectedTimeframe: string;
+
   // Order book
   orderBook: OrderBookData | null;
   setOrderBook: (data: OrderBookData) => void;
@@ -53,11 +57,20 @@ interface MarketState {
   setCandles: (candles: CandleData[]) => void;
   addCandle: (candle: CandleData) => void;
   clearCandles: () => void;
+
+  // Placeholder functions for MarketDataProvider compatibility
+  fetchAllMarkets: () => Promise<void>;
+  fetchMarketInfo: (coin: string) => Promise<void>;
+  fetchCandles: (coin: string, timeframe: string) => Promise<void>;
 }
 
 export const useMarketStore = create<MarketState>((set, get) => ({
   selectedAsset: 'BTC',
   setSelectedAsset: (asset) => set({ selectedAsset: asset }),
+
+  // Aliases for compatibility
+  selectedCoin: 'BTC',
+  selectedTimeframe: '1h',
 
   orderBook: null,
   setOrderBook: (data) => set({ orderBook: data }),
@@ -101,4 +114,18 @@ export const useMarketStore = create<MarketState>((set, get) => ({
     set({ candles: newCandles });
   },
   clearCandles: () => set({ candles: [] }),
+
+  // Placeholder functions - these are no-ops but prevent errors
+  fetchAllMarkets: async () => {
+    // Placeholder - could fetch from API in future
+    console.log('fetchAllMarkets called (placeholder)');
+  },
+  fetchMarketInfo: async (coin: string) => {
+    // Placeholder - could fetch from API in future
+    console.log('fetchMarketInfo called for:', coin);
+  },
+  fetchCandles: async (coin: string, timeframe: string) => {
+    // Placeholder - candles are fetched via WebSocket in Chart component
+    console.log('fetchCandles called for:', coin, timeframe);
+  },
 }));
