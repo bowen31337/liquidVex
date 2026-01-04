@@ -1,7 +1,13 @@
+/**
+ * Test: Input Validation and Security
+ * Feature ID: 74
+ * Category: functional
+ */
+
 import { test, expect } from '@playwright/test';
 
 test.describe('Feature 74: Input Validation and Security', () => {
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001';
 
   test('Step 1: Send request with missing required fields', async ({ request }) => {
     // Test with missing required field 'coin'

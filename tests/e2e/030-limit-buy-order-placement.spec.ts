@@ -205,9 +205,13 @@ test.describe('Limit Buy Order Placement Flow', () => {
     await submitButton.click();
     await page.waitForTimeout(500);
 
-    // Close modal by clicking backdrop
-    const backdrop = page.locator('div[role="dialog"] ~ div');
-    await backdrop.click({ force: true });
+    // Get modal and close by clicking backdrop
+    const modal = page.locator('[data-testid="order-confirm-modal"]');
+    await expect(modal).toBeVisible();
+    const backdrop = modal.locator('..').locator('div').filter({ hasText: '' }).first(); // Backdrop is sibling of modal
+    // Alternative: click the cancel button
+    const cancelButton = modal.locator('button').filter({ hasText: /^Cancel$/ });
+    await cancelButton.click();
     await page.waitForTimeout(300);
 
     // Verify form values are preserved
@@ -231,7 +235,10 @@ test.describe('Limit Buy Order Placement Flow', () => {
     await submitButton.click();
     await page.waitForTimeout(500);
 
-    const confirmButton = page.locator('button:has-text("Confirm Order")');
+    // Get modal and click confirm
+    const modal = page.locator('[data-testid="order-confirm-modal"]');
+    await expect(modal).toBeVisible();
+    const confirmButton = modal.locator('button:has-text("Confirm Order")');
     await confirmButton.click();
     await page.waitForTimeout(2500);
 
