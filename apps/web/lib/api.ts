@@ -20,7 +20,7 @@ import type {
 import type { AccountState, Position } from '../types/account';
 
 // API base URL - default to localhost, override with env var
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 /**
  * Generic fetch wrapper with error handling

@@ -6,6 +6,7 @@
 
 import { useEffect, useState } from 'react';
 import { useMarketStore } from '../../stores/marketStore';
+import { useOrderStore } from '../../stores/orderStore';
 import { useWebSocket } from '../../hooks/useWebSocket';
 import { OrderBookLevel } from '../../types';
 
