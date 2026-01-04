@@ -308,9 +308,9 @@
       "Step 3: Verify indicator shows relative bid vs ask volume",
       "Step 4: Verify indicator updates with market changes"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 0,
     "dev_completed_at": "2026-01-04T02:27:01.061397Z"
@@ -1043,7 +1043,12 @@
     "is_qa_passed": false,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T03:54:56.551598Z",
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "last_dev_failure_at": null,
+    "dev_failure_reasons": [],
+    "is_stuck": false,
+    "stuck_reason": null,
+    "stuck_at": null
   },
   {
     "category": "functional",
@@ -1094,8 +1099,11 @@
       "Step 4: Verify each payment shows time, asset, amount"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T03:59:01.794367Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
