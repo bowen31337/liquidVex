@@ -2923,9 +2923,12 @@
       "Step 5: Switch to different asset",
       "Step 6: Verify max leverage updates for new asset"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "test_file": "tests/e2e/032-asset-validation-features.spec.ts",
+    "dev_completed_at": "2026-01-04T23:45:00.000000Z",
+    "notes": "Implemented in useMarginValidation.ts with validateLeverage() function. OrderForm.tsx updated to use max leverage from asset info. Slider max attribute dynamically set from assetInfo.maxLeverage."
   },
   {
     "category": "functional",
@@ -2937,9 +2940,12 @@
       "Step 4: Enter order size at minimum",
       "Step 5: Verify order can be submitted"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "test_file": "tests/e2e/032-asset-validation-features.spec.ts",
+    "dev_completed_at": "2026-01-04T23:45:00.000000Z",
+    "notes": "Implemented in useMarginValidation.ts with validateSize() function. Checks minSz from asset info (BTC: 0.001, ETH: 0.01). Also validates decimal precision for size."
   },
   {
     "category": "functional",
@@ -2950,9 +2956,12 @@
       "Step 3: Verify price is truncated to valid precision",
       "Step 4: Verify order book prices match precision"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "test_file": "tests/e2e/032-asset-validation-features.spec.ts",
+    "dev_completed_at": "2026-01-04T23:45:00.000000Z",
+    "notes": "Implemented with truncateDecimals() helper in OrderForm.tsx. handleInputChange truncates price to pxDecimals (BTC: 1, ETH: 2). adjustPrice() uses correct precision."
   },
   {
     "category": "functional",
@@ -2963,9 +2972,12 @@
       "Step 3: Verify size is truncated to valid precision",
       "Step 4: Verify position sizes match precision"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "test_file": "tests/e2e/032-asset-validation-features.spec.ts",
+    "dev_completed_at": "2026-01-04T23:45:00.000000Z",
+    "notes": "Implemented with truncateDecimals() helper in OrderForm.tsx. handleInputChange truncates size to szDecimals (BTC: 4, ETH: 3). handlePercentage() uses correct precision."
   },
   {
     "category": "functional",
@@ -3012,8 +3024,11 @@
       "Step 5: Verify order rejected as would cross spread"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T12:41:26.314859Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -3045,8 +3060,11 @@
       "Step 7: Verify form data is retained"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T12:43:27.322675Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
