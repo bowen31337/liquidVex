@@ -17,10 +17,10 @@ test.describe('Application Startup and Initial Render', () => {
     });
 
     // Step 1: Navigate to the application root URL with test mode to skip WebSocket/API calls
-    await page.goto('http://localhost:3002?testMode=true');
+    await page.goto('/?testMode=true');
 
     // Step 2: Wait for the page to fully load
-    await expect(page).toHaveURL(/http:\/\/localhost:3002\/(\?testMode=true)?/);
+    await expect(page).toHaveURL(/testMode=true/);
     await expect(page.locator('body')).toBeVisible();
 
     // Step 3: Populate store data to transition from skeletons to real components

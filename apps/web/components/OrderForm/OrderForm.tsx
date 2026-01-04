@@ -31,6 +31,7 @@ export function OrderForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, boolean>>({});
 
   // Test mode bypasses wallet requirement
   // Check for NEXT_PUBLIC_TEST_MODE env var OR URL parameter
@@ -72,6 +73,14 @@ export function OrderForm() {
       setOrderForm({ [field]: value });
     }
     setError(null);
+    // Clear field error when user starts typing
+    if (fieldErrors[field]) {
+      setFieldErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
   };
 
   // Helper function to truncate decimals
@@ -139,6 +148,9 @@ export function OrderForm() {
 
   // Validate form
   const validate = () => {
+    // Clear previous field errors
+    setFieldErrors({});
+
     // Skip wallet check in test mode
     if (!isConnected && !isTestMode) {
       setError('Connect wallet first');
@@ -149,6 +161,7 @@ export function OrderForm() {
     const sizeValidation = validateSize();
     if (!sizeValidation.isValid) {
       setError(sizeValidation.error || 'Invalid size');
+      setFieldErrors({ size: true });
       return false;
     }
 
@@ -157,16 +170,19 @@ export function OrderForm() {
       const price = parseFloat(orderForm.price);
       if (!price || price <= 0) {
         setError('Invalid price');
+        setFieldErrors({ price: true });
         return false;
       }
       // Check post-only crossing spread
       if (orderForm.postOnly) {
         if (orderForm.side === 'buy' && price >= currentPrice) {
           setError('Post-only buy order would cross spread');
+          setFieldErrors({ price: true });
           return false;
         }
         if (orderForm.side === 'sell' && price <= currentPrice) {
           setError('Post-only sell order would cross spread');
+          setFieldErrors({ price: true });
           return false;
         }
       }
@@ -177,6 +193,7 @@ export function OrderForm() {
       const stopPrice = parseFloat(orderForm.stopPrice);
       if (!stopPrice || stopPrice <= 0) {
         setError('Invalid stop price');
+        setFieldErrors({ stopPrice: true });
         return false;
       }
       // Validate limit price for stop-limit orders
@@ -184,16 +201,19 @@ export function OrderForm() {
         const limitPrice = parseFloat(orderForm.price);
         if (!limitPrice || limitPrice <= 0) {
           setError('Invalid limit price');
+          setFieldErrors({ price: true });
           return false;
         }
         // Check post-only crossing spread for stop-limit orders
         if (orderForm.postOnly) {
           if (orderForm.side === 'buy' && limitPrice >= currentPrice) {
             setError('Post-only buy order would cross spread');
+            setFieldErrors({ price: true });
             return false;
           }
           if (orderForm.side === 'sell' && limitPrice <= currentPrice) {
             setError('Post-only sell order would cross spread');
+            setFieldErrors({ price: true });
             return false;
           }
         }
@@ -572,8 +592,9 @@ export function OrderForm() {
             value={orderForm.stopPrice}
             onChange={(e) => handleInputChange('stopPrice', e.target.value)}
             placeholder="0.00"
-            className="input w-full mt-1 font-mono"
+            className={`input w-full mt-1 font-mono ${fieldErrors.stopPrice ? 'border-error focus:border-error focus:ring-error' : ''}`}
             aria-label="Stop price trigger value"
+            aria-invalid={fieldErrors.stopPrice ? 'true' : 'false'}
           />
         </div>
       )}
@@ -608,9 +629,10 @@ export function OrderForm() {
             value={orderForm.price}
             onChange={(e) => handleInputChange('price', e.target.value)}
             placeholder="0.00"
-            className="input w-full mt-1 font-mono"
+            className={`input w-full mt-1 font-mono ${fieldErrors.price ? 'border-error focus:border-error focus:ring-error' : ''}`}
             data-testid="order-price-input"
             aria-label="Order price"
+            aria-invalid={fieldErrors.price ? 'true' : 'false'}
           />
         </div>
       )}
@@ -626,9 +648,10 @@ export function OrderForm() {
           value={orderForm.size}
           onChange={(e) => handleInputChange('size', e.target.value)}
           placeholder="0.00"
-          className="input w-full mt-1 font-mono"
+          className={`input w-full mt-1 font-mono ${fieldErrors.size ? 'border-error focus:border-error focus:ring-error' : ''}`}
           data-testid="order-size-input"
           aria-label="Order size"
+          aria-invalid={fieldErrors.size ? 'true' : 'false'}
         />
         <div className="flex gap-1 mt-2">
           {['25%', '50%', '75%', '100%'].map((pct, idx) => (
@@ -767,7 +790,7 @@ export function OrderForm() {
 
       {/* Messages */}
       {error && (
-        <div className="mt-2 text-xs text-short bg-surface-elevated px-2 py-1 rounded" data-testid="order-error">
+        <div className="mt-2 text-xs text-error bg-surface-elevated px-2 py-1 rounded border border-error" data-testid="order-error">
           {error}
         </div>
       )}

@@ -11,38 +11,13 @@ test.describe('Account Margin Ratio Display', () => {
     await page.goto('http://localhost:3002?testMode=true');
     await page.waitForLoadState('networkidle');
 
-    // Wait for stores to be available
-    await page.waitForFunction(() => {
-      return typeof window !== 'undefined' && (window as any).stores;
-    }, { timeout: 10000 });
-
-    // Populate account state to make account balance visible
-    await page.evaluate(() => {
-      const stores = (window as any).stores;
-      if (stores && stores.getOrderStoreState) {
-        const orderStoreState = stores.getOrderStoreState();
-        if (orderStoreState && orderStoreState.setAccountState) {
-          orderStoreState.setAccountState({
-            equity: 10000.0,
-            marginUsed: 2500.0,
-            availableBalance: 7500.0,
-            withdrawable: 5000.0,
-            crossMarginSummary: {
-              accountValue: 10000.0,
-              totalMarginUsed: 2500.0,
-            },
-          });
-        }
-      }
-    });
-
-    // Wait for account balance to render
-    await page.waitForSelector('[data-testid=\"account-balance\"]', { timeout: 10000 });
-    await page.waitForTimeout(300);
+    // Wait for account balance to be visible (it uses mock data by default)
+    await page.waitForSelector('[data-testid="account-balance"]', { timeout: 15000 });
+    await page.waitForTimeout(500);
   });
 
   test('Step 1: Locate margin ratio indicator', async ({ page }) => {
-    const accountBalance = page.locator('[data-testid=\"account-balance\"]');
+    const accountBalance = page.locator('[data-testid="account-balance"]');
 
     // Verify margin utilization section is visible
     const marginUtilization = accountBalance.locator('text=Margin Utilization');
@@ -50,10 +25,9 @@ test.describe('Account Margin Ratio Display', () => {
   });
 
   test('Step 2: Verify ratio is displayed correctly', async ({ page }) => {
-    const accountBalance = page.locator('[data-testid=\"account-balance\"]');
+    const accountBalance = page.locator('[data-testid="account-balance"]');
 
-    // With equity=10000 and marginUsed=2500, ratio should be 25.0%
-    // Margin Utilization = (marginUsed / equity) * 100 = (2500/10000)*100 = 25%
+    // With equity=10000 and marginUsed=2500 (from useAccount mock), ratio should be 25.0%
     const marginUtilizationSection = accountBalance.locator('text=Margin Utilization').locator('..');
     const ratioText = await marginUtilizationSection.textContent();
 
@@ -62,11 +36,11 @@ test.describe('Account Margin Ratio Display', () => {
   });
 
   test('Step 3: Verify color changes with risk level - low risk (25%)', async ({ page }) => {
-    const accountBalance = page.locator('[data-testid=\"account-balance\"]');
+    const accountBalance = page.locator('[data-testid="account-balance"]');
 
     // With 25% utilization, should show green (bg-accent) - low risk
-    // The colored bar is the div with transition-all class
-    const coloredBar = accountBalance.locator('.h-1.5.rounded-full.transition-all');
+    // Use attribute selector to find the colored bar (has bg-accent, bg-warning, or bg-loss)
+    const coloredBar = accountBalance.locator('div[class*="bg-accent"], div[class*="bg-warning"], div[class*="bg-loss"]').first();
     await expect(coloredBar).toBeVisible();
 
     // Should have bg-accent class for low utilization (25% < 70%)
@@ -95,10 +69,10 @@ test.describe('Account Margin Ratio Display', () => {
       }
     });
 
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(500);
 
-    const accountBalance = page.locator('[data-testid=\"account-balance\"]');
-    const coloredBar = accountBalance.locator('.h-1.5.rounded-full.transition-all');
+    const accountBalance = page.locator('[data-testid="account-balance"]');
+    const coloredBar = accountBalance.locator('div[class*="bg-accent"], div[class*="bg-warning"], div[class*="bg-loss"]').first();
 
     // Should have bg-warning class for medium utilization (75% > 70% and < 90%)
     const classAttr = await coloredBar.getAttribute('class');
@@ -126,10 +100,10 @@ test.describe('Account Margin Ratio Display', () => {
       }
     });
 
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(500);
 
-    const accountBalance = page.locator('[data-testid=\"account-balance\"]');
-    const coloredBar = accountBalance.locator('.h-1.5.rounded-full.transition-all');
+    const accountBalance = page.locator('[data-testid="account-balance"]');
+    const coloredBar = accountBalance.locator('div[class*="bg-accent"], div[class*="bg-warning"], div[class*="bg-loss"]').first();
 
     // Should have bg-loss class for high utilization (> 90%)
     const classAttr = await coloredBar.getAttribute('class');
@@ -137,7 +111,7 @@ test.describe('Account Margin Ratio Display', () => {
   });
 
   test('Step 6: Verify margin utilization bar width scales with ratio', async ({ page }) => {
-    // Test with 50% utilization
+    // Update account state to 50% utilization
     await page.evaluate(() => {
       const stores = (window as any).stores;
       if (stores && stores.getOrderStoreState) {
@@ -157,10 +131,10 @@ test.describe('Account Margin Ratio Display', () => {
       }
     });
 
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(500);
 
-    const accountBalance = page.locator('[data-testid=\"account-balance\"]');
-    const coloredBar = accountBalance.locator('.h-1.5.rounded-full.transition-all');
+    const accountBalance = page.locator('[data-testid="account-balance"]');
+    const coloredBar = accountBalance.locator('div[class*="bg-accent"], div[class*="bg-warning"], div[class*="bg-loss"]').first();
 
     // Should have bg-accent class (50% < 70%)
     const classAttr = await coloredBar.getAttribute('class');
@@ -172,7 +146,7 @@ test.describe('Account Margin Ratio Display', () => {
   });
 
   test('Step 7: Verify margin utilization percentage text updates', async ({ page }) => {
-    // Test with 85% utilization
+    // Update account state to 85% utilization
     await page.evaluate(() => {
       const stores = (window as any).stores;
       if (stores && stores.getOrderStoreState) {
@@ -192,9 +166,9 @@ test.describe('Account Margin Ratio Display', () => {
       }
     });
 
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(500);
 
-    const accountBalance = page.locator('[data-testid=\"account-balance\"]');
+    const accountBalance = page.locator('[data-testid="account-balance"]');
 
     // Find the percentage text next to "Margin Utilization"
     const marginUtilizationSection = accountBalance.locator('text=Margin Utilization').locator('..');

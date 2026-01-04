@@ -2,8 +2,37 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Account Balance Integration', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:3002');
+    // Navigate with test mode to skip WebSocket connections
+    await page.goto('http://localhost:3002?testMode=true');
     await page.waitForLoadState('networkidle');
+
+    // Wait for stores to be available
+    await page.waitForFunction(() => {
+      return typeof window !== 'undefined' &&
+             (window as any).stores &&
+             (window as any).stores.getOrderStoreState;
+    }, { timeout: 10000 });
+
+    // Populate account state data
+    await page.evaluate(() => {
+      const stores = (window as any).stores;
+      if (!stores || !stores.getOrderStoreState) return;
+
+      const orderState = stores.getOrderStoreState();
+      orderState.setAccountState({
+        equity: 10000,
+        marginUsed: 2500,
+        availableBalance: 7500,
+        withdrawable: 7500,
+        crossMarginSummary: {
+          accountValue: 10000,
+          totalMarginUsed: 2500
+        }
+      });
+    });
+
+    // Wait for component to render
+    await page.waitForTimeout(500);
   });
 
   test('Account Balance component renders correctly in header', async ({ page }) => {

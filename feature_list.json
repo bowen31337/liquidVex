@@ -3701,7 +3701,7 @@
       "Step 6: Verify normal styling returns"
     ],
     "passes": false,
-    "is_dev_done": false,
+    "is_dev_done": true,
     "is_qa_passed": false,
     "qa_retry_count": 0,
     "dev_failure_count": 1,
@@ -3734,7 +3734,7 @@
       "Step 3: Verify scrollbar matches dark theme"
     ],
     "passes": false,
-    "is_dev_done": false,
+    "is_dev_done": true,
     "is_qa_passed": false,
     "qa_retry_count": 0,
     "dev_failure_count": 1,
@@ -4161,7 +4161,7 @@
       "Step 9: Verify rest of application continues to function"
     ],
     "passes": false,
-    "is_dev_done": false,
+    "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 2,

@@ -1,11 +1,12 @@
 /**
- * Zustand store for wallet connection
+ * Zustand store for wallet connection with persistence
  */
 
 import { create } from 'zustand';
 import { useWallet } from '../hooks/useWallet';
 import { useContext } from 'react';
 import { WagmiContext } from 'wagmi';
+import { useWalletPersistence } from '../hooks/useWalletPersistence';
 
 interface WalletState {
   address: string | null;
@@ -20,10 +21,11 @@ interface WalletState {
   setError: (error: string | null) => void;
   setChainId: (chainId: number | null) => void;
   setState: (state: Partial<WalletState>) => void;
+  clearState: () => void;
 }
 
-// Create the store
-export const useWalletStore = create<WalletState>((set) => ({
+// Create the store with persistence
+export const useWalletStore = create<WalletState>((set, get) => ({
   address: null,
   isConnected: false,
   connecting: false,
@@ -35,12 +37,22 @@ export const useWalletStore = create<WalletState>((set) => ({
   setError: (error) => set({ error }),
   setChainId: (chainId) => set({ chainId }),
   setState: (state) => set(state),
+  clearState: () => set({
+    address: null,
+    isConnected: false,
+    connecting: false,
+    error: null,
+    chainId: null,
+  }),
 }));
 
-// Export a hook that syncs with wagmi
+// Export a hook that syncs with wagmi and handles persistence
 export function useWalletSync() {
   const wagmiWallet = useWallet();
   const storeState = useWalletStore();
+
+  // Add persistence functionality
+  useWalletPersistence();
 
   // Check if we're in test mode
   const isTestMode = typeof window !== 'undefined' &&

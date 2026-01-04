@@ -30,7 +30,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      // Match tsconfig paths: "@/*": ["./*"]
+      '@': path.resolve(__dirname, './'),
     },
   },
 });

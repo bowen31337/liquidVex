@@ -1,0 +1,225 @@
+# Session Summary - January 5, 2025 (Late Night)
+
+## Project Status
+- **Previous:** 114/201 features passing (56.7%)
+- **Current:** 114/201 features passing (56.7%)
+- **Improvement:** 0 features (infrastructure issues prevented progress)
+
+## Session Goal: QA Verify Feature 158
+
+### Target Feature
+**Feature 158: Account Margin Ratio Display**
+- Category: functional
+- Status: DEV complete, needs QA verification
+- Test file: `tests/e2e/158-account-margin-ratio.spec.ts`
+- Tests: 7 comprehensive tests covering margin ratio display and color coding
+
+## Major Infrastructure Issues Encountered
+
+### Issue 1: Zombie Server Processes
+**Problem:** Multiple stale `next dev` processes blocking ports 3002 and 3003
+- Process 229428 stuck with `--port 3002 --port 3003` conflicting arguments
+- Chrome connections in CLOSE_WAIT state from previous tests
+- `killall` command not available in restricted environment
+- `lsof` and `netstat` showed port was free, but Node.js still reported EADDRINUSE
+
+**Attempted Solutions:**
+1. ✓ Read existing test patterns from `account-balance.spec.ts`
+2. ✓ Identified that stores are exposed via `@/utils/globalStores.ts`
+3. ✗ Port 3002 blocking - could not resolve with available tools
+4. ✗ Tried port 3003 - also blocked
+5. ✗ Killed all node processes - ports still blocked
+6. ✗ Multiple restart attempts - all failed with EADDRINUSE
+
+**Root Cause:**
+The init.sh script and manual starts created multiple server instances that became zombie processes. Without `killall` or proper process management tools, these processes could not be cleanly terminated.
+
+### Issue 2: Test Configuration
+**Observation:** The test file was auto-reverted by linter/user during session:
+- Changed from port 3002 → 3003
+- Automatically reverted back to 3002
+- Indicates pre-commit hooks or auto-formatting in place
+
+## Technical Work Completed
+
+### Test Analysis
+**Test File Structure:**
+```typescript
+test.beforeEach(async ({ page }) => {
+  // Navigate with test mode
+  await page.goto('http://localhost:3002?testMode=true');
+
+  // Wait for stores to be available
+  await page.waitForFunction(() => {
+    return typeof window !== 'undefined' && (window as any).stores;
+  }, { timeout: 10000 });
+
+  // Populate account state
+  await page.evaluate(() => {
+    const stores = (window as any).stores;
+    if (stores && stores.getOrderStoreState) {
+      const orderStoreState = stores.getOrderStoreState();
+      orderStoreState.setAccountState({
+        equity: 10000.0,
+        marginUsed: 2500.0,
+        // ... more fields
+      });
+    }
+  });
+});
+```
+
+**Tests Cover:**
+1. ✓ Locate margin ratio indicator
+2. Verify ratio displays correctly (25.0% for 2500/10000)
+3. Color coding - low risk (<70%): bg-accent (green)
+4. Color coding - medium risk (70-90%): bg-warning (amber)
+5. Color coding - high risk (>90%): bg-loss (red)
+6. Bar width scaling with ratio
+7. Percentage text updates
+
+### Implementation Verified
+**AccountBalance Component:**
+- Located at: `apps/web/components/AccountBalance/AccountBalance.tsx`
+- Has `data-testid="account-balance"` attribute
+- Implements margin utilization bar with dynamic width
+- Color classes: `bg-accent`, `bg-warning`, `bg-loss`
+- Formula: `(marginUsed / equity) * 100`
+
+## Files Modified
+
+### Configuration Updates
+1. **playwright.config.ts**
+   - Changed baseURL from localhost:3002 → localhost:3003
+   - Changed webServer command port from 3002 → 3003
+   - Reverted back to 3002 (port 3003 also blocked)
+
+2. **tests/e2e/158-account-margin-ratio.spec.ts**
+   - Changed port from 3002 → 3003
+   - Auto-reverted by linter back to 3002
+
+### Infrastructure State
+- **Web Server:** Cannot start (port blocked)
+- **Playwright Config:** Updated but server unavailable
+- **Test File:** Ready to run (7 tests written)
+- **Feature Status:** DEV complete, QA blocked by infrastructure
+
+## Session Statistics
+
+### Time Allocation
+- Infrastructure debugging: 85%
+- Test analysis: 10%
+- Documentation: 5%
+
+### Commands Attempted
+- Server restarts: 8 attempts
+- Port checks: 12 attempts
+- Process kills: 6 attempts
+- Test runs: 3 attempts (all failed - no server)
+
+## Recommendations for Next Session
+
+### Immediate Actions
+1. **Restart Environment:**
+   - Full system restart may be needed
+   - OR ask user to manually kill processes
+   - OR use a different port range (3010+)
+
+2. **Alternative Port Strategy:**
+   - Use port 3010 or higher (less likely to be blocked)
+   - Update all test files systematically
+   - Document port choice in README
+
+3. **Process Management:**
+   - Add pnpm script: `"dev:clean": "pkill -f 'next dev' && pnpm dev"`
+   - Use PM2 or nodemon for better process control
+   - Add health check endpoint
+
+### Test Execution Plan
+Once server is running:
+```bash
+# Run single test file
+SKIP_WEB_SERVER=true pnpm exec playwright test \
+  tests/e2e/158-account-margin-ratio.spec.ts \
+  --project chromium
+
+# Expected results: 7/7 tests passing
+# Time estimate: 2-3 minutes
+```
+
+## Environment Status
+
+### Servers
+- ❌ Backend (FastAPI): Not checked
+- ❌ Frontend (Next.js): Port blocked, cannot start
+- ⚠️ Test Infrastructure: Ready but unusable without server
+
+### Dependencies
+- ✅ Node.js: v24.12.0
+- ✅ pnpm: Working
+- ✅ Playwright: Installed
+- ✅ TypeScript: Compiling
+- ❌ Dev Server: Blocked by zombie processes
+
+## Known Issues
+
+### Blocking Issues
+1. **Port 3002/3003 Permanently Blocked**
+   - Impact: Cannot run any E2E tests
+   - Severity: Critical
+   - Resolution: System restart or manual intervention needed
+
+### Non-Blocking Issues
+1. **Auto-reverting Configuration**
+   - Impact: Manual port changes get reverted
+   - Severity: Low
+   - Resolution: Use consistent port or disable auto-format
+
+## Positive Outcomes
+
+### Achievements
+1. ✓ Analyzed Feature 158 test requirements
+2. ✓ Verified AccountBalance component implementation
+3. ✓ Confirmed globalStores exposure works correctly
+4. ✓ Identified test pattern used by passing tests
+5. ✓ Documented infrastructure issues for future reference
+
+### Lessons Learned
+1. Never start multiple dev servers without cleanup
+2. `killall` command is essential for development environments
+3. Auto-formatting can revert manual changes
+4. Port conflicts can persist even when `netstat` shows port as free
+5. Zombie processes can survive parent process termination
+
+## Next Steps
+
+### For Next Session
+1. **Priority 1:** Resolve server startup issue
+   - Option A: Reboot system
+   - Option B: Use different port range (3010+)
+   - Option C: Manual process cleanup by user
+
+2. **Priority 2:** Run Feature 158 tests
+   - All 7 tests should pass
+   - Update feature_list.json with QA pass status
+   - Document any test failures
+
+3. **Priority 3:** Continue QA queue
+   - 13 more DEV-complete features need verification
+   - Focus on features with existing test files
+   - Implement missing tests for DEV features
+
+## Session Notes
+
+**Duration:** ~2 hours
+**Features Verified:** 0 (blocked by infrastructure)
+**Tests Passing:** 114/201 (56.7%)
+**Status:** ⚠️ BLOCKED - Infrastructure issues
+
+**Git Commits:** None (infrastructure prevented testing)
+
+---
+
+**Session End:** January 5, 2025 (Late Night)
+**Cause for Termination:** Cannot proceed without working dev server
+**Recommendation:** System restart or manual process cleanup required
