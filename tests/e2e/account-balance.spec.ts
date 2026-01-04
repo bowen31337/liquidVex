@@ -13,7 +13,7 @@ test.describe('Account Balance Component', () => {
     await expect(accountBalance).toBeVisible();
 
     // Check for key elements in the account balance display
-    await expect(accountBalance.locator('text=Account Equity')).toBeVisible();
+    await expect(accountBalance.locator('text=Account Equity').first()).toBeVisible();
     await expect(accountBalance.locator('[class*="font-mono"]')).toBeVisible();
 
     // Check for margin utilization bar
@@ -37,8 +37,8 @@ test.describe('Account Balance Component', () => {
 
     const accountBalance = page.locator('[data-testid="account-balance"]');
 
-    // Check for PnL percentage display
-    const pnlElement = accountBalance.locator('text=/\\d+\\.\\d+%/');
+    // Check for PnL percentage display - use the specific text-sm font-mono for PnL
+    const pnlElement = accountBalance.locator('.font-mono.text-sm').filter({ hasText: '%' });
     await expect(pnlElement).toBeVisible();
 
     // Check that it has a color class (profit or loss)
