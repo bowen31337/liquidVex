@@ -27,12 +27,11 @@ test.describe('WebSocket Auto-reconnect Tests', () => {
     // Wait for order book data to load
     await page.waitForTimeout(1000);
 
-    // Step 3: Simulate network disconnection by simulating WebSocket close
+    // Step 3: Simulate network disconnection using test helper
     await page.evaluate(() => {
-      // Access the WebSocket manager and close connections
       const wsManager = (window as any).wsManager;
       if (wsManager) {
-        wsManager.disconnectAll();
+        wsManager.testDisconnectAll();
       }
     });
 
@@ -71,11 +70,11 @@ test.describe('WebSocket Auto-reconnect Tests', () => {
     // Get initial order book state
     const initialBidPrice = await orderBook.locator('text=/\d+\.\d+/').first().textContent();
 
-    // Simulate disconnection
+    // Simulate disconnection using test helper
     await page.evaluate(() => {
-      const ws = (window as any).wsConnection;
-      if (ws) {
-        ws.close();
+      const wsManager = (window as any).wsManager;
+      if (wsManager) {
+        wsManager.testDisconnectAll();
       }
     });
 
@@ -97,9 +96,9 @@ test.describe('WebSocket Auto-reconnect Tests', () => {
 
     // First disconnection
     await page.evaluate(() => {
-      const ws = (window as any).wsConnection;
-      if (ws) {
-        ws.close();
+      const wsManager = (window as any).wsManager;
+      if (wsManager) {
+        wsManager.testDisconnectAll();
       }
     });
 
@@ -109,9 +108,9 @@ test.describe('WebSocket Auto-reconnect Tests', () => {
 
     // Second disconnection
     await page.evaluate(() => {
-      const ws = (window as any).wsConnection;
-      if (ws) {
-        ws.close();
+      const wsManager = (window as any).wsManager;
+      if (wsManager) {
+        wsManager.testDisconnectAll();
       }
     });
 

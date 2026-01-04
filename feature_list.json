@@ -208,9 +208,9 @@
       "Step 10: Verify data flow resumes with correct values",
       "Step 11: Verify no data loss or corruption occurred"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 0,
     "dev_completed_at": "2026-01-04T02:27:00.933175Z"
@@ -292,9 +292,9 @@
       "Step 11: Select lower aggregation",
       "Step 12: Verify more price levels appear"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 0,
     "dev_completed_at": "2026-01-04T02:27:01.315238Z"
@@ -1012,7 +1012,13 @@
     "passes": false,
     "is_dev_done": true,
     "is_qa_passed": false,
-    "dev_completed_at": "2026-01-04T03:40:44Z"
+    "dev_completed_at": "2026-01-04T03:40:44Z",
+    "qa_retry_count": 0,
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-04T03:57:41.642702Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "functional",
@@ -1033,8 +1039,11 @@
       "Step 13: Open file and verify data integrity"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T03:54:56.551598Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",

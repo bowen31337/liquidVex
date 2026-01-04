@@ -15,6 +15,7 @@ interface WebSocketConnection {
   reconnectAttempts: number;
   messageHandlers: Set<(data: any) => void>;
   isConnecting: boolean;
+  lastError: Event | null;
 }
 
 const MAX_RECONNECT_ATTEMPTS = 5;
@@ -48,6 +49,7 @@ class WebSocketManagerClass {
       reconnectAttempts: 0,
       messageHandlers: new Set([messageHandler]),
       isConnecting: true,
+      lastError: null,
     };
 
     this.connections.set(url, connection);
@@ -75,12 +77,15 @@ class WebSocketManagerClass {
     };
 
     ws.onerror = (error) => {
+      // Store the error for debugging
+      connection.lastError = error;
       // Silently handle connection errors - they're expected in some environments
       // and will be retried automatically if autoReconnect is enabled
     };
 
     ws.onclose = () => {
       connection.isConnecting = false;
+      connection.lastError = null; // Clear error on close
       this.connections.delete(url);
       this.updateConnectionStatus();
 
@@ -127,6 +132,26 @@ class WebSocketManagerClass {
     this.connections.clear();
     const { setWsConnected } = useMarketStore.getState();
     setWsConnected(false);
+  }
+
+  // Test helper methods
+  testDisconnectAll() {
+    // Force close all connections for testing
+    this.connections.forEach((connection) => {
+      connection.ws?.close(1000, 'Test disconnect');
+    });
+    this.connections.clear();
+    const { setWsConnected } = useMarketStore.getState();
+    setWsConnected(false);
+  }
+
+  testGetConnection(url: string) {
+    return this.connections.get(url);
+  }
+
+  testIsConnected(url: string): boolean {
+    const conn = this.connections.get(url);
+    return conn?.ws?.readyState === WebSocket.OPEN;
   }
 
   private isConnecting(url: string): boolean {

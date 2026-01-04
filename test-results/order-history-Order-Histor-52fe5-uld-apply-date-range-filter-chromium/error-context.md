@@ -1,0 +1,265 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - heading "liquidVex" [level=1] [ref=e5]
+        - button "BTC-PERP" [ref=e7] [cursor=pointer]:
+          - generic [ref=e8]: BTC-PERP
+          - img [ref=e9]
+        - generic "Connected" [ref=e11]
+      - generic [ref=e12]:
+        - generic [ref=e13]:
+          - generic [ref=e14]: $95,232.03
+          - generic [ref=e15]: +2.34%
+        - generic [ref=e16]:
+          - generic "Mark Price" [ref=e17]: "M: $95,232.03"
+          - generic "Index Price" [ref=e18]: "I: $95,231.53"
+        - generic [ref=e19]:
+          - generic "Funding Rate" [ref=e20]: "F: 0.010%"
+          - generic "Next Funding" [ref=e21]: 1h 0m
+        - button "Connect Wallet" [ref=e22] [cursor=pointer]
+    - generic [ref=e23]:
+      - generic [ref=e25]:
+        - generic [ref=e26]:
+          - generic [ref=e27]:
+            - generic [ref=e28]: TradingView Chart
+            - generic [ref=e29]:
+              - button "1m" [ref=e30] [cursor=pointer]
+              - button "5m" [ref=e31] [cursor=pointer]
+              - button "15m" [ref=e32] [cursor=pointer]
+              - button "1h" [ref=e33] [cursor=pointer]
+              - button "4h" [ref=e34] [cursor=pointer]
+              - button "1D" [ref=e35] [cursor=pointer]
+          - generic [ref=e36]:
+            - button "Line" [ref=e37] [cursor=pointer]
+            - button "Full" [ref=e38] [cursor=pointer]
+        - table [ref=e41]:
+          - row [ref=e42]:
+            - cell
+            - cell [ref=e43]:
+              - link "Charting by TradingView" [ref=e47] [cursor=pointer]:
+                - /url: https://www.tradingview.com/?utm_medium=lwc-link&utm_campaign=lwc-chart&utm_source=localhost/
+                - img [ref=e48]
+            - cell [ref=e52]
+          - row [ref=e56]:
+            - cell
+            - cell [ref=e57]
+            - cell [ref=e61]
+      - generic [ref=e64]:
+        - generic [ref=e66]:
+          - generic [ref=e67]:
+            - generic [ref=e68]: Order Book
+            - generic [ref=e69]:
+              - generic [ref=e70]:
+                - generic [ref=e71]: "Precision:"
+                - button "1d" [ref=e72] [cursor=pointer]
+                - button "2d" [ref=e73] [cursor=pointer]
+                - button "4d" [ref=e74] [cursor=pointer]
+                - button "6d" [ref=e75] [cursor=pointer]
+              - generic [ref=e76]:
+                - generic [ref=e77]: "Group:"
+                - button "1" [ref=e78] [cursor=pointer]
+                - button "5" [ref=e79] [cursor=pointer]
+                - button "10" [ref=e80] [cursor=pointer]
+                - button "25" [ref=e81] [cursor=pointer]
+          - generic [ref=e82]:
+            - text: "Spread: 0.20 ("
+            - generic [ref=e83]: 0.000%
+            - text: )
+          - generic [ref=e84]:
+            - generic [ref=e85]: "Imbalance:"
+            - generic [ref=e86]:
+              - generic [ref=e87]: NEUTRAL
+              - generic [ref=e88]: 45.4% / 54.6%
+          - generic [ref=e89]:
+            - generic [ref=e90]:
+              - generic [ref=e91] [cursor=pointer]:
+                - generic [ref=e93]: "30.4807"
+                - generic [ref=e94]: "95000.00"
+              - generic [ref=e95] [cursor=pointer]:
+                - generic [ref=e97]: "60.7988"
+                - generic [ref=e98]: "95001.00"
+              - generic [ref=e99] [cursor=pointer]:
+                - generic [ref=e101]: "2.1448"
+                - generic [ref=e102]: "95002.00"
+            - generic [ref=e103]:
+              - generic [ref=e104] [cursor=pointer]:
+                - generic [ref=e106]: "95000.00"
+                - generic [ref=e107]: "20.2330"
+              - generic [ref=e108] [cursor=pointer]:
+                - generic [ref=e110]: "94999.00"
+                - generic [ref=e111]: "57.3403"
+        - generic [ref=e113]:
+          - generic [ref=e114]:
+            - generic [ref=e115]: Recent Trades
+            - button "Clear" [ref=e116] [cursor=pointer]
+          - generic [ref=e118]:
+            - generic [ref=e119]:
+              - generic [ref=e120]: 94,963.95
+              - generic [ref=e121]: "0.1987"
+              - generic [ref=e122]: 14:58:08
+            - generic [ref=e123]:
+              - generic [ref=e124]: 94,963.95
+              - generic [ref=e125]: "0.1987"
+              - generic [ref=e126]: 14:58:08
+            - generic [ref=e127]:
+              - generic [ref=e128]: 94,951.82
+              - generic [ref=e129]: "0.3957"
+              - generic [ref=e130]: 14:58:07
+            - generic [ref=e131]:
+              - generic [ref=e132]: 94,951.82
+              - generic [ref=e133]: "0.3957"
+              - generic [ref=e134]: 14:58:07
+            - generic [ref=e135]:
+              - generic [ref=e136]: 95,003.50
+              - generic [ref=e137]: "0.2772"
+              - generic [ref=e138]: 14:58:07
+            - generic [ref=e139]:
+              - generic [ref=e140]: 95,003.50
+              - generic [ref=e141]: "0.2772"
+              - generic [ref=e142]: 14:58:07
+            - generic [ref=e143]:
+              - generic [ref=e144]: 95,017.00
+              - generic [ref=e145]: "0.2958"
+              - generic [ref=e146]: 14:58:07
+            - generic [ref=e147]:
+              - generic [ref=e148]: 95,017.00
+              - generic [ref=e149]: "0.2958"
+              - generic [ref=e150]: 14:58:07
+            - generic [ref=e151]:
+              - generic [ref=e152]: 95,046.14
+              - generic [ref=e153]: "0.5140"
+              - generic [ref=e154]: 14:58:06
+            - generic [ref=e155]:
+              - generic [ref=e156]: 95,046.14
+              - generic [ref=e157]: "0.5140"
+              - generic [ref=e158]: 14:58:06
+            - generic [ref=e159]:
+              - generic [ref=e160]: 94,955.70
+              - generic [ref=e161]: "0.9121"
+              - generic [ref=e162]: 14:58:06
+            - generic [ref=e163]:
+              - generic [ref=e164]: 94,955.70
+              - generic [ref=e165]: "0.9121"
+              - generic [ref=e166]: 14:58:06
+            - generic [ref=e167]:
+              - generic [ref=e168]: 94,997.59
+              - generic [ref=e169]: "0.1083"
+              - generic [ref=e170]: 14:58:04
+            - generic [ref=e171]:
+              - generic [ref=e172]: 94,997.59
+              - generic [ref=e173]: "0.1083"
+              - generic [ref=e174]: 14:58:04
+            - generic [ref=e175]:
+              - generic [ref=e176]: 94,955.46
+              - generic [ref=e177]: "0.0943"
+              - generic [ref=e178]: 14:58:03
+            - generic [ref=e179]:
+              - generic [ref=e180]: 94,955.46
+              - generic [ref=e181]: "0.0943"
+              - generic [ref=e182]: 14:58:03
+            - generic [ref=e183]:
+              - generic [ref=e184]: 94,952.00
+              - generic [ref=e185]: "0.9859"
+              - generic [ref=e186]: 14:58:02
+            - generic [ref=e187]:
+              - generic [ref=e188]: 94,952.00
+              - generic [ref=e189]: "0.9859"
+              - generic [ref=e190]: 14:58:02
+            - generic [ref=e191]:
+              - generic [ref=e192]: 94,965.55
+              - generic [ref=e193]: "0.7382"
+              - generic [ref=e194]: 14:58:01
+            - generic [ref=e195]:
+              - generic [ref=e196]: 94,965.55
+              - generic [ref=e197]: "0.7382"
+              - generic [ref=e198]: 14:58:01
+            - generic [ref=e199]:
+              - generic [ref=e200]: 95,020.77
+              - generic [ref=e201]: "0.6743"
+              - generic [ref=e202]: 14:57:59
+            - generic [ref=e203]:
+              - generic [ref=e204]: 95,020.77
+              - generic [ref=e205]: "0.6743"
+              - generic [ref=e206]: 14:57:59
+            - generic [ref=e207]:
+              - generic [ref=e208]: 94,976.31
+              - generic [ref=e209]: "0.8936"
+              - generic [ref=e210]: 14:57:59
+            - generic [ref=e211]:
+              - generic [ref=e212]: 94,976.31
+              - generic [ref=e213]: "0.8936"
+              - generic [ref=e214]: 14:57:59
+            - generic [ref=e215]:
+              - generic [ref=e216]: 95,009.93
+              - generic [ref=e217]: "0.6299"
+              - generic [ref=e218]: 14:57:57
+            - generic [ref=e219]:
+              - generic [ref=e220]: 95,009.93
+              - generic [ref=e221]: "0.6299"
+              - generic [ref=e222]: 14:57:57
+      - generic [ref=e224]:
+        - generic [ref=e225]:
+          - button "Buy / Long" [ref=e226] [cursor=pointer]
+          - button "Sell / Short" [ref=e227] [cursor=pointer]
+        - generic [ref=e228]:
+          - text: Order Type
+          - combobox [ref=e229]:
+            - option "Limit" [selected]
+            - option "Market"
+            - option "Stop Limit"
+            - option "Stop Market"
+        - generic [ref=e230]:
+          - generic [ref=e231]:
+            - generic [ref=e232]: Price
+            - generic [ref=e233]:
+              - button "-" [ref=e234] [cursor=pointer]
+              - button "+" [ref=e235] [cursor=pointer]
+          - spinbutton [ref=e236]
+        - generic [ref=e237]:
+          - text: Size
+          - spinbutton [ref=e238]
+          - generic [ref=e239]:
+            - button "25%" [ref=e240] [cursor=pointer]
+            - button "50%" [ref=e241] [cursor=pointer]
+            - button "75%" [ref=e242] [cursor=pointer]
+            - button "100%" [ref=e243] [cursor=pointer]
+        - generic [ref=e244]:
+          - generic [ref=e245]:
+            - generic [ref=e246]: Leverage
+            - generic [ref=e247]: 10x
+          - slider [ref=e248]: "10"
+        - generic [ref=e249]:
+          - generic [ref=e250] [cursor=pointer]:
+            - checkbox "Reduce Only" [ref=e251]
+            - text: Reduce Only
+          - generic [ref=e252] [cursor=pointer]:
+            - checkbox "Post Only" [ref=e253]
+            - text: Post Only
+        - generic [ref=e254]:
+          - text: Time-in-Force
+          - combobox [ref=e255]:
+            - option "Good Till Cancelled (GTC)" [selected]
+            - option "Immediate or Cancel (IOC)"
+            - option "Fill or Kill (FOK)"
+        - button "Buy / Long" [ref=e256] [cursor=pointer]
+        - generic [ref=e257]:
+          - generic [ref=e258]:
+            - generic [ref=e259]: Order Value
+            - generic [ref=e260]: $0.00
+          - generic [ref=e261]:
+            - generic [ref=e262]: Available
+            - generic [ref=e263]: $10,000.00
+    - generic [ref=e264]:
+      - generic [ref=e265]:
+        - button "Positions" [ref=e266] [cursor=pointer]
+        - button "Open Orders" [ref=e267] [cursor=pointer]
+        - button "Order History" [ref=e268] [cursor=pointer]
+        - button "Trade History" [ref=e269] [cursor=pointer]
+      - generic [ref=e270]:
+        - generic: Connect your wallet to view positions and orders
+  - alert [ref=e271]
+```
