@@ -3304,8 +3304,11 @@
       "Step 6: Verify line is removed"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T13:35:51.696841Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -3359,8 +3362,11 @@
       "Step 3: Verify older trades show date if applicable"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T13:35:29.609787Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -3514,9 +3520,9 @@
       "Step 2: Verify no theme toggle exists",
       "Step 3: Verify application is always in dark mode"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true
   },
   {
     "category": "style",

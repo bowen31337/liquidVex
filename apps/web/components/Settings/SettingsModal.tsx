@@ -13,7 +13,6 @@ interface SettingsModalProps {
 }
 
 interface Settings {
-  theme: 'dark' | 'light';
   language: string;
   notifications: {
     orderConfirmations: boolean;
@@ -35,7 +34,6 @@ interface Settings {
 
 export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
   const [settings, setSettings] = useState<Settings>({
-    theme: 'dark',
     language: 'en',
     notifications: {
       orderConfirmations: true,
@@ -55,8 +53,8 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
     },
   });
 
-  // Update a primitive setting value (theme, language)
-  const updatePrimitiveSetting = <S extends 'theme' | 'language'>(
+  // Update a primitive setting value (language)
+  const updatePrimitiveSetting = <S extends 'language'>(
     section: S,
     value: Settings[S]
   ) => {
@@ -86,7 +84,6 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
 
   const handleReset = () => {
     setSettings({
-      theme: 'dark',
       language: 'en',
       notifications: {
         orderConfirmations: true,
@@ -139,23 +136,11 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Account Settings">
       <div className="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
-        {/* Theme & Language */}
+        {/* Language & Display */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-text-primary">Appearance</h3>
 
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm text-text-secondary mb-2">Theme</label>
-              <select
-                value={settings.theme}
-                onChange={(e) => updatePrimitiveSetting('theme', e.target.value as 'dark' | 'light')}
-                className="w-full p-2 bg-surface-elevated border border-border rounded text-text-primary"
-              >
-                <option value="dark">Dark</option>
-                <option value="light">Light</option>
-              </select>
-            </div>
-
             <div>
               <label className="block text-sm text-text-secondary mb-2">Language</label>
               <select
