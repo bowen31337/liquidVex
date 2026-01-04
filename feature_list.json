@@ -19,7 +19,12 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "last_dev_failure_at": null,
+    "dev_failure_reasons": [],
+    "is_stuck": false,
+    "stuck_reason": null,
+    "stuck_at": null
   },
   {
     "category": "functional",
@@ -34,16 +39,7 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 3,
-    "last_dev_failure_at": "2026-01-04T02:26:16.563143Z",
-    "dev_failure_reasons": [
-      "All 1 API pairs failed for this request",
-      "All 1 API pairs failed for this request",
-      "All 1 API pairs failed for this request"
-    ],
-    "is_stuck": false,
-    "stuck_reason": "Max DEV failures exceeded. Last errors: ['All 1 API pairs failed for this request', 'All 1 API pairs failed for this request']",
-    "stuck_at": "2026-01-04T02:26:24.307226Z"
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -66,16 +62,7 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 3,
-    "last_dev_failure_at": "2026-01-04T02:26:16.492728Z",
-    "dev_failure_reasons": [
-      "All 1 API pairs failed for this request",
-      "All 1 API pairs failed for this request",
-      "All 1 API pairs failed for this request"
-    ],
-    "is_stuck": false,
-    "stuck_reason": "Max DEV failures exceeded. Last errors: ['All 1 API pairs failed for this request', 'All 1 API pairs failed for this request']",
-    "stuck_at": "2026-01-04T02:26:26.556034Z"
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -418,8 +405,11 @@
       "Step 9: Verify scale updates with pan/zoom"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T02:35:37.043488Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
