@@ -12,6 +12,7 @@ import { OrderBookLevel } from '../../types';
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 import type { KeyboardShortcut } from '../../hooks/useKeyboardShortcuts';
 import { Tooltip } from '../Tooltip/Tooltip';
+import { ErrorState } from '../ErrorState/ErrorState';
 
 interface OrderBookProps {
   levels?: number; // Number of levels to display
@@ -19,7 +20,7 @@ interface OrderBookProps {
 }
 
 export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
-  const { orderBook, selectedAsset } = useMarketStore();
+  const { orderBook, selectedAsset, hasOrderBookError, orderBookError, clearOrderBookError } = useMarketStore();
   const { setOrderForm } = useOrderStore();
   const [aggregation, setAggregation] = useState<number>(1); // Price grouping in decimals
   const [selectedPrecision, setSelectedPrecision] = useState<number>(2); // Price precision
@@ -153,6 +154,13 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
     setOrderForm({ price: formattedPrice });
   };
 
+  // Handle retry for failed data loads
+  const handleRetry = () => {
+    clearOrderBookError();
+    // Force reconnection by reloading the page
+    window.location.reload();
+  };
+
   // Prepare data for rendering
   const renderData = orderBook
     ? {
@@ -246,6 +254,16 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
           </Tooltip>
         </div>
       </div>
+
+      {/* Error State */}
+      {hasOrderBookError && (
+        <ErrorState
+          message="Failed to load order book"
+          details={orderBookError || undefined}
+          onRetry={handleRetry}
+          testId="orderbook-error"
+        />
+      )}
 
       {/* Spread Indicator */}
       {spread && (

@@ -18,14 +18,23 @@ test.describe('Order Book Volume Tooltip', () => {
     // Wait for the page to fully load
     await page.waitForLoadState('networkidle');
 
+    // Wait for stores to be available
+    await page.waitForFunction(() => {
+      return typeof window !== 'undefined' &&
+             (window as any).stores &&
+             (window as any).stores.getMarketStoreState;
+    }, { timeout: 5000 });
+
     // Verify the main trading interface is displayed
     await expect(page.locator('.panel').first()).toBeVisible();
 
     // Populate order book with test data
     await page.evaluate(() => {
       const stores = (window as any).stores;
-      const marketStore = stores.useMarketStore.getState();
-      const orderStore = stores.useOrderStore.getState();
+      if (!stores || !stores.getMarketStoreState) return;
+
+      const marketStore = stores.getMarketStoreState();
+      const orderStore = stores.getOrderStoreState();
 
       // Set test order book data with multiple orders per level
       marketStore.setOrderBook({
@@ -49,6 +58,7 @@ test.describe('Order Book Volume Tooltip', () => {
 
       // Set loading states to false to render real components
       marketStore.setIsLoadingOrderBook(false);
+      marketStore.setIsLoadingTrades(false);
 
       // Initialize order form for click test
       orderStore.setOrderForm({
@@ -64,12 +74,12 @@ test.describe('Order Book Volume Tooltip', () => {
     });
 
     // Wait for order book to update
-    await page.waitForTimeout(100);
+    await page.waitForTimeout(500);
   });
 
   test('should show tooltip with detailed volume info when hovering over bid price level', async ({ page }) => {
     // Step 1: Navigate to order book
-    const orderBookPanel = page.locator('.orderbook-panel');
+    const orderBookPanel = page.locator('[data-testid="orderbook-panel"]');
     await expect(orderBookPanel).toBeVisible();
 
     // Verify order book has bid levels
@@ -98,7 +108,7 @@ test.describe('Order Book Volume Tooltip', () => {
 
   test('should show tooltip with detailed volume info when hovering over ask price level', async ({ page }) => {
     // Step 1: Navigate to order book
-    const orderBookPanel = page.locator('.orderbook-panel');
+    const orderBookPanel = page.locator('[data-testid="orderbook-panel"]');
     await expect(orderBookPanel).toBeVisible();
 
     // Verify order book has ask levels
@@ -127,7 +137,7 @@ test.describe('Order Book Volume Tooltip', () => {
 
   test('should hide tooltip when mouse leaves price level', async ({ page }) => {
     // Navigate to order book
-    const orderBookPanel = page.locator('.orderbook-panel');
+    const orderBookPanel = page.locator('[data-testid="orderbook-panel"]');
     await expect(orderBookPanel).toBeVisible();
 
     // Get first bid level
@@ -150,7 +160,7 @@ test.describe('Order Book Volume Tooltip', () => {
 
   test('should show correct volume and order count for each price level', async ({ page }) => {
     // Navigate to order book
-    const orderBookPanel = page.locator('.orderbook-panel');
+    const orderBookPanel = page.locator('[data-testid="orderbook-panel"]');
     await expect(orderBookPanel).toBeVisible();
 
     // Get bid levels
@@ -177,7 +187,7 @@ test.describe('Order Book Volume Tooltip', () => {
 
   test('should show cumulative volume in tooltip', async ({ page }) => {
     // Navigate to order book
-    const orderBookPanel = page.locator('.orderbook-panel');
+    const orderBookPanel = page.locator('[data-testid="orderbook-panel"]');
     await expect(orderBookPanel).toBeVisible();
 
     // Get first bid level
@@ -198,7 +208,7 @@ test.describe('Order Book Volume Tooltip', () => {
 
   test('should display price correctly formatted in tooltip', async ({ page }) => {
     // Navigate to order book
-    const orderBookPanel = page.locator('.orderbook-panel');
+    const orderBookPanel = page.locator('[data-testid="orderbook-panel"]');
     await expect(orderBookPanel).toBeVisible();
 
     // Get first bid level
@@ -218,7 +228,7 @@ test.describe('Order Book Volume Tooltip', () => {
 
   test('should maintain clickable behavior when tooltip is enabled', async ({ page }) => {
     // Navigate to order book
-    const orderBookPanel = page.locator('.orderbook-panel');
+    const orderBookPanel = page.locator('[data-testid="orderbook-panel"]');
     await expect(orderBookPanel).toBeVisible();
 
     // Get first bid level

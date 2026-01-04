@@ -808,3 +808,114 @@ Continue verifying the remaining 10 features in the QA queue:
 - Feature 168: Loading state shows skeleton for all data panels
 - Feature 170: Empty state styling for no data
 - Feature 171: Disabled button styling
+
+---
+
+## Session Summary - January 5, 2026 (TypeScript Compilation Fixes)
+
+Successfully fixed all TypeScript compilation errors in the codebase.
+
+### Issues Fixed
+
+#### 1. Chart.tsx - Lightweight Charts Type Error ✅
+**File:** `apps/web/components/Chart/Chart.tsx`
+
+**Issue:**
+Line 387 had a type error with `unsubscribe()` not being callable:
+```typescript
+const unsubscribe = chartRef.current.timeScale().subscribeVisibleLogicalRangeChange((range) => { ... });
+return () => {
+  if (unsubscribe) {
+    unsubscribe();  // Error: Type 'void' has no call signatures
+  }
+};
+```
+
+**Root Cause:**
+The `subscribeVisibleLogicalRangeChange` method returns `void`, not an unsubscribe function. The correct pattern is to:
+1. Store the handler function
+2. Pass the same handler to `unsubscribeVisibleLogicalRangeChange`
+
+**Fix Applied:**
+```typescript
+import { LogicalRange } from 'lightweight-charts';
+
+const handler = (range: LogicalRange | null) => {
+  if (!range) return;
+  // Logical is a nominal type wrapping number, cast for arithmetic
+  const from = range.from as unknown as number;
+  const to = range.to as unknown as number;
+  const visibleRangeWidth = to - from;
+  const threshold = from + (visibleRangeWidth * 0.1);
+
+  if (from <= threshold && candles.length > 0) {
+    loadHistoricalData();
+  }
+};
+
+chartRef.current.timeScale().subscribeVisibleLogicalRangeChange(handler);
+
+return () => {
+  if (chartRef.current) {
+    chartRef.current.timeScale().unsubscribeVisibleLogicalRangeChange(handler);
+  }
+};
+```
+
+**Key Changes:**
+- Imported `LogicalRange` type from `lightweight-charts`
+- Changed handler parameter type from `{ from: number; to: number } | null` to `LogicalRange | null`
+- Added type casting for `from` and `to` since `Logical` is a nominal type
+- Used `unsubscribeVisibleLogicalRangeChange(handler)` instead of calling an unsubscribe function
+
+#### 2. OrderForm.test.tsx - Missing Jest-DOM Matchers ✅
+**File:** `apps/web/src/components/OrderForm/OrderForm.test.tsx`
+
+**Issue:**
+TypeScript errors for missing matchers:
+- `toBeInTheDocument()`
+- `toHaveValue()`
+- `toHaveClass()`
+- `toBeChecked()`
+
+**Root Cause:**
+The test file referenced `./src/test-setup.ts` in vitest config, but the file didn't exist. Without importing `@testing-library/jest-dom/vitest`, the custom matchers weren't available.
+
+**Fix Applied:**
+Created `apps/web/src/test-setup.ts`:
+```typescript
+import '@testing-library/jest-dom/vitest';
+```
+
+### Verification
+
+**TypeScript Compilation:** ✅ PASS
+```bash
+pnpm type-check
+# No errors
+```
+
+**Build:** ✅ PASS
+```bash
+pnpm build
+# Successfully compiled
+```
+
+### Files Modified
+
+1. **`apps/web/components/Chart/Chart.tsx`**
+   - Added `LogicalRange` import
+   - Fixed handler type and unsubscribe pattern
+
+2. **`apps/web/src/test-setup.ts`** (NEW)
+   - Created test setup file
+   - Imports jest-dom matchers
+
+### Summary
+
+- **TypeScript errors fixed:** 2 issues
+- **Files modified:** 2 files
+- **Build status:** ✅ Passing
+- **Type check status:** ✅ Passing
+
+The codebase now compiles cleanly with no TypeScript errors. Ready to continue with feature implementation or QA verification.

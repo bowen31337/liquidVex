@@ -207,6 +207,28 @@ export const accountAPI = {
   ): Promise<{ history: any[] }> {
     return fetchAPI(`/api/account/history/${address}?type=${type}`);
   },
+
+  /**
+   * Create a session key for reduced signing
+   */
+  async createSessionKey(name: string, permissions: string[]): Promise<any> {
+    return fetchAPI('/api/wallet/create-session-key', {
+      method: 'POST',
+      body: JSON.stringify({
+        name,
+        permissions,
+      }),
+    });
+  },
+
+  /**
+   * Revoke a session key
+   */
+  async revokeSessionKey(keyId: string): Promise<any> {
+    return fetchAPI(`/api/wallet/revoke-session-key/${keyId}`, {
+      method: 'POST',
+    });
+  },
 };
 
 /**
@@ -217,3 +239,6 @@ export const api = {
   trade: tradeAPI,
   account: accountAPI,
 };
+
+// Export individual functions for direct import
+export const { createSessionKey, revokeSessionKey } = accountAPI;

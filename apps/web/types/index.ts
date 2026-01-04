@@ -233,6 +233,37 @@ export interface SetMarginModeRequest {
   timestamp: number;
 }
 
+// Session Key types
+export interface SessionKey {
+  id: string;
+  name: string;
+  address: string;
+  created_at: string;
+  last_used: string;
+  is_active: boolean;
+  permissions: string[];
+}
+
+export interface SessionKeyRequest {
+  name: string;
+  permissions: string[];
+}
+
+export interface SessionKeyResponse {
+  id: string;
+  name: string;
+  address: string;
+  created_at: string;
+  last_used: string;
+  is_active: boolean;
+  permissions: string[];
+}
+
+export interface RevokeSessionKeyResponse {
+  success: boolean;
+  message: string;
+}
+
 export interface OrderResponse {
   success: boolean;
   orderId?: number;

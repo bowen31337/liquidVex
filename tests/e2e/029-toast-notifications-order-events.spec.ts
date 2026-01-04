@@ -85,7 +85,7 @@ test.describe('Toast Notifications - Order Events', () => {
     await page.waitForSelector('[data-testid="toast"][data-toast-type="success"]', { timeout: 5000 });
 
     // Step 2: Navigate to Open Orders tab
-    const openOrdersTab = page.getByRole('tab', { name: /open orders/i });
+    const openOrdersTab = page.locator('button:has-text("Open Orders")');
     await openOrdersTab.click();
     await page.waitForTimeout(500);
 

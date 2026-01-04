@@ -6,9 +6,10 @@
 
 import { useMarketStore } from '../../stores/marketStore';
 import { useWebSocket } from '../../hooks/useWebSocket';
+import { ErrorState } from '../ErrorState/ErrorState';
 
 export function RecentTrades() {
-  const { trades, selectedAsset, clearTrades } = useMarketStore();
+  const { trades, selectedAsset, clearTrades, hasTradesError, tradesError, clearTradesError } = useMarketStore();
 
   // Connect to trades WebSocket
   const { isConnected } = useWebSocket(
@@ -55,6 +56,13 @@ export function RecentTrades() {
     }
   };
 
+  // Handle retry for failed data loads
+  const handleRetry = () => {
+    clearTradesError();
+    // Force reconnection by reloading the page
+    window.location.reload();
+  };
+
   return (
     <div className="panel p-2 flex flex-col h-full" data-testid="recent-trades-panel">
       {/* Header */}
@@ -70,6 +78,16 @@ export function RecentTrades() {
           Clear
         </button>
       </div>
+
+      {/* Error State */}
+      {hasTradesError && (
+        <ErrorState
+          message="Failed to load trades"
+          details={tradesError || undefined}
+          onRetry={handleRetry}
+          testId="recent-trades-error"
+        />
+      )}
 
       {/* Trade Feed */}
       <div className="flex-1 overflow-y-auto">

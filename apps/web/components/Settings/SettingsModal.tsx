@@ -30,6 +30,20 @@ interface Settings {
     confirmOrders: boolean;
     soundEffects: boolean;
   };
+  sessionKeys: {
+    enabled: boolean;
+    keys: SessionKey[];
+  };
+}
+
+interface SessionKey {
+  id: string;
+  name: string;
+  address: string;
+  createdAt: string;
+  lastUsed: string;
+  isActive: boolean;
+  permissions: string[];
 }
 
 export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
@@ -50,6 +64,10 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
       defaultOrderSize: '1.0',
       confirmOrders: true,
       soundEffects: false,
+    },
+    sessionKeys: {
+      enabled: false,
+      keys: [],
     },
   });
 
@@ -101,6 +119,10 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
         confirmOrders: true,
         soundEffects: false,
       },
+      sessionKeys: {
+        enabled: false,
+        keys: [],
+      },
     });
   };
 
@@ -131,6 +153,55 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
       }
     };
     reader.readAsText(file);
+  };
+
+  const handleCreateSessionKey = async () => {
+    try {
+      // This would call the API to create a session key
+      const response = await fetch('/api/wallet/create-session-key', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: `Session Key ${Date.now()}`,
+          permissions: ['trade', 'view']
+        })
+      });
+
+      if (response.ok) {
+        const newKey = await response.json();
+        setSettings(prev => ({
+          ...prev,
+          sessionKeys: {
+            ...prev.sessionKeys,
+            keys: [...prev.sessionKeys.keys, newKey]
+          }
+        }));
+      }
+    } catch (error) {
+      console.error('Failed to create session key:', error);
+    }
+  };
+
+  const handleRevokeSessionKey = async (keyId: string) => {
+    try {
+      const response = await fetch(`/api/wallet/revoke-session-key/${keyId}`, {
+        method: 'POST'
+      });
+
+      if (response.ok) {
+        setSettings(prev => ({
+          ...prev,
+          sessionKeys: {
+            ...prev.sessionKeys,
+            keys: prev.sessionKeys.keys.map(key =>
+              key.id === keyId ? { ...key, isActive: false } : key
+            )
+          }
+        }));
+      }
+    } catch (error) {
+      console.error('Failed to revoke session key:', error);
+    }
   };
 
   return (
@@ -309,6 +380,82 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               />
             </div>
           </div>
+        </div>
+
+        {/* Session Keys */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-text-primary">Session Keys</h3>
+
+          <div className="flex items-center space-x-2 mb-4">
+            <input
+              type="checkbox"
+              id="session-keys-enabled"
+              checked={settings.sessionKeys.enabled}
+              onChange={(e) => setSettings(prev => ({
+                ...prev,
+                sessionKeys: { ...prev.sessionKeys, enabled: e.target.checked }
+              }))}
+              className="w-4 h-4 text-accent bg-surface-elevated border-border rounded"
+            />
+            <label htmlFor="session-keys-enabled" className="text-sm text-text-primary">
+              Enable Session Keys for reduced signing
+            </label>
+          </div>
+
+          {settings.sessionKeys.enabled && (
+            <div>
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-sm text-text-secondary">Active Session Keys</span>
+                <button
+                  onClick={handleCreateSessionKey}
+                  className="p-1 bg-accent text-black rounded text-sm hover:bg-accent/90 transition-colors"
+                >
+                  Create Session Key
+                </button>
+              </div>
+
+              {settings.sessionKeys.keys.length === 0 ? (
+                <div className="text-sm text-text-tertiary p-3 bg-surface-elevated border border-border rounded">
+                  No session keys created yet. Create a session key to reduce signing requirements for trades.
+                </div>
+              ) : (
+                <div className="space-y-2 max-h-40 overflow-y-auto">
+                  {settings.sessionKeys.keys.map((key) => (
+                    <div key={key.id} className="flex items-center justify-between p-3 bg-surface-elevated border border-border rounded">
+                      <div className="flex-1">
+                        <div className="text-sm font-medium text-text-primary">{key.name}</div>
+                        <div className="text-xs text-text-tertiary">
+                          Created: {new Date(key.createdAt).toLocaleDateString()}
+                          {' • '}
+                          Last used: {new Date(key.lastUsed).toLocaleDateString()}
+                        </div>
+                        <div className="text-xs text-text-tertiary">
+                          Permissions: {key.permissions.join(', ')}
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span className={`px-2 py-1 text-xs rounded ${
+                          key.isActive
+                            ? 'bg-success/20 text-success border border-success/50'
+                            : 'bg-loss/20 text-loss border border-loss/50'
+                        }`}>
+                          {key.isActive ? 'Active' : 'Revoked'}
+                        </span>
+                        {key.isActive && (
+                          <button
+                            onClick={() => handleRevokeSessionKey(key.id)}
+                            className="p-1 bg-loss/20 text-loss border border-loss/50 rounded text-sm hover:bg-loss/30 transition-colors"
+                          >
+                            Revoke
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Account Actions */}

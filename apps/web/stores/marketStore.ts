@@ -42,6 +42,20 @@ interface NonPersistedMarketState {
   setIsLoadingTrades: (loading: boolean) => void;
   setIsLoadingCandles: (loading: boolean) => void;
 
+  // Error states
+  hasOrderBookError: boolean;
+  hasTradesError: boolean;
+  hasCandlesError: boolean;
+  orderBookError: string | null;
+  tradesError: string | null;
+  candlesError: string | null;
+  setOrderBookError: (error: string | null) => void;
+  setTradesError: (error: string | null) => void;
+  setCandlesError: (error: string | null) => void;
+  clearOrderBookError: () => void;
+  clearTradesError: () => void;
+  clearCandlesError: () => void;
+
   // Order book
   orderBook: OrderBookData | null;
   setOrderBook: (data: OrderBookData) => void;
@@ -135,12 +149,19 @@ export const useMarketStore = create<MarketState>()(
       clearCandlesCache: () => set({ candlesCache: {} }),
 
       setSelectedAsset: (asset) => {
-        // Reset loading states when switching assets
+        // Reset loading and error states when switching assets
         set({
           selectedAsset: asset,
           isLoadingOrderBook: true,
           isLoadingTrades: true,
           isLoadingCandles: true,
+          // Clear errors
+          hasOrderBookError: false,
+          hasTradesError: false,
+          hasCandlesError: false,
+          orderBookError: null,
+          tradesError: null,
+          candlesError: null,
           // Clear existing data
           orderBook: null,
           trades: [],
@@ -166,11 +187,52 @@ export const useMarketStore = create<MarketState>()(
       setIsLoadingTrades: (loading) => set({ isLoadingTrades: loading }),
       setIsLoadingCandles: (loading) => set({ isLoadingCandles: loading }),
 
+      // Error states
+      hasOrderBookError: false,
+      hasTradesError: false,
+      hasCandlesError: false,
+      orderBookError: null,
+      tradesError: null,
+      candlesError: null,
+      setOrderBookError: (error) => set({
+        hasOrderBookError: error !== null,
+        orderBookError: error,
+        isLoadingOrderBook: false,
+      }),
+      setTradesError: (error) => set({
+        hasTradesError: error !== null,
+        tradesError: error,
+        isLoadingTrades: false,
+      }),
+      setCandlesError: (error) => set({
+        hasCandlesError: error !== null,
+        candlesError: error,
+        isLoadingCandles: false,
+      }),
+      clearOrderBookError: () => set({
+        hasOrderBookError: false,
+        orderBookError: null,
+      }),
+      clearTradesError: () => set({
+        hasTradesError: false,
+        tradesError: null,
+      }),
+      clearCandlesError: () => set({
+        hasCandlesError: false,
+        candlesError: null,
+      }),
+
       orderBook: null,
       setOrderBook: (data) => {
         // Validate order book data
         if (!data || !Array.isArray(data.bids) || !Array.isArray(data.asks)) {
           reportValidationError('Invalid order book data received', { data });
+          const state = get();
+          set({
+            hasOrderBookError: true,
+            orderBookError: 'Invalid order book data received',
+            isLoadingOrderBook: false,
+          });
           return;
         }
 
@@ -178,6 +240,8 @@ export const useMarketStore = create<MarketState>()(
         set({
           orderBook: data,
           isLoadingOrderBook: false,
+          hasOrderBookError: false,
+          orderBookError: null,
           performanceMetrics: {
             ...state.performanceMetrics,
             orderBookUpdates: state.performanceMetrics.orderBookUpdates + 1,
@@ -193,6 +257,8 @@ export const useMarketStore = create<MarketState>()(
         set({
           trades: newTrades,
           isLoadingTrades: false,
+          hasTradesError: false,
+          tradesError: null,
           performanceMetrics: {
             ...state.performanceMetrics,
             tradeUpdates: state.performanceMetrics.tradeUpdates + 1,
@@ -200,8 +266,13 @@ export const useMarketStore = create<MarketState>()(
           },
         });
       },
-      clearTrades: () => set({ trades: [], isLoadingTrades: true }),
-      setTrades: (trades) => set({ trades, isLoadingTrades: false }),
+      clearTrades: () => set({ trades: [], isLoadingTrades: true, hasTradesError: false, tradesError: null }),
+      setTrades: (trades) => set({
+        trades,
+        isLoadingTrades: false,
+        hasTradesError: false,
+        tradesError: null
+      }),
 
       currentPrice: 95420.50,
       priceChange24h: 2.34,
@@ -246,7 +317,12 @@ export const useMarketStore = create<MarketState>()(
       setWsConnected: (connected) => set({ wsConnected: connected }),
 
       candles: [],
-      setCandles: (candles) => set({ candles, isLoadingCandles: false }),
+      setCandles: (candles) => set({
+        candles,
+        isLoadingCandles: false,
+        hasCandlesError: false,
+        candlesError: null
+      }),
       addCandle: (candle) => {
         const state = get();
         // WebSocket sends full CandleData structure: {type, coin, interval, t, o, h, l, c, v}

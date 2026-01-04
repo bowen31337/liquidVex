@@ -14,16 +14,10 @@ test.describe('Feature 154: Recent Trades Size Formatting', () => {
     await page.waitForTimeout(1000);
 
     // Clear any existing trades before each test
-    // Also disconnect WebSocket to prevent real trade data from interfering
     await page.evaluate(() => {
-      // Disconnect all WebSocket connections
-      if ((window as any).wsManager) {
-        (window as any).wsManager.disconnectAll();
-      }
-
-      // Clear trades
-      const store = (window as any).stores?.getMarketStoreState();
-      if (store) {
+      const stores = (window as any).stores;
+      if (stores && stores.getMarketStoreState) {
+        const store = stores.getMarketStoreState();
         store.setTrades([]);
       }
     });
@@ -33,12 +27,15 @@ test.describe('Feature 154: Recent Trades Size Formatting', () => {
   test('Small trades (< 1000) show full precision (4 decimal places)', async ({ page }) => {
     // Add mock small trades
     await page.evaluate(() => {
-      const store = (window as any).stores.getMarketStoreState();
-      store.setTrades([
-        { coin: 'BTC', side: 'B', px: 95000, sz: 0.1234, time: Date.now(), hash: '0xabc1' },
-        { coin: 'BTC', side: 'A', px: 95050, sz: 500.5678, time: Date.now(), hash: '0xdef2' },
-        { coin: 'ETH', side: 'B', px: 3500, sz: 999.9999, time: Date.now(), hash: '0xghi3' },
-      ]);
+      const stores = (window as any).stores;
+      if (stores && stores.getMarketStoreState) {
+        const store = stores.getMarketStoreState();
+        store.setTrades([
+          { coin: 'BTC', side: 'B', px: 95000, sz: 0.1234, time: Date.now(), hash: '0xabc1' },
+          { coin: 'BTC', side: 'A', px: 95050, sz: 500.5678, time: Date.now(), hash: '0xdef2' },
+          { coin: 'ETH', side: 'B', px: 3500, sz: 999.9999, time: Date.now(), hash: '0xghi3' },
+        ]);
+      }
     });
 
     await page.waitForTimeout(500);
@@ -63,12 +60,15 @@ test.describe('Feature 154: Recent Trades Size Formatting', () => {
   test('Large trades (1000+) abbreviate with K suffix', async ({ page }) => {
     // Add mock trades in thousands
     await page.evaluate(() => {
-      const store = (window as any).stores.getMarketStoreState();
-      store.setTrades([
-        { coin: 'BTC', side: 'B', px: 95000, sz: 1500, time: Date.now(), hash: '0xabc1' },
-        { coin: 'BTC', side: 'A', px: 95050, sz: 12345.678, time: Date.now(), hash: '0xdef2' },
-        { coin: 'ETH', side: 'B', px: 3500, sz: 999999.999, time: Date.now(), hash: '0xghi3' },
-      ]);
+      const stores = (window as any).stores;
+      if (stores && stores.getMarketStoreState) {
+        const store = stores.getMarketStoreState();
+        store.setTrades([
+          { coin: 'BTC', side: 'B', px: 95000, sz: 1500, time: Date.now(), hash: '0xabc1' },
+          { coin: 'BTC', side: 'A', px: 95050, sz: 12345.678, time: Date.now(), hash: '0xdef2' },
+          { coin: 'ETH', side: 'B', px: 3500, sz: 999999.999, time: Date.now(), hash: '0xghi3' },
+        ]);
+      }
     });
 
     await page.waitForTimeout(500);
@@ -93,12 +93,15 @@ test.describe('Feature 154: Recent Trades Size Formatting', () => {
   test('Very large trades (1M+) abbreviate with M suffix', async ({ page }) => {
     // Add mock trades in millions
     await page.evaluate(() => {
-      const store = (window as any).stores.getMarketStoreState();
-      store.setTrades([
-        { coin: 'BTC', side: 'B', px: 95000, sz: 1500000, time: Date.now(), hash: '0xabc1' },
-        { coin: 'BTC', side: 'A', px: 95050, sz: 12345678.90, time: Date.now(), hash: '0xdef2' },
-        { coin: 'ETH', side: 'B', px: 3500, sz: 999999999.99, time: Date.now(), hash: '0xghi3' },
-      ]);
+      const stores = (window as any).stores;
+      if (stores && stores.getMarketStoreState) {
+        const store = stores.getMarketStoreState();
+        store.setTrades([
+          { coin: 'BTC', side: 'B', px: 95000, sz: 1500000, time: Date.now(), hash: '0xabc1' },
+          { coin: 'BTC', side: 'A', px: 95050, sz: 12345678.90, time: Date.now(), hash: '0xdef2' },
+          { coin: 'ETH', side: 'B', px: 3500, sz: 999999999.99, time: Date.now(), hash: '0xghi3' },
+        ]);
+      }
     });
 
     await page.waitForTimeout(500);
@@ -123,11 +126,14 @@ test.describe('Feature 154: Recent Trades Size Formatting', () => {
   test('Massive trades (1B+) abbreviate with B suffix', async ({ page }) => {
     // Add mock trades in billions
     await page.evaluate(() => {
-      const store = (window as any).stores.getMarketStoreState();
-      store.setTrades([
-        { coin: 'BTC', side: 'B', px: 95000, sz: 1500000000, time: Date.now(), hash: '0xabc1' },
-        { coin: 'BTC', side: 'A', px: 95050, sz: 12345678901.23, time: Date.now(), hash: '0xdef2' },
-      ]);
+      const stores = (window as any).stores;
+      if (stores && stores.getMarketStoreState) {
+        const store = stores.getMarketStoreState();
+        store.setTrades([
+          { coin: 'BTC', side: 'B', px: 95000, sz: 1500000000, time: Date.now(), hash: '0xabc1' },
+          { coin: 'BTC', side: 'A', px: 95050, sz: 12345678901.23, time: Date.now(), hash: '0xdef2' },
+        ]);
+      }
     });
 
     await page.waitForTimeout(500);
@@ -148,13 +154,16 @@ test.describe('Feature 154: Recent Trades Size Formatting', () => {
   test('Formatting is consistent across different trade sizes', async ({ page }) => {
     // Add trades across all size ranges
     await page.evaluate(() => {
-      const store = (window as any).stores.getMarketStoreState();
-      store.setTrades([
-        { coin: 'BTC', side: 'B', px: 95000, sz: 0.5, time: Date.now(), hash: '0xabc1' }, // Small
-        { coin: 'BTC', side: 'A', px: 95050, sz: 5000, time: Date.now(), hash: '0xdef2' }, // K
-        { coin: 'ETH', side: 'B', px: 3500, sz: 2000000, time: Date.now(), hash: '0xghi3' }, // M
-        { coin: 'BTC', side: 'A', px: 95100, sz: 3000000000, time: Date.now(), hash: '0xjkl4' }, // B
-      ]);
+      const stores = (window as any).stores;
+      if (stores && stores.getMarketStoreState) {
+        const store = stores.getMarketStoreState();
+        store.setTrades([
+          { coin: 'BTC', side: 'B', px: 95000, sz: 0.5, time: Date.now(), hash: '0xabc1' }, // Small
+          { coin: 'BTC', side: 'A', px: 95050, sz: 5000, time: Date.now(), hash: '0xdef2' }, // K
+          { coin: 'ETH', side: 'B', px: 3500, sz: 2000000, time: Date.now(), hash: '0xghi3' }, // M
+          { coin: 'BTC', side: 'A', px: 95100, sz: 3000000000, time: Date.now(), hash: '0xjkl4' }, // B
+        ]);
+      }
     });
 
     await page.waitForTimeout(500);
@@ -180,10 +189,13 @@ test.describe('Feature 154: Recent Trades Size Formatting', () => {
   test('Recent trades panel displays sizes correctly', async ({ page }) => {
     // Add a mock trade
     await page.evaluate(() => {
-      const store = (window as any).stores.getMarketStoreState();
-      store.setTrades([
-        { coin: 'BTC', side: 'B', px: 95000, sz: 1.5, time: Date.now(), hash: '0xabc1' },
-      ]);
+      const stores = (window as any).stores;
+      if (stores && stores.getMarketStoreState) {
+        const store = stores.getMarketStoreState();
+        store.setTrades([
+          { coin: 'BTC', side: 'B', px: 95000, sz: 1.5, time: Date.now(), hash: '0xabc1' },
+        ]);
+      }
     });
 
     await page.waitForTimeout(500);

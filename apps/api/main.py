@@ -14,7 +14,7 @@ from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from config import settings, validate_environment, print_environment_info
-from routers import info, trade, account, websocket
+from routers import info, trade, account, websocket, wallet
 from rate_limiter import rate_limiter
 from validation_middleware import ValidationMiddleware
 
@@ -146,6 +146,7 @@ app.add_middleware(
 app.include_router(info.router, prefix="/api/info", tags=["Info"])
 app.include_router(trade.router, prefix="/api/trade", tags=["Trading"])
 app.include_router(account.router, prefix="/api/account", tags=["Account"])
+app.include_router(wallet.router, prefix="/api/wallet", tags=["Wallet"])
 app.include_router(websocket.router, prefix="/ws", tags=["WebSocket"])
 
 

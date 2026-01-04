@@ -5,10 +5,11 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { createChart, ColorType, IChartApi, ISeriesApi } from 'lightweight-charts';
+import { createChart, ColorType, IChartApi, ISeriesApi, LogicalRange } from 'lightweight-charts';
 import { useMarketStore } from '../../stores/marketStore';
 import { useWebSocket } from '../../hooks/useWebSocket';
 import { useApi } from '../../hooks/useApi';
+import { ErrorState } from '../ErrorState/ErrorState';
 
 const TIMEFRAMES = {
   '1m': 60,
@@ -74,7 +75,7 @@ export function Chart() {
   const [isLoadingHistorical, setIsLoadingHistorical] = useState(false);
   const [hasMoreHistorical, setHasMoreHistorical] = useState(true);
 
-  const { selectedAsset, candles, setCandles, indicators, setIndicators, candlesCache, setCandlesCache, getCandlesFromCache } = useMarketStore();
+  const { selectedAsset, candles, setCandles, indicators, setIndicators, candlesCache, setCandlesCache, getCandlesFromCache, hasCandlesError, candlesError, clearCandlesError } = useMarketStore();
   const { getCandles } = useApi();
 
   // Check for test mode
@@ -370,21 +371,28 @@ export function Chart() {
       return;
     }
 
-    const unsubscribe = chartRef.current.timeScale().subscribeVisibleLogicalRangeChange((range) => {
-      if (!range || range.from === null || range.to === null) return;
+    const handler = (range: LogicalRange | null) => {
+      if (!range) return;
 
       // Check if user is scrolling near the beginning of loaded data
       // Load more historical data when getting close to the left edge
-      const visibleRangeWidth = range.to - range.from;
-      const threshold = range.from + (visibleRangeWidth * 0.1); // 10% from left edge
+      // Logical is a nominal type wrapping number, so we cast to number for arithmetic
+      const from = range.from as unknown as number;
+      const to = range.to as unknown as number;
+      const visibleRangeWidth = to - from;
+      const threshold = from + (visibleRangeWidth * 0.1); // 10% from left edge
 
-      if (range.from <= threshold && candles.length > 0) {
+      if (from <= threshold && candles.length > 0) {
         loadHistoricalData();
       }
-    });
+    };
+
+    chartRef.current.timeScale().subscribeVisibleLogicalRangeChange(handler);
 
     return () => {
-      unsubscribe?.();
+      if (chartRef.current) {
+        chartRef.current.timeScale().unsubscribeVisibleLogicalRangeChange(handler);
+      }
     };
   }, [chartRef, candles, hasMoreHistorical, isLoadingHistorical, isTestMode, selectedAsset, timeframe, loadHistoricalData]);
 
@@ -449,6 +457,13 @@ export function Chart() {
         );
       }
     }, 100);
+  };
+
+  // Handle retry for failed data loads
+  const handleRetry = () => {
+    clearCandlesError();
+    // Force reconnection by reloading the page
+    window.location.reload();
   };
 
   return (
