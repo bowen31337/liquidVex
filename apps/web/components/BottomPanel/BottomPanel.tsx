@@ -5,6 +5,7 @@
 'use client';
 
 import { useOrderStore } from '../../stores/orderStore';
+import { useUIStore } from '../../stores/orderStore';
 import { PositionsTable } from '../PositionsTable/PositionsTable';
 import { OrdersTable } from '../OrdersTable/OrdersTable';
 import { OrderHistory } from '../OrdersTable/OrderHistory';
@@ -15,7 +16,8 @@ import { ConnectionStatus } from '../ConnectionStatus/ConnectionStatus';
 const TABS = ['Positions', 'Open Orders', 'Order History', 'Trade History', 'Calculator'] as const;
 
 export function BottomPanel() {
-  const { activeTab, setActiveTab, positions, openOrders, orderHistory, tradeHistory } = useOrderStore();
+  const { activeTab, setActiveTab } = useUIStore();
+  const { positions, openOrders, orderHistory, tradeHistory } = useOrderStore();
 
   const getCount = (tab: (typeof TABS)[number]) => {
     switch (tab) {
@@ -50,7 +52,7 @@ export function BottomPanel() {
   };
 
   return (
-    <div className="h-[200px] border-t border-border bg-surface flex flex-col">
+    <div className="h-[200px] border-t border-border bg-surface flex flex-col" data-testid="bottom-panel">
       {/* Tabs */}
       <div className="flex items-center justify-between border-b border-border pr-2">
         <div className="flex">

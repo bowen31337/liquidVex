@@ -228,7 +228,7 @@ export function PositionsTable() {
 
   if (!isConnected) {
     return (
-      <div className="p-4 text-center text-text-tertiary text-sm pointer-events-none">
+      <div className="p-4 text-center text-text-tertiary text-sm pointer-events-none" data-testid="positions-table">
         Connect your wallet to view positions and orders
       </div>
     );
@@ -236,7 +236,7 @@ export function PositionsTable() {
 
   if (positions.length === 0) {
     return (
-      <div className="p-4 text-center text-text-tertiary text-sm pointer-events-none">
+      <div className="p-4 text-center text-text-tertiary text-sm pointer-events-none" data-testid="positions-table">
         No open positions
       </div>
     );
@@ -244,7 +244,7 @@ export function PositionsTable() {
 
   return (
     <>
-      <div className="overflow-auto">
+      <div className="overflow-auto" data-testid="positions-table">
         <table className="data-table w-full">
           <thead>
             <tr>

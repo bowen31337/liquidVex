@@ -3,6 +3,7 @@
  */
 
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import { Order, Position, AccountState, AccountHistory } from '../types';
 import { useApi } from '../hooks/useApi';
 
@@ -60,6 +61,13 @@ interface OrderState {
   setActiveTab: (tab: OrderState['activeTab']) => void;
 }
 
+// Separate interface for persisted UI state
+interface PersistedUIState {
+  activeTab: OrderState['activeTab'];
+  setActiveTab: (tab: OrderState['activeTab']) => void;
+}
+
+// Store for non-persistent data (positions, orders, etc.)
 export const useOrderStore = create<OrderState>((set) => ({
   positions: [],
   setPositions: (positions) => set({ positions }),
@@ -126,3 +134,18 @@ export const useOrderStore = create<OrderState>((set) => ({
   activeTab: 'Positions',
   setActiveTab: (tab) => set({ activeTab: tab }),
 }));
+
+// Separate store for persisted UI state (tab selection)
+export const useUIStore = create<PersistedUIState>()(
+  persist(
+    (set) => ({
+      activeTab: 'Positions',
+      setActiveTab: (tab) => set({ activeTab: tab }),
+    }),
+    {
+      name: 'liquidvex-ui-storage', // localStorage key
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({ activeTab: state.activeTab }), // Only persist activeTab
+    }
+  )
+);

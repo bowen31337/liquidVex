@@ -130,7 +130,7 @@ export function AssetSelector() {
     <div className="relative">
       {/* Trigger Button */}
       <button
-        data-testid="asset-selector-trigger"
+        data-testid="asset-selector-button"
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-3 py-1.5 bg-surface-elevated hover:bg-surface border border-border rounded transition-colors"
       >

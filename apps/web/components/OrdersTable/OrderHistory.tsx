@@ -149,14 +149,14 @@ export function OrderHistory() {
 
   if (!isConnected) {
     return (
-      <div className="p-4 text-center text-text-tertiary text-sm pointer-events-none">
+      <div className="p-4 text-center text-text-tertiary text-sm pointer-events-none" data-testid="order-history">
         Connect your wallet to view order history
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full" data-testid="order-history">
       {/* Filters */}
       <div className="px-4 py-2 border-b border-border flex gap-2 items-center flex-wrap">
         <select

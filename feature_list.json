@@ -1708,8 +1708,14 @@
       "Step 13: Verify tab selection persists"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "dev_failure_count": 0,
+    "last_dev_failure_at": null,
+    "dev_failure_reasons": [],
+    "is_stuck": false,
+    "stuck_reason": null,
+    "stuck_at": null
   },
   {
     "category": "style",

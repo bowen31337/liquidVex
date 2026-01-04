@@ -178,7 +178,7 @@ export function OrdersTable() {
 
   if (!isConnected) {
     return (
-      <div className="p-4 text-center text-text-tertiary text-sm pointer-events-none">
+      <div className="p-4 text-center text-text-tertiary text-sm pointer-events-none" data-testid="orders-table">
         Connect your wallet to view orders
       </div>
     );
@@ -186,7 +186,7 @@ export function OrdersTable() {
 
   if (openOrders.length === 0) {
     return (
-      <div className="p-4 text-center text-text-tertiary text-sm pointer-events-none">
+      <div className="p-4 text-center text-text-tertiary text-sm pointer-events-none" data-testid="orders-table">
         No open orders
       </div>
     );
@@ -194,7 +194,7 @@ export function OrdersTable() {
 
   return (
     <>
-      <div className="overflow-auto">
+      <div className="overflow-auto" data-testid="orders-table">
         <table className="data-table w-full">
           <thead>
             <tr>
