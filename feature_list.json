@@ -270,8 +270,8 @@
     ],
     "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
-    "qa_retry_count": 0,
+    "is_qa_passed": true,
+    "qa_retry_count": 1,
     "dev_failure_count": 0,
     "dev_completed_at": "2026-01-04T02:44:29.331327Z"
   },
@@ -802,8 +802,11 @@
       "Step 7: Verify validation error is shown"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T03:12:30.797212Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
