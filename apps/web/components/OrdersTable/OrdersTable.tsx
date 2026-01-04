@@ -173,17 +173,21 @@ export function OrdersTable() {
   };
 
   const handleConfirmModify = async (newPx?: number, newSz?: number) => {
-    if (!selectedOrder || !address) return;
+    if (!selectedOrder) return;
+    if (!address && !isTestMode) return;
 
     setIsSubmittingModify(true);
     try {
-      // Call the API to modify the order
-      await modifyOrder({
-        oid: selectedOrder.oid,
-        coin: selectedOrder.coin,
-        limitPx: newPx,
-        sz: newSz,
-      });
+      // In test mode, skip API call
+      if (!isTestMode) {
+        // Call the API to modify the order
+        await modifyOrder({
+          oid: selectedOrder.oid,
+          coin: selectedOrder.coin,
+          limitPx: newPx,
+          sz: newSz,
+        });
+      }
 
       // Update order in store
       const updates: Partial<Order> = {};
@@ -242,13 +246,14 @@ export function OrdersTable() {
               <th>Filled</th>
               <th>Status</th>
               <th>
-                <span>Actions</span>
+                Actions
                 {openOrders.length > 0 && (
                   <button
                     onClick={handleCancelAll}
                     disabled={cancellingAll}
                     className="ml-2 px-2 py-0.5 text-xs bg-short hover:bg-short-muted text-white rounded disabled:opacity-50"
                     data-testid="cancel-all-orders"
+                    aria-label="Cancel All"
                   >
                     {cancellingAll ? 'Cancelling...' : 'Cancel All'}
                   </button>

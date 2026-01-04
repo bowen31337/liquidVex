@@ -54,7 +54,9 @@ test.describe('Feature 37: Open Orders Table Complete Functionality', () => {
     expect(headers).toContain('Size');
     expect(headers).toContain('Filled');
     expect(headers).toContain('Status');
-    expect(headers).toContain('Actions');
+    // The last header contains "Actions" and may also contain "Cancel All" button text
+    const lastHeader = headers[headers.length - 1];
+    expect(lastHeader).toContain('Actions');
   });
 
   test('should display order information correctly', async ({ page }) => {

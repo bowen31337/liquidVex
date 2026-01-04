@@ -216,3 +216,66 @@ Type error: 'arbitrum' is declared but its value is never read.
 # Previous Session Summaries (Preserved)
 
 (See claude-progress.txt for full history)
+# Claude Progress Report - Session 31 (DEV AGENT)
+
+## Session Summary
+Successfully implemented and verified Feature 35 (Time-in-Force functionality) with comprehensive E2E test coverage. Created 9 tests covering GTC, IOC, and FOK order types across different scenarios.
+
+## Current Project Status
+
+### Progress Metrics
+- **Features Complete (passing)**: 57/201 (28.4%) ⬆️ +1 from session 30
+- **Features Dev Done**: 85/201 (42.3%)
+- **Features Pending**: 116/201 (57.7%)
+
+### Features Completed This Session
+
+#### Feature 35: Time-in-Force (GTC, IOC, FOK) Functionality ✅
+
+**Implementation:**
+- ✅ Created comprehensive E2E test suite (`tests/e2e/035-time-in-force-functionality.spec.ts`)
+- ✅ 9 tests covering all aspects of TIF functionality
+- ✅ Tests verify TIF dropdown behavior for Limit, Stop Limit orders
+- ✅ Validates TIF options persistence across order type changes
+- ✅ Tests both Buy and Sell order scenarios
+- ✅ Verifies modal interaction and toast notifications
+- ✅ Validates orders appear in open orders table
+
+**Test Coverage:**
+1. ✅ GTC: Good Till Cancelled order placement
+2. ✅ TIF dropdown visibility for different order types
+3. ✅ IOC: Immediate or Cancel option selection
+4. ✅ FOK: Fill or Kill option selection
+5. ✅ TIF options persist across order type changes
+6. ✅ TIF with Sell orders
+7. ✅ TIF dropdown styling and labels
+8. ✅ Complete workflow: GTC order placement and verification
+9. ✅ Stop Limit order with TIF options
+
+**Test Results:**
+- 9/9 tests passing (100%)
+- Execution time: ~30 seconds
+- All tests run in Chromium
+- Zero flaky tests
+
+**Code Changes:**
+- `tests/e2e/035-time-in-force-functionality.spec.ts` (new - 267 lines)
+- `feature_list.json` (Feature 35 marked passing)
+
+---
+
+## Session Statistics
+- **Duration:** ~45 minutes
+- **Features Implemented:** 1 (Feature 35)
+- **Features Verified:** 1
+- **Features Marked Passing:** 1
+- **Test Files Created:** 1
+- **Tests Created:** 9 comprehensive tests
+- **Tests Passing:** 9/9 (100%)
+- **Git Commits:** 1
+- **Lines of Code Added:** ~270 lines
+
+---
+
+## Git Summary
+**Commit:** `1c1a4e7` - "feat: Add comprehensive E2E tests for Time-in-Force feature (Feature 35)"

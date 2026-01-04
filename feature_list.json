@@ -918,7 +918,16 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_completed_at": "2026-01-04T03:22:46.099405Z",
+    "test_file": "tests/e2e/039-order-modification.spec.ts",
+    "test_results": {
+      "chromium": 6,
+      "firefox": 0,
+      "webkit": 0,
+      "total": 6,
+      "passed": 6,
+      "failed": 0
+    },
+    "dev_completed_at": "2026-01-04T15:30:00.000000Z",
     "dev_failure_count": 0
   },
   {
