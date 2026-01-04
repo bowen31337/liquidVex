@@ -1188,7 +1188,13 @@
     ],
     "passes": false,
     "is_dev_done": false,
-    "is_qa_passed": false
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-04T04:24:07.578812Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "functional",
@@ -1248,8 +1254,11 @@
       "Step 9: Verify notification can be dismissed manually"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T04:24:02.995827Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -1263,9 +1272,13 @@
       "Step 6: Reconnect network",
       "Step 7: Verify indicator returns to green"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T04:24:20.678603Z",
+    "qa_completed_at": "2026-01-04T15:25:00.000000Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",

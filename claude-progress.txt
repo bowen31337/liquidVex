@@ -1,6 +1,49 @@
 # Claude Progress Report - Session 16 (DEV AGENT)
 
 ## Session Summary
+Implemented Connection Status Indicator (Feature 50). Created ConnectionStatus component with real-time WebSocket state tracking, added to Header and BottomPanel. All tests passing (8/8 for Chromium and Firefox).
+
+## Current Project Status
+
+### Progress Metrics
+- **Features Complete (passing)**: 23/200 (11.5%)
+- **Features Dev Done**: 53/200 (26.5%)
+- **Features Pending**: 147/200 (73.5%)
+
+### Feature Implemented This Session
+
+#### Feature 50: Connection Status Indicator States ✅
+
+**Implementation:**
+- Created `ConnectionStatus` component with color-coded state indicators
+- Added polling mechanism to track WebSocket connection count
+- Integrated into Header (compact mode, no text)
+- Integrated into BottomPanel (full mode with text and count)
+
+**Component Features:**
+- **States**: Connected (green), Connecting (yellow/pulse), Disconnected (gray), Error (red)
+- **Visual**: Dot indicator with optional pulse animation for connected state
+- **Text**: Shows status name and connection count when `showText={true}`
+- **Badge**: Optional connection count badge showing number of active WebSocket connections
+
+**Code Changes:**
+- `apps/web/components/ConnectionStatus/ConnectionStatus.tsx` (NEW) - Main component
+- `apps/web/components/Header/Header.tsx` - Replaced basic indicator with ConnectionStatus
+- `apps/web/components/BottomPanel/BottomPanel.tsx` - Added ConnectionStatus with text
+- `tests/e2e/050-connection-status-indicator.spec.ts` - 4 E2E tests (4/4 passing)
+
+**Test Results:**
+- 8/8 tests passing (Chromium + Firefox)
+- WebKit skipped due to missing system dependencies
+- All core functionality verified working
+
+**Status:** Implementation complete and verified.
+
+---
+
+# Claude Progress Report - Session 16 (DEV AGENT)
+
+## Session Summary
 Implemented Settings Modal and Options (Feature 53). Fixed wagmi/Next.js App Router integration issues with QueryClientProvider. Added modal-overlay and modal-content classes to Modal component for testability. Created comprehensive E2E test suite for settings modal (13/15 tests passing).
 
 ## Current Project Status
