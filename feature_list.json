@@ -1734,8 +1734,11 @@
       "Step 11: Verify border color is #404040"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "dev_failure_count": 0,
+    "last_dev_failure_at": null,
+    "dev_failure_reasons": []
   },
   {
     "category": "style",

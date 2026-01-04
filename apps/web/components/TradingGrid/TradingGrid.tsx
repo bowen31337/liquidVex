@@ -118,7 +118,7 @@ export function TradingGrid() {
     <div className="flex h-[calc(100vh-3.5rem-200px)] overflow-hidden">
       {/* Chart Panel */}
       <div
-        className={`relative flex flex-col chart-panel ${isDragging ? 'select-none' : ''}`}
+        className={`relative flex flex-col chart-panel panel ${isDragging ? 'select-none' : ''}`}
         style={{ width: `${sizes.chart}%`, minWidth: '30%' }}
       >
         <div className="flex-1 overflow-hidden p-1">
@@ -139,7 +139,7 @@ export function TradingGrid() {
 
       {/* Middle Column: Order Book + Recent Trades */}
       <div
-        className={`relative flex flex-col ${isDragging ? 'select-none' : ''}`}
+        className={`relative flex flex-col panel ${isDragging ? 'select-none' : ''}`}
         style={{ width: `${sizes.orderBook}%`, minWidth: '10%' }}
       >
         <div className="flex-1 overflow-hidden p-1">
@@ -165,7 +165,7 @@ export function TradingGrid() {
 
       {/* Order Entry Panel */}
       <div
-        className={`relative flex-1 ${isDragging ? 'select-none' : ''}`}
+        className={`relative flex-1 panel ${isDragging ? 'select-none' : ''}`}
         style={{ minWidth: '15%' }}
       >
         <div className="h-full overflow-hidden p-1">
