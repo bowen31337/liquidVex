@@ -56,7 +56,7 @@ export function PositionCloseModal({
 
           {/* Side and Type */}
           <div className="flex items-center justify-between">
-            <span className="text-text-secondary text-sm\">Side</span>
+            <span className="text-text-secondary text-sm">Side</span>
             <span className={`${sideColor} font-bold text-lg uppercase`}>
               {sideLabel}
             </span>
@@ -66,13 +66,13 @@ export function PositionCloseModal({
 
           {/* Asset */}
           <div className="flex items-center justify-between">
-            <span className="text-text-secondary text-sm\">Asset</span>
+            <span className="text-text-secondary text-sm">Asset</span>
             <span className="text-text-primary font-medium">{position.coin}</span>
           </div>
 
           {/* Size */}
           <div className="flex items-center justify-between">
-            <span className="text-text-secondary text-sm\">Size</span>
+            <span className="text-text-secondary text-sm">Size</span>
             <span className="text-text-primary font-mono font-medium">
               {position.sz.toFixed(4)}
             </span>
@@ -80,7 +80,7 @@ export function PositionCloseModal({
 
           {/* Entry Price */}
           <div className="flex items-center justify-between">
-            <span className="text-text-secondary text-sm\">Entry Price</span>
+            <span className="text-text-secondary text-sm">Entry Price</span>
             <span className="text-text-primary font-mono font-medium">
               ${position.entryPx.toFixed(2)}
             </span>
@@ -88,13 +88,13 @@ export function PositionCloseModal({
 
           {/* Leverage */}
           <div className="flex items-center justify-between">
-            <span className="text-text-secondary text-sm\">Leverage</span>
+            <span className="text-text-secondary text-sm">Leverage</span>
             <span className="text-text-primary font-medium">{position.leverage}x</span>
           </div>
 
           {/* Margin */}
           <div className="flex items-center justify-between">
-            <span className="text-text-secondary text-sm\">Margin Used</span>
+            <span className="text-text-secondary text-sm">Margin Used</span>
             <span className="text-text-primary font-mono font-medium">
               ${position.marginUsed.toFixed(2)}
             </span>
@@ -102,7 +102,7 @@ export function PositionCloseModal({
 
           {/* Current PnL */}
           <div className="flex items-center justify-between">
-            <span className="text-text-secondary text-sm\">Unrealized PnL</span>
+            <span className="text-text-secondary text-sm">Unrealized PnL</span>
             <span className={`font-mono font-medium ${position.unrealizedPnl >= 0 ? 'text-long' : 'text-short'}`}>
               {position.unrealizedPnl >= 0 ? '+' : ''}${position.unrealizedPnl.toFixed(2)}
             </span>

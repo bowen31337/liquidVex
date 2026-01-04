@@ -171,6 +171,13 @@ export interface ModifyRequest {
   timestamp: number;
 }
 
+export interface ModifyOrderRequest {
+  oid: number;
+  coin: string;
+  limitPx?: number;
+  sz?: number;
+}
+
 export interface CancelAllRequest {
   coin?: string;
   signature: string;

@@ -4,6 +4,7 @@
 
 import { create } from 'zustand';
 import { Order, Position, AccountState, AccountHistory } from '../types';
+import { useApi } from '../hooks/useApi';
 
 export type OrderFormState = {
   side: 'buy' | 'sell';
@@ -30,6 +31,7 @@ interface OrderState {
   setOpenOrders: (orders: Order[]) => void;
   addOpenOrder: (order: Order) => void;
   removeOpenOrder: (oid: number) => void;
+  updateOpenOrder: (oid: number, updates: Partial<Order>) => void;
   clearOpenOrders: () => void;
 
   // Order history
@@ -45,6 +47,7 @@ interface OrderState {
   // Account state
   accountState: AccountState | null;
   setAccountState: (state: AccountState) => void;
+  fetchAccountState: (address: string) => Promise<void>;
 
   // Order form state
   orderForm: OrderFormState;
@@ -52,7 +55,7 @@ interface OrderState {
   resetOrderForm: () => void;
 
   // UI state
-  activeTab: 'Positions' | 'Open Orders' | 'Order History' | 'Trade History';
+  activeTab: 'Positions' | 'Open Orders' | 'Order History' | 'Trade History' | 'Calculator';
   setActiveTab: (tab: OrderState['activeTab']) => void;
 }
 
@@ -67,6 +70,9 @@ export const useOrderStore = create<OrderState>((set) => ({
   setOpenOrders: (orders) => set({ openOrders: orders }),
   addOpenOrder: (order) => set((state) => ({ openOrders: [...state.openOrders, order] })),
   removeOpenOrder: (oid) => set((state) => ({ openOrders: state.openOrders.filter(o => o.oid !== oid) })),
+  updateOpenOrder: (oid, updates) => set((state) => ({
+    openOrders: state.openOrders.map(o => o.oid === oid ? { ...o, ...updates } : o)
+  })),
   clearOpenOrders: () => set({ openOrders: [] }),
 
   orderHistory: [],
@@ -79,6 +85,15 @@ export const useOrderStore = create<OrderState>((set) => ({
 
   accountState: null,
   setAccountState: (state) => set({ accountState: state }),
+  fetchAccountState: async (address: string) => {
+    try {
+      const api = useApi();
+      const state = await api.getAccountState(address);
+      set({ accountState: state });
+    } catch (error) {
+      console.error('Failed to fetch account state:', error);
+    }
+  },
 
   orderForm: {
     side: 'buy',
