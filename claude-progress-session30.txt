@@ -222,10 +222,3 @@ These features are implemented but need E2E verification to mark as passing.
 # Previous Session Summaries (Preserved)
 
 (Previous summaries from sessions 1-29 are preserved in claude-progress.txt)
-
-
----
-
-# Previous Session Summaries (Preserved)
-
-(Previous summaries from sessions 1-29 are preserved in separate files)

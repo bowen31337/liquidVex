@@ -70,7 +70,7 @@ export function OrderModifyModal({
       />
 
       {/* Modal */}
-      <div className="relative bg-surface border border-border rounded-lg shadow-xl w-full max-w-md mx-4 animate-fade-in">
+      <div data-testid="order-modify-modal" className="relative bg-surface border border-border rounded-lg shadow-xl w-full max-w-md mx-4 animate-fade-in">
         {/* Header */}
         <div className="px-4 py-3 border-b border-border">
           <h2 className="text-lg font-semibold text-text-primary">

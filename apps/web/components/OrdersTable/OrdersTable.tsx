@@ -242,7 +242,7 @@ export function OrdersTable() {
               <th>Filled</th>
               <th>Status</th>
               <th>
-                Actions
+                <span>Actions</span>
                 {openOrders.length > 0 && (
                   <button
                     onClick={handleCancelAll}

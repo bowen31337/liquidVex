@@ -5,6 +5,7 @@ import { WagmiProvider } from 'wagmi';
 import { useState, useEffect } from 'react';
 import { FavoritesProvider } from '@/contexts/FavoritesContext';
 import { wagmiConfig } from '@/lib/wagmi';
+import { useOrderStore } from '@/stores/orderStore';
 
 export function ClientProviders({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient({
@@ -21,25 +22,26 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
     },
   }));
 
-  const [mounted, setMounted] = useState(false);
-
+  // Expose stores to window for testing
   useEffect(() => {
-    setMounted(true);
+    // Only expose in test mode or development
+    const isTestMode = process.env.NEXT_PUBLIC_TEST_MODE === 'true' ||
+                       process.env.NODE_ENV === 'test' ||
+                       typeof window !== 'undefined' &&
+                       (window.location.search.includes('testMode=true') ||
+                        window.location.search.includes('testMode=1'));
+
+    if (isTestMode && typeof window !== 'undefined') {
+      // Expose the store factory and current state
+      (window as any).stores = {
+        useOrderStore: useOrderStore,
+        getOrderStoreState: () => useOrderStore.getState(),
+      };
+    }
   }, []);
 
-  // Only render WagmiProvider on client side to avoid SSR issues with WalletConnect
-  // During SSR, render a placeholder to avoid calling wagmi hooks without provider
-  if (!mounted) {
-    return (
-      <QueryClientProvider client={queryClient}>
-        <FavoritesProvider>
-          {/* Render a minimal layout during SSR - children that don't use wagmi hooks */}
-          <div suppressHydrationWarning>{children}</div>
-        </FavoritesProvider>
-      </QueryClientProvider>
-    );
-  }
-
+  // Render providers directly - no client-side blocking
+  // WagmiProvider and QueryClientProvider handle SSR correctly
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>

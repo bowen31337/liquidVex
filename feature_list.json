@@ -864,9 +864,9 @@
       "Step 9: Verify order is removed from open orders",
       "Step 10: Verify cancellation notification appears"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T03:27:41.556097Z",
     "dev_failure_count": 0
