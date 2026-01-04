@@ -88,7 +88,6 @@ export function TradingGrid() {
     setIsDragging(true);
 
     const startX = e.clientX;
-    const startSize = sizes[panel];
 
     const handleMouseMove = (moveEvent: MouseEvent) => {
       const delta = ((moveEvent.clientX - startX) / window.innerWidth) * 100;
