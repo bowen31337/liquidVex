@@ -1,5 +1,6 @@
 /**
  * Header component with logo, asset selector, price display, and wallet connect
+ * Responsive: Collapses price info on tablet, hides mark/index on mobile
  */
 
 'use client';
@@ -31,6 +32,19 @@ export function Header() {
   const { getExchangeMeta } = useApi();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [walletModalOpen, setWalletModalOpen] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1920);
+
+  // Track window size for responsive behavior
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Auto-close wallet modal in test mode
   useEffect(() => {
@@ -103,6 +117,10 @@ export function Header() {
     return () => clearInterval(interval);
   }, [getExchangeMeta, selectedAsset]);
 
+  // Responsive breakpoints
+  const isTablet = windowWidth < 1024;
+  const isMobile = windowWidth < 768;
+
   return (
     <>
       {/* Network Warning Banner */}
@@ -122,7 +140,7 @@ export function Header() {
 
       {/* Right side: Price and Wallet */}
       <div className="flex items-center gap-4">
-        {/* Price Display */}
+        {/* Price Display - always visible */}
         <div className="text-right">
           <div className="font-mono text-lg text-text-primary">
             {formatPrice(currentPrice)}
@@ -132,17 +150,21 @@ export function Header() {
           </div>
         </div>
 
-        {/* Mark/Index Prices */}
-        <div className="text-xs text-text-tertiary">
-          <div title="Mark Price">M: {formatPrice(markPrice)}</div>
-          <div title="Index Price">I: {formatPrice(indexPrice)}</div>
-        </div>
+        {/* Mark/Index Prices - hidden on tablet and mobile */}
+        {!isTablet && (
+          <div className="text-xs text-text-tertiary hidden lg:block">
+            <div title="Mark Price">M: {formatPrice(markPrice)}</div>
+            <div title="Index Price">I: {formatPrice(indexPrice)}</div>
+          </div>
+        )}
 
-        {/* Funding Rate Display */}
-        <div className="text-xs text-text-secondary text-right">
-          <div title="Funding Rate">F: {(fundingRate * 100).toFixed(3)}%</div>
-          <div title="Next Funding">{formatCountdown(fundingCountdown)}</div>
-        </div>
+        {/* Funding Rate Display - hidden on mobile */}
+        {!isMobile && (
+          <div className="text-xs text-text-secondary text-right hidden sm:block">
+            <div title="Funding Rate">F: {(fundingRate * 100).toFixed(3)}%</div>
+            <div title="Next Funding">{formatCountdown(fundingCountdown)}</div>
+          </div>
+        )}
 
         {/* Account Balance */}
         <AccountBalance />

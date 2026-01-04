@@ -25,6 +25,8 @@ export interface LayoutPreferences {
     timeRange: string;
     orderType: string;
   };
+  fullScreenChart?: boolean;
+  compactMode?: boolean;
 }
 
 class StorageManager {
@@ -302,7 +304,7 @@ class StorageManager {
   private validateLayoutPreferences(preferences: any): LayoutPreferences | null {
     if (!preferences || typeof preferences !== 'object') return null;
 
-    const { panelSizes, activeTab, tradeHistoryFilters } = preferences;
+    const { panelSizes, activeTab, tradeHistoryFilters, fullScreenChart, compactMode } = preferences;
 
     // Validate panel sizes
     if (!panelSizes || typeof panelSizes !== 'object') return null;
@@ -318,6 +320,10 @@ class StorageManager {
     if (typeof tradeHistoryFilters.asset !== 'string' || typeof tradeHistoryFilters.timeRange !== 'string' || typeof tradeHistoryFilters.orderType !== 'string') {
       return null;
     }
+
+    // Validate optional fields (if present)
+    if (fullScreenChart !== undefined && typeof fullScreenChart !== 'boolean') return null;
+    if (compactMode !== undefined && typeof compactMode !== 'boolean') return null;
 
     return preferences as LayoutPreferences;
   }

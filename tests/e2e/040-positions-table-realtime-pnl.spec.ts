@@ -17,6 +17,12 @@ test.describe('Feature 40: Positions Table with Real-time PnL', () => {
     await page.goto('http://localhost:3001?testMode=true');
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1000);
+
+    // Clear any existing market data to ensure clean test state
+    await page.evaluate(() => {
+      const marketStore = (window as any).stores.getMarketStoreState();
+      marketStore.setAllMids({});
+    });
   });
 
   test('should display positions table with correct structure', async ({ page }) => {
@@ -100,17 +106,17 @@ test.describe('Feature 40: Positions Table with Real-time PnL', () => {
     // Check Size
     await expect(row.locator('td').nth(2)).toContainText('0.5');
 
-    // Check Entry
-    await expect(row.locator('td').nth(3)).toContainText('45000');
+    // Check Entry (formatted with commas)
+    await expect(row.locator('td').nth(3)).toContainText('45,000');
 
     // Check Leverage
     await expect(row.locator('td').nth(7)).toContainText('10x');
 
     // Check Margin
-    await expect(row.locator('td').nth(8)).toContainText('2250');
+    await expect(row.locator('td').nth(8)).toContainText('2,250');
 
     // Check Liquidation Price
-    await expect(row.locator('td').nth(9)).toContainText('40500');
+    await expect(row.locator('td').nth(9)).toContainText('40,500');
 
     // Check Margin Type
     await expect(row.locator('td').nth(10)).toContainText('CROSS');

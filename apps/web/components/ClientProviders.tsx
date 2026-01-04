@@ -7,6 +7,7 @@ import { FavoritesProvider } from '@/contexts/FavoritesContext';
 import { wagmiConfig } from '@/lib/wagmi';
 import { useOrderStore } from '@/stores/orderStore';
 import { useMarketStore } from '@/stores/marketStore';
+import { useWalletStore } from '@/stores/walletStore';
 
 export function ClientProviders({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient({
@@ -39,6 +40,8 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
         getOrderStoreState: () => useOrderStore.getState(),
         useMarketStore: useMarketStore,
         getMarketStoreState: () => useMarketStore.getState(),
+        useWalletStore: useWalletStore,
+        getWalletStoreState: () => useWalletStore.getState(),
       };
     }
   }, []);

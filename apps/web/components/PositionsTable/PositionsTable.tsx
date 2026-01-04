@@ -30,8 +30,26 @@ export function PositionsTable() {
   const [isModifying, setIsModifying] = useState(false);
   const [isSettingMargin, setIsSettingMargin] = useState(false);
 
+  // Check for test mode
+  const isTestMode = (() => {
+    if (typeof process !== 'undefined' &&
+        (process.env.NEXT_PUBLIC_TEST_MODE === 'true' || process.env.NODE_ENV === 'test')) {
+      return true;
+    }
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('testMode') === 'true' || urlParams.has('testMode');
+    }
+    return false;
+  })();
+
   // Load positions when wallet connects
   useEffect(() => {
+    // In test mode, don't load from API (positions are added directly to store)
+    if (isTestMode) {
+      return;
+    }
+
     if (isConnected && address) {
       const loadPositions = async () => {
         try {
@@ -50,7 +68,7 @@ export function PositionsTable() {
       setPositions([]);
       return undefined;
     }
-  }, [isConnected, address, getPositions, setPositions]);
+  }, [isConnected, address, isTestMode]);
 
   // Update mark prices from allMids (real-time updates)
   useEffect(() => {
@@ -107,16 +125,19 @@ export function PositionsTable() {
 
   // Confirm close position
   const handleConfirmClose = async () => {
-    if (!selectedPosition || !address) return;
+    if (!selectedPosition || (!address && !isTestMode)) return;
 
     setIsClosing(true);
     try {
-      // Call the API to close the position
-      await closePosition({
-        coin: selectedPosition.coin,
-        signature: 'mock-signature', // In real implementation, this would come from wallet
-        timestamp: Date.now(),
-      });
+      // In test mode, skip API call
+      if (!isTestMode) {
+        // Call the API to close the position
+        await closePosition({
+          coin: selectedPosition.coin,
+          signature: 'mock-signature', // In real implementation, this would come from wallet
+          timestamp: Date.now(),
+        });
+      }
 
       // Remove position from store
       removePosition(selectedPosition.coin);
@@ -150,18 +171,21 @@ export function PositionsTable() {
 
   // Confirm modify position
   const handleConfirmModify = async (addSize?: number, reduceSize?: number) => {
-    if (!selectedPosition || !address) return;
+    if (!selectedPosition || (!address && !isTestMode)) return;
 
     setIsModifying(true);
     try {
-      // Call the API to modify the position
-      await modifyPosition({
-        coin: selectedPosition.coin,
-        addSize,
-        reduceSize,
-        signature: 'mock-signature', // In real implementation, this would come from wallet
-        timestamp: Date.now(),
-      });
+      // In test mode, skip API call
+      if (!isTestMode) {
+        // Call the API to modify the position
+        await modifyPosition({
+          coin: selectedPosition.coin,
+          addSize,
+          reduceSize,
+          signature: 'mock-signature', // In real implementation, this would come from wallet
+          timestamp: Date.now(),
+        });
+      }
 
       // Show success toast
       const action = addSize ? `added ${addSize}` : `reduced ${reduceSize}`;
@@ -193,17 +217,20 @@ export function PositionsTable() {
 
   // Confirm margin mode change
   const handleConfirmMarginMode = async (marginType: 'cross' | 'isolated') => {
-    if (!selectedPosition || !address) return;
+    if (!selectedPosition || (!address && !isTestMode)) return;
 
     setIsSettingMargin(true);
     try {
-      // Call the API to set margin mode
-      await setMarginMode({
-        coin: selectedPosition.coin,
-        marginType,
-        signature: 'mock-signature', // In real implementation, this would come from wallet
-        timestamp: Date.now(),
-      });
+      // In test mode, skip API call
+      if (!isTestMode) {
+        // Call the API to set margin mode
+        await setMarginMode({
+          coin: selectedPosition.coin,
+          marginType,
+          signature: 'mock-signature', // In real implementation, this would come from wallet
+          timestamp: Date.now(),
+        });
+      }
 
       // Show success toast
       success(`Margin mode for ${selectedPosition.coin} set to ${marginType}`);
@@ -226,7 +253,7 @@ export function PositionsTable() {
     setIsSettingMargin(false);
   };
 
-  if (!isConnected) {
+  if (!isConnected && !isTestMode) {
     return (
       <div className="p-4 text-center text-text-tertiary text-sm pointer-events-none" data-testid="positions-table">
         Connect your wallet to view positions and orders

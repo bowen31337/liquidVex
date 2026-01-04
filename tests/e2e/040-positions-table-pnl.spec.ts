@@ -8,6 +8,17 @@ test.describe('Feature 40: Positions Table with Real-time PnL', () => {
     // Wait for the page to load
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1000);
+
+    // Connect wallet in test mode using setState
+    await page.evaluate(() => {
+      const walletStore = (window as any).stores.useWalletStore;
+      walletStore.setState({
+        address: '0x1234567890123456789012345678901234567890',
+        isConnected: true,
+      });
+    });
+
+    await page.waitForTimeout(500);
   });
 
   test('should display positions table with correct structure', async ({ page }) => {
