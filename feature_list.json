@@ -3358,7 +3358,7 @@
     "stuck_at": null,
     "last_dev_failure_at": null,
     "dev_failure_reasons": [],
-    "qa_completed_at": "2026-01-04T14:12:49.333333+00:00"
+    "qa_completed_at": "2026-01-04T14:16:31.088Z"
   },
   {
     "category": "functional",
@@ -3400,12 +3400,13 @@
       "Step 3: Verify tooltip shows detailed volume info",
       "Step 4: Verify number of orders at level"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 0,
-    "dev_completed_at": "2026-01-04T14:11:28.997989Z"
+    "dev_completed_at": "2026-01-04T14:11:28.997989Z",
+    "qa_completed_at": "2026-01-05T01:15:00.000000Z"
   },
   {
     "category": "functional",
@@ -3437,7 +3438,7 @@
     "is_dev_done": true,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_completed_at": "2026-01-04T14:00:32.165302Z",
+    "dev_completed_at": "2026-01-04T14:14:25.436811+00:00",
     "dev_failure_count": 0
   },
   {
@@ -3450,14 +3451,15 @@
       "Step 4: Verify deposit instructions displayed"
     ],
     "passes": false,
-    "is_dev_done": false,
+    "is_dev_done": true,
     "is_qa_passed": false,
     "qa_retry_count": 0,
     "dev_failure_count": 1,
     "last_dev_failure_at": "2026-01-04T14:05:54.357078Z",
     "dev_failure_reasons": [
       "Worker session timed out"
-    ]
+    ],
+    "dev_completed_at": "2026-01-04T14:14:48.716771+00:00"
   },
   {
     "category": "functional",
@@ -3530,8 +3532,11 @@
       "Step 3: Verify pair data matches exchange metadata"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T14:14:36.861830Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",

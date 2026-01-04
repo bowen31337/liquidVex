@@ -289,7 +289,9 @@ export function TradeHistory() {
       </div>
 
       {/* Trades Table */}
-      {filteredTrades.length === 0 ? (
+      {isLoadingTradeHistory ? (
+        <PositionsTableSkeleton />
+      ) : filteredTrades.length === 0 ? (
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center text-text-tertiary text-sm">
             {hasActiveFilters ? 'No trades match your filters' : 'No trade history'}
