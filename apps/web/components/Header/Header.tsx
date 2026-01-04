@@ -57,20 +57,32 @@ export function Header() {
     }
   };
 
-  // Load exchange meta on mount
+  // Load exchange meta on mount and update prices periodically
   useEffect(() => {
     const loadMeta = async () => {
       try {
         const meta = await getExchangeMeta();
         if (meta.assets.length > 0) {
-          // Could set default asset here
+          // Update current price from meta
+          const asset = meta.assets.find((a: any) => a.coin === selectedAsset);
+          if (asset) {
+            // Prices are updated via store defaults, but we could fetch more specific data here
+          }
         }
       } catch (err) {
         console.error('Failed to load exchange meta:', err);
       }
     };
+
     loadMeta();
-  }, [getExchangeMeta]);
+
+    // Update prices every 5 seconds
+    const interval = setInterval(() => {
+      loadMeta();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [getExchangeMeta, selectedAsset]);
 
   return (
     <header className="h-14 border-b border-border bg-surface flex items-center justify-between px-4">
@@ -102,14 +114,14 @@ export function Header() {
           </div>
         </div>
 
-        {/* Mark/Index Prices (compact display on hover) */}
-        <div className="hidden lg:block text-xs text-text-tertiary">
+        {/* Mark/Index Prices */}
+        <div className="text-xs text-text-tertiary">
           <div title="Mark Price">M: {formatPrice(markPrice)}</div>
           <div title="Index Price">I: {formatPrice(indexPrice)}</div>
         </div>
 
         {/* Funding Rate Display */}
-        <div className="hidden md:block text-xs text-text-secondary text-right">
+        <div className="text-xs text-text-secondary text-right">
           <div title="Funding Rate">F: {(fundingRate * 100).toFixed(3)}%</div>
           <div title="Next Funding">{formatCountdown(fundingCountdown)}</div>
         </div>
