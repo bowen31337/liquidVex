@@ -1859,15 +1859,15 @@
       "Step 9: Verify monospace font"
     ],
     "passes": false,
-    "is_dev_done": false,
+    "is_dev_done": true,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_failure_count": 2,
-    "last_dev_failure_at": "2026-01-04T10:01:38.690742Z",
-    "dev_failure_reasons": [
-      "Worker session timed out",
-      "Worker session timed out"
-    ]
+    "dev_failure_count": 0,
+    "last_dev_failure_at": null,
+    "dev_failure_reasons": [],
+    "is_stuck": false,
+    "stuck_reason": null,
+    "stuck_at": null
   },
   {
     "category": "style",
@@ -1945,9 +1945,16 @@
       "Step 3: Verify ask side has red depth bars",
       "Step 4: Verify bars represent volume proportionally"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "last_dev_failure_at": null,
+    "dev_failure_reasons": [],
+    "is_stuck": false,
+    "stuck_reason": null,
+    "stuck_at": null
   },
   {
     "category": "style",
@@ -2000,8 +2007,11 @@
       "Step 6: Verify shimmer effect is visible"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T10:24:34.811574Z",
+    "dev_failure_count": 0
   },
   {
     "category": "style",
@@ -2076,8 +2086,14 @@
       "Step 5: Verify spread display between bids/asks"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "dev_failure_count": 0,
+    "last_dev_failure_at": null,
+    "dev_failure_reasons": [],
+    "is_stuck": false,
+    "stuck_reason": null,
+    "stuck_at": null
   },
   {
     "category": "style",
@@ -2091,8 +2107,14 @@
       "Step 6: Verify submit button at bottom"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "dev_failure_count": 0,
+    "last_dev_failure_at": null,
+    "dev_failure_reasons": [],
+    "is_stuck": false,
+    "stuck_reason": null,
+    "stuck_at": null
   },
   {
     "category": "style",
