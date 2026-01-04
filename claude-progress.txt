@@ -229,3 +229,60 @@ These features are implemented but need E2E verification to mark as passing.
 # Previous Session Summaries (Preserved)
 
 (Previous summaries from sessions 1-29 are preserved in separate files)
+
+# Claude Progress Report - Session 31 (DEV AGENT)
+
+## Session Summary
+Successfully verified Feature 35 (Time-in-force TIF functionality). Created comprehensive E2E test suite with 13 tests, all passing. Total passing features now 58/201 (28.9%).
+
+## Current Project Status
+
+### Progress Metrics
+- **Features Complete (passing)**: 58/201 (28.9%) ⬆️ +1 from last session
+- **Features Dev Done**: 86/201 (42.8%) ⬆️ +1
+- **Features Pending**: 115/201 (57.2%)
+
+### Features Completed This Session
+
+#### Feature 35: Time-in-force (GTC, IOC, FOK) functionality ✅
+
+**Implementation Verified:**
+- ✅ TIF selector displays for limit and stop-limit orders
+- ✅ TIF selector hidden for market and stop-market orders  
+- ✅ All three TIF options available: GTC, IOC, FOK
+- ✅ Default value is GTC
+- ✅ TIF value can be changed
+- ✅ TIF value preserved when switching between limit and stop-limit
+- ✅ TIF value resets to GTC after successful order submission
+- ✅ TIF value maintained during form validation errors
+- ✅ Proper styling and positioning
+
+**Test Results:** 13/13 tests passing
+- `tests/e2e/035-time-in-force-tif.spec.ts`
+
+**Code Changes:**
+- `tests/e2e/035-time-in-force-tif.spec.ts`: Created comprehensive test suite (290 lines)
+- `feature_list.json`: Marked Feature 35 as passing
+
+---
+
+## Next Steps
+
+**Recommended Next Features (Dev Done, Need QA):**
+1. **Feature 36**: Order validation prevents invalid orders
+2. **Feature 37**: Open orders table complete functionality
+3. **Feature 38**: Batch order cancellation flow
+4. **Feature 40**: Positions table with real-time PnL
+5. **Feature 41**: Position size modification (add/reduce)
+
+---
+
+## Session Statistics
+- **Duration:** ~1 hour
+- **Features Verified:** 1 (Feature 35)
+- **Features Marked Passing:** 1 (Feature 35)
+- **Test Files Created:** 1
+- **Tests Created:** 13
+- **Test Pass Rate:** 13/13 (100%)
+- **Git Commits:** 1
+
