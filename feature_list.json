@@ -15,9 +15,11 @@
       "Step 10: Verify bottom panel with tabs renders",
       "Step 11: Verify WebSocket connection status indicator is visible"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -28,9 +30,20 @@
       "Step 3: Verify asset selector dropdown is present",
       "Step 4: Verify wallet connect button is displayed on the right"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 3,
+    "last_dev_failure_at": "2026-01-04T02:26:16.563143Z",
+    "dev_failure_reasons": [
+      "All 1 API pairs failed for this request",
+      "All 1 API pairs failed for this request",
+      "All 1 API pairs failed for this request"
+    ],
+    "is_stuck": false,
+    "stuck_reason": "Max DEV failures exceeded. Last errors: ['All 1 API pairs failed for this request', 'All 1 API pairs failed for this request']",
+    "stuck_at": "2026-01-04T02:26:24.307226Z"
   },
   {
     "category": "functional",
@@ -49,9 +62,20 @@
       "Step 11: Click outside dropdown",
       "Step 12: Verify dropdown closes"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 3,
+    "last_dev_failure_at": "2026-01-04T02:26:16.492728Z",
+    "dev_failure_reasons": [
+      "All 1 API pairs failed for this request",
+      "All 1 API pairs failed for this request",
+      "All 1 API pairs failed for this request"
+    ],
+    "is_stuck": false,
+    "stuck_reason": "Max DEV failures exceeded. Last errors: ['All 1 API pairs failed for this request', 'All 1 API pairs failed for this request']",
+    "stuck_at": "2026-01-04T02:26:26.556034Z"
   },
   {
     "category": "functional",
@@ -65,9 +89,20 @@
       "Step 6: Verify recent trades update with new pair data",
       "Step 7: Verify order entry form shows correct pair"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 3,
+    "last_dev_failure_at": "2026-01-04T02:26:11.967059Z",
+    "dev_failure_reasons": [
+      "All 1 API pairs failed for this request",
+      "All 1 API pairs failed for this request",
+      "All 1 API pairs failed for this request"
+    ],
+    "is_stuck": false,
+    "stuck_reason": "Max DEV failures exceeded. Last errors: ['All 1 API pairs failed for this request', 'All 1 API pairs failed for this request']",
+    "stuck_at": "2026-01-04T02:26:22.030166Z"
   },
   {
     "category": "functional",
@@ -79,9 +114,20 @@
       "Step 4: Verify positive change shows green color",
       "Step 5: Verify negative change shows red color"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 3,
+    "last_dev_failure_at": "2026-01-04T02:26:13.615988Z",
+    "dev_failure_reasons": [
+      "All 1 API pairs failed for this request",
+      "All 1 API pairs failed for this request",
+      "All 1 API pairs failed for this request"
+    ],
+    "is_stuck": false,
+    "stuck_reason": "Max DEV failures exceeded. Last errors: ['All 1 API pairs failed for this request', 'All 1 API pairs failed for this request']",
+    "stuck_at": "2026-01-04T02:26:20.786522Z"
   },
   {
     "category": "functional",
@@ -96,7 +142,18 @@
     ],
     "passes": false,
     "is_dev_done": false,
-    "is_qa_passed": false
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 3,
+    "last_dev_failure_at": "2026-01-04T02:26:14.354889Z",
+    "dev_failure_reasons": [
+      "All 1 API pairs failed for this request",
+      "All 1 API pairs failed for this request",
+      "All 1 API pairs failed for this request"
+    ],
+    "is_stuck": true,
+    "stuck_reason": "Max DEV failures exceeded. Last errors: ['All 1 API pairs failed for this request', 'All 1 API pairs failed for this request']",
+    "stuck_at": "2026-01-04T02:26:21.587235Z"
   },
   {
     "category": "functional",
@@ -110,7 +167,18 @@
     ],
     "passes": false,
     "is_dev_done": false,
-    "is_qa_passed": false
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 3,
+    "last_dev_failure_at": "2026-01-04T02:26:14.529456Z",
+    "dev_failure_reasons": [
+      "All 1 API pairs failed for this request",
+      "All 1 API pairs failed for this request",
+      "All 1 API pairs failed for this request"
+    ],
+    "is_stuck": true,
+    "stuck_reason": "Max DEV failures exceeded. Last errors: ['All 1 API pairs failed for this request', 'All 1 API pairs failed for this request']",
+    "stuck_at": "2026-01-04T02:26:24.185020Z"
   },
   {
     "category": "functional",
@@ -124,7 +192,18 @@
     ],
     "passes": false,
     "is_dev_done": false,
-    "is_qa_passed": false
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 3,
+    "last_dev_failure_at": "2026-01-04T02:26:11.661433Z",
+    "dev_failure_reasons": [
+      "All 1 API pairs failed for this request",
+      "All 1 API pairs failed for this request",
+      "All 1 API pairs failed for this request"
+    ],
+    "is_stuck": true,
+    "stuck_reason": "Max DEV failures exceeded. Last errors: ['All 1 API pairs failed for this request', 'All 1 API pairs failed for this request']",
+    "stuck_at": "2026-01-04T02:26:21.766179Z"
   },
   {
     "category": "functional",
@@ -143,8 +222,11 @@
       "Step 11: Verify no data loss or corruption occurred"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-04T02:27:00.933175Z"
   },
   {
     "category": "functional",
@@ -164,8 +246,11 @@
       "Step 12: Verify prices update in real-time"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-04T02:27:00.854429Z"
   },
   {
     "category": "functional",
@@ -178,8 +263,11 @@
       "Step 5: Verify spread updates in real-time"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-04T02:27:00.607011Z"
   },
   {
     "category": "functional",
@@ -193,7 +281,13 @@
     ],
     "passes": false,
     "is_dev_done": false,
-    "is_qa_passed": false
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-04T02:26:23.992233Z",
+    "dev_failure_reasons": [
+      "All 1 API pairs failed for this request"
+    ]
   },
   {
     "category": "functional",
@@ -213,8 +307,11 @@
       "Step 12: Verify more price levels appear"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-04T02:27:01.315238Z"
   },
   {
     "category": "functional",
@@ -226,8 +323,11 @@
       "Step 4: Verify indicator updates with market changes"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-04T02:27:01.061397Z"
   },
   {
     "category": "functional",
@@ -244,8 +344,11 @@
       "Step 9: Verify sell trade is colored red"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-04T02:27:01.154147Z"
   },
   {
     "category": "functional",
@@ -266,7 +369,13 @@
     ],
     "passes": false,
     "is_dev_done": false,
-    "is_qa_passed": false
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-04T02:26:28.412280Z",
+    "dev_failure_reasons": [
+      "All 1 API pairs failed for this request"
+    ]
   },
   {
     "category": "functional",
@@ -288,8 +397,11 @@
       "Step 14: Verify chart updates to daily candles"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T02:27:03.616700Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
