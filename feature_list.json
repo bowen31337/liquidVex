@@ -795,10 +795,10 @@
       "Step 9: Submit order",
       "Step 10: Verify stop-loss order is linked to position"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
-    "qa_retry_count": 0,
+    "is_qa_passed": true,
+    "qa_retry_count": 1,
     "dev_completed_at": "2026-01-04T03:24:05.932461Z",
     "dev_failure_count": 0
   },
@@ -818,16 +818,17 @@
       "Step 10: Verify order is completely canceled",
       "Step 11: Verify no partial fill occurred"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
-    "notes": "TIF selector implemented for limit and stop-limit orders. GTC, IOC, FOK options available.",
+    "is_qa_passed": true,
+    "notes": "13/13 E2E tests passing. TIF selector works correctly for limit and stop-limit orders. GTC, IOC, FOK options all functional.",
     "qa_retry_count": 0,
     "dev_failure_count": 1,
     "last_dev_failure_at": "2026-01-04T03:33:51.268453Z",
     "dev_failure_reasons": [
       "Worker session timed out"
-    ]
+    ],
+    "qa_completed_at": "2026-01-04T21:17:46.049749Z"
   },
   {
     "category": "functional",
@@ -1685,9 +1686,10 @@
     "is_dev_done": false,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_failure_count": 1,
-    "last_dev_failure_at": "2026-01-04T09:35:35.468214Z",
+    "dev_failure_count": 2,
+    "last_dev_failure_at": "2026-01-04T10:05:37.683168Z",
     "dev_failure_reasons": [
+      "Worker session timed out",
       "Worker session timed out"
     ]
   },
@@ -1822,15 +1824,11 @@
       "Step 7: Verify warning text/icon is #f59e0b (amber)"
     ],
     "passes": false,
-    "is_dev_done": false,
+    "is_dev_done": true,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_failure_count": 2,
-    "last_dev_failure_at": "2026-01-04T09:57:10.542285Z",
-    "dev_failure_reasons": [
-      "Worker session timed out",
-      "Worker session timed out"
-    ]
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-04T10:17:15.772362Z"
   },
   {
     "category": "style",
@@ -1896,15 +1894,11 @@
       "Step 9: Test other buttons for hover states"
     ],
     "passes": false,
-    "is_dev_done": false,
+    "is_dev_done": true,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_failure_count": 2,
-    "last_dev_failure_at": "2026-01-04T10:02:44.615096Z",
-    "dev_failure_reasons": [
-      "Worker session timed out",
-      "Worker session timed out"
-    ]
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-04T10:06:51.538100Z"
   },
   {
     "category": "style",
@@ -1922,8 +1916,11 @@
       "Step 10: Verify hover moves correctly"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T10:05:15.000861Z",
+    "dev_failure_count": 0
   },
   {
     "category": "style",
@@ -1951,8 +1948,11 @@
       "Step 7: Verify animation is smooth"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T10:04:15.981696Z",
+    "dev_failure_count": 0
   },
   {
     "category": "style",
@@ -1968,8 +1968,11 @@
       "Step 8: Test on multiple button types"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T10:06:34.182294Z",
+    "dev_failure_count": 0
   },
   {
     "category": "style",
@@ -2017,8 +2020,11 @@
       "Step 4: Verify candlestick colors match design system"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T10:15:45.230243Z",
+    "dev_failure_count": 0
   },
   {
     "category": "style",
