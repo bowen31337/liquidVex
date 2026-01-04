@@ -7,11 +7,33 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Chart Functionality Tests', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:3002');
+    // Navigate with test mode to skip WebSocket connections
+    await page.goto('http://localhost:3002?testMode=true');
     await page.waitForLoadState('networkidle');
 
-    // Wait for chart to load
-    await page.waitForTimeout(2000);
+    // Populate store data to render real components instead of skeletons
+    await page.evaluate(() => {
+      const stores = (window as any).stores;
+      if (stores && stores.getMarketStoreState) {
+        const marketState = stores.getMarketStoreState();
+
+        // Set initial candles for the chart
+        const now = Date.now();
+        marketState.setCandles([
+          { t: now - 3600000, o: 95400, h: 95450, l: 95380, c: 95420, v: 100 },
+          { t: now - 2700000, o: 95420, h: 95460, l: 95400, c: 95440, v: 120 },
+          { t: now - 1800000, o: 95440, h: 95480, l: 95420, c: 95450, v: 90 },
+          { t: now - 900000, o: 95450, h: 95470, l: 95430, c: 95435, v: 110 },
+          { t: now, o: 95435, h: 95445, l: 95415, c: 95425, v: 80 },
+        ]);
+
+        // Set loading states to false to trigger real component rendering
+        marketState.setIsLoadingCandles(false);
+      }
+    });
+
+    // Wait for chart to render
+    await page.waitForTimeout(500);
   });
 
   test('should render chart with timeframe buttons', async ({ page }) => {
