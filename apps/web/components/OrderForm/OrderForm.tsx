@@ -191,7 +191,8 @@ export function OrderForm() {
         addOpenOrder(newOrder);
 
         // Show success message
-        showSuccess(`Order placed: ${orderForm.side.toUpperCase()} ${orderForm.size} @ $${orderForm.price}`);
+        const priceDisplay = orderForm.type === 'market' ? 'Market' : `$${orderForm.price}`;
+        showSuccess(`Order placed: ${orderForm.side.toUpperCase()} ${orderForm.size} @ ${priceDisplay}`);
         resetOrderForm();
       } else {
         showError(response.message || 'Order placement failed');

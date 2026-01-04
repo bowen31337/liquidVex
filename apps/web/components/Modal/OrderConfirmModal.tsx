@@ -29,9 +29,13 @@ export function OrderConfirmModal({
   const sideColor = orderForm.side === 'buy' ? 'text-long' : 'text-short';
   const sideBgColor = orderForm.side === 'buy' ? 'bg-long' : 'bg-short';
   const sideLabel = orderForm.side === 'buy' ? 'BUY / LONG' : 'SELL / SHORT';
-  const price = parseFloat(orderForm.price).toFixed(2);
+
+  // For market orders, show "Market" instead of price
+  const isMarketOrder = orderForm.type === 'market' || orderForm.type === 'stop_market';
+  const displayPrice = isMarketOrder ? 'Market' : parseFloat(orderForm.price).toFixed(2);
+  const priceValue = isMarketOrder ? 0 : parseFloat(orderForm.price);
   const size = orderForm.size;
-  const value = (parseFloat(orderForm.price) * parseFloat(size || '0')).toFixed(2);
+  const value = (priceValue * parseFloat(size || '0')).toFixed(2);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -42,7 +46,7 @@ export function OrderConfirmModal({
       />
 
       {/* Modal */}
-      <div className="relative bg-surface border border-border rounded-lg shadow-xl w-full max-w-md mx-4 animate-fade-in">
+      <div data-testid="order-confirm-modal" className="relative bg-surface border border-border rounded-lg shadow-xl w-full max-w-md mx-4 animate-fade-in">
         {/* Header */}
         <div className="px-4 py-3 border-b border-border">
           <h2 className="text-lg font-semibold text-text-primary">
@@ -79,7 +83,7 @@ export function OrderConfirmModal({
           <div className="flex items-center justify-between">
             <span className="text-text-secondary text-sm">Price</span>
             <span className="text-text-primary font-mono font-medium">
-              ${price}
+              {isMarketOrder ? displayPrice : `$${displayPrice}`}
             </span>
           </div>
 
