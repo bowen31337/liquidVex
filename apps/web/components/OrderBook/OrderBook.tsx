@@ -221,14 +221,14 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
                     className="absolute right-0 top-0 bottom-0 bg-short opacity-20"
                     style={{ width: `${barWidth}%` }}
                   />
-                  {/* Size (Left) */}
-                  <div className="flex-1 text-short z-10">{formatSize(level.sz)}</div>
+                  {/* Empty (Left for symmetry) */}
+                  <div className="flex-1"></div>
                   {/* Price (Center) */}
                   <div className="flex-1 text-center text-text-primary z-10 font-medium" data-testid="ask-price">
                     {formatPrice(level.px)}
                   </div>
-                  {/* Empty (Right for symmetry) */}
-                  <div className="flex-1"></div>
+                  {/* Size (Right) */}
+                  <div className="flex-1 text-right text-short z-10">{formatSize(level.sz)}</div>
                 </div>
               );
             })
@@ -255,14 +255,14 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
                     className="absolute left-0 top-0 bottom-0 bg-long opacity-20"
                     style={{ width: `${barWidth}%` }}
                   />
-                  {/* Empty (Left for symmetry) */}
-                  <div className="flex-1"></div>
+                  {/* Size (Left) */}
+                  <div className="flex-1 text-left text-long z-10">{formatSize(level.sz)}</div>
                   {/* Price (Center) */}
                   <div className="flex-1 text-center text-text-primary z-10 font-medium" data-testid="bid-price">
                     {formatPrice(level.px)}
                   </div>
-                  {/* Size (Right) */}
-                  <div className="flex-1 text-right text-long z-10">{formatSize(level.sz)}</div>
+                  {/* Empty (Right for symmetry) */}
+                  <div className="flex-1"></div>
                 </div>
               );
             })
