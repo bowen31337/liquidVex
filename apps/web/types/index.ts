@@ -56,6 +56,7 @@ export interface Trade {
   sz: number;
   time: number;
   hash: string;
+  fee?: number;  // Optional fee field for trade history
 }
 
 export interface TradeData {
