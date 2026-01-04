@@ -1,0 +1,23 @@
+{
+  "name": "liquidvex",
+  "private": true,
+  "scripts": {
+    "dev": "turbo run dev",
+    "dev:web": "turbo run dev --filter=@liquidvex/web",
+    "dev:api": "cd apps/api && uv run python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "type-check": "turbo run type-check",
+    "test": "turbo run test",
+    "test:e2e": "pnpm exec playwright test",
+    "clean": "turbo run clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0",
+    "@playwright/test": "^1.42.0"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
