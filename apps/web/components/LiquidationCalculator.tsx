@@ -84,6 +84,7 @@ export function LiquidationCalculator() {
         <div>
           <label className="block text-xs text-text-secondary mb-1">Position Size</label>
           <input
+            data-testid="calculator-position-size"
             type="number"
             value={state.positionSize}
             onChange={(e) => handleInputChange('positionSize', e.target.value)}
@@ -95,6 +96,7 @@ export function LiquidationCalculator() {
         <div>
           <label className="block text-xs text-text-secondary mb-1">Entry Price</label>
           <input
+            data-testid="calculator-entry-price"
             type="number"
             value={state.entryPrice}
             onChange={(e) => handleInputChange('entryPrice', e.target.value)}
@@ -107,6 +109,7 @@ export function LiquidationCalculator() {
           <label className="block text-xs text-text-secondary mb-1">Leverage</label>
           <div className="flex gap-2">
             <input
+              data-testid="calculator-leverage"
               type="number"
               value={state.leverage}
               onChange={(e) => handleInputChange('leverage', e.target.value)}
@@ -121,6 +124,7 @@ export function LiquidationCalculator() {
         <div>
           <label className="block text-xs text-text-secondary mb-1">Margin Type</label>
           <select
+            data-testid="calculator-margin-type"
             value={state.marginType}
             onChange={(e) => handleInputChange('marginType', e.target.value as 'cross' | 'isolated')}
             className="w-full px-3 py-2 bg-surface border border-border rounded text-text-primary focus:outline-none focus:border-accent"

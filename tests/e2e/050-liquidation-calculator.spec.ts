@@ -29,10 +29,10 @@ test.describe('Liquidation Calculator', () => {
     const header = page.locator('text=Liquidation Calculator');
     await expect(header).toBeVisible();
 
-    // Verify input fields exist
-    const positionSizeInput = page.locator('input[placeholder="0.0000"]');
-    const entryPriceInput = page.locator('input[placeholder="0.00"]');
-    const leverageInput = page.locator('input[type="number"]').filter({ hasText: '' }).nth(1);
+    // Verify input fields exist using data-testid
+    const positionSizeInput = page.locator('[data-testid="calculator-position-size"]');
+    const entryPriceInput = page.locator('[data-testid="calculator-entry-price"]');
+    const leverageInput = page.locator('[data-testid="calculator-leverage"]');
 
     await expect(positionSizeInput).toBeVisible();
     await expect(entryPriceInput).toBeVisible();
@@ -45,7 +45,7 @@ test.describe('Liquidation Calculator', () => {
     await page.waitForTimeout(300);
 
     // Enter position size
-    const positionSizeInput = page.locator('input[placeholder="0.0000"]');
+    const positionSizeInput = page.locator('[data-testid="calculator-position-size"]');
     await positionSizeInput.fill('1.5');
     await expect(positionSizeInput).toHaveValue('1.5');
   });
@@ -56,7 +56,7 @@ test.describe('Liquidation Calculator', () => {
     await page.waitForTimeout(300);
 
     // Enter entry price
-    const entryPriceInput = page.locator('input[placeholder="0.00"]');
+    const entryPriceInput = page.locator('[data-testid="calculator-entry-price"]');
     await entryPriceInput.fill('50000');
     await expect(entryPriceInput).toHaveValue('50000');
   });
@@ -66,8 +66,8 @@ test.describe('Liquidation Calculator', () => {
     await page.locator('button:has-text("Calculator")').click();
     await page.waitForTimeout(300);
 
-    // Find leverage input (second number input after position size and entry price)
-    const leverageInput = page.locator('input[type="number"]').filter({ hasText: '' }).nth(1);
+    // Find leverage input
+    const leverageInput = page.locator('[data-testid="calculator-leverage"]');
     await leverageInput.fill('20');
     await expect(leverageInput).toHaveValue('20');
   });
@@ -77,10 +77,10 @@ test.describe('Liquidation Calculator', () => {
     await page.locator('button:has-text("Calculator")').click();
     await page.waitForTimeout(300);
 
-    // Fill in all inputs
-    const positionSizeInput = page.locator('input[placeholder="0.0000"]');
-    const entryPriceInput = page.locator('input[placeholder="0.00"]');
-    const leverageInput = page.locator('input[type="number"]').filter({ hasText: '' }).nth(1);
+    // Fill in all inputs using data-testid
+    const positionSizeInput = page.locator('[data-testid="calculator-position-size"]');
+    const entryPriceInput = page.locator('[data-testid="calculator-entry-price"]');
+    const leverageInput = page.locator('[data-testid="calculator-leverage"]');
 
     await positionSizeInput.fill('1.0');
     await entryPriceInput.fill('50000');
@@ -89,13 +89,15 @@ test.describe('Liquidation Calculator', () => {
     // Wait for calculation
     await page.waitForTimeout(500);
 
-    // Verify liquidation price is displayed
-    const liqPriceText = page.locator('text=Liquidation Price');
+    // Verify liquidation price is displayed - use the result section which has the value
+    // The result section shows "Liquidation Price" label followed by the value
+    const calculator = page.locator('[data-testid="liquidation-calculator"]');
+    const liqPriceText = calculator.locator('text=Liquidation Price').first();
     await expect(liqPriceText).toBeVisible();
 
     // The calculated liquidation price for long position with 10x leverage
     // should be: 50000 - (50000/10) = 45000
-    const liqPriceValue = page.locator('.font-mono.font-bold.text-short');
+    const liqPriceValue = calculator.locator('.font-mono.font-bold.text-short');
     await expect(liqPriceValue).toBeVisible();
 
     // Verify it shows a dollar amount
@@ -109,9 +111,9 @@ test.describe('Liquidation Calculator', () => {
     await page.waitForTimeout(300);
 
     // Fill in inputs with high leverage (high risk)
-    const positionSizeInput = page.locator('input[placeholder="0.0000"]');
-    const entryPriceInput = page.locator('input[placeholder="0.00"]');
-    const leverageInput = page.locator('input[type="number"]').filter({ hasText: '' }).nth(1);
+    const positionSizeInput = page.locator('[data-testid="calculator-position-size"]');
+    const entryPriceInput = page.locator('[data-testid="calculator-entry-price"]');
+    const leverageInput = page.locator('[data-testid="calculator-leverage"]');
 
     await positionSizeInput.fill('1.0');
     await entryPriceInput.fill('50000');
@@ -130,9 +132,9 @@ test.describe('Liquidation Calculator', () => {
     await page.waitForTimeout(300);
 
     // Fill in inputs
-    const positionSizeInput = page.locator('input[placeholder="0.0000"]');
-    const entryPriceInput = page.locator('input[placeholder="0.00"]');
-    const leverageInput = page.locator('input[type="number"]').filter({ hasText: '' }).nth(1);
+    const positionSizeInput = page.locator('[data-testid="calculator-position-size"]');
+    const entryPriceInput = page.locator('[data-testid="calculator-entry-price"]');
+    const leverageInput = page.locator('[data-testid="calculator-leverage"]');
 
     await positionSizeInput.fill('1.0');
     await entryPriceInput.fill('50000');
@@ -150,8 +152,8 @@ test.describe('Liquidation Calculator', () => {
     await page.locator('button:has-text("Calculator")').click();
     await page.waitForTimeout(300);
 
-    // Find margin type selector
-    const marginSelect = page.locator('select').filter({ hasText: /Cross|Isolated/ });
+    // Find margin type selector using data-testid
+    const marginSelect = page.locator('[data-testid="calculator-margin-type"]');
     await expect(marginSelect).toBeVisible();
 
     // Change to isolated
@@ -169,9 +171,9 @@ test.describe('Liquidation Calculator', () => {
     await page.waitForTimeout(300);
 
     // Fill in initial inputs
-    const positionSizeInput = page.locator('input[placeholder="0.0000"]');
-    const entryPriceInput = page.locator('input[placeholder="0.00"]');
-    const leverageInput = page.locator('input[type="number"]').filter({ hasText: '' }).nth(1);
+    const positionSizeInput = page.locator('[data-testid="calculator-position-size"]');
+    const entryPriceInput = page.locator('[data-testid="calculator-entry-price"]');
+    const leverageInput = page.locator('[data-testid="calculator-leverage"]');
 
     await positionSizeInput.fill('1.0');
     await entryPriceInput.fill('50000');
@@ -198,9 +200,9 @@ test.describe('Liquidation Calculator', () => {
     await page.waitForTimeout(300);
 
     // Fill in inputs with very high leverage
-    const positionSizeInput = page.locator('input[placeholder="0.0000"]');
-    const entryPriceInput = page.locator('input[placeholder="0.00"]');
-    const leverageInput = page.locator('input[type="number"]').filter({ hasText: '' }).nth(1);
+    const positionSizeInput = page.locator('[data-testid="calculator-position-size"]');
+    const entryPriceInput = page.locator('[data-testid="calculator-entry-price"]');
+    const leverageInput = page.locator('[data-testid="calculator-leverage"]');
 
     await positionSizeInput.fill('1.0');
     await entryPriceInput.fill('50000');

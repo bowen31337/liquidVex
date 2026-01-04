@@ -1439,9 +1439,9 @@
       "Step 4: Verify each candle has OHLCV fields",
       "Step 5: Test different intervals"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T08:15:36.310560Z",
     "dev_failure_count": 0
