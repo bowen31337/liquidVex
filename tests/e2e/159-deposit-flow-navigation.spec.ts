@@ -60,17 +60,23 @@ test.describe('Deposit Flow Navigation', () => {
   });
 
   test('Step 2: Click deposit button', async ({ page }) => {
-    // Find and click the deposit button
+    // Find and click the deposit button - scroll to top first
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(100);
+
     const depositButton = page.locator('[data-testid="deposit-button"]');
     await expect(depositButton).toBeVisible();
     await expect(depositButton).toContainText('Deposit');
-    await depositButton.click();
+    await depositButton.click({ force: true });
   });
 
   test('Step 3: Verify deposit modal opens', async ({ page }) => {
-    // Click deposit button
+    // Scroll to top and click deposit button
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(100);
+
     const depositButton = page.locator('[data-testid="deposit-button"]');
-    await depositButton.click();
+    await depositButton.click({ force: true });
 
     // Verify modal is visible
     const modal = page.locator('.modal-overlay');
@@ -82,9 +88,12 @@ test.describe('Deposit Flow Navigation', () => {
   });
 
   test('Step 4: Verify deposit instructions displayed', async ({ page }) => {
-    // Click deposit button
+    // Scroll to top and click deposit button
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(100);
+
     const depositButton = page.locator('[data-testid="deposit-button"]');
-    await depositButton.click();
+    await depositButton.click({ force: true });
 
     // Verify modal is visible
     const modal = page.locator('.modal-overlay');

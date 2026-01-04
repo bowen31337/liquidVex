@@ -2,7 +2,7 @@
  * Global stores for testing - available immediately when module loads
  */
 
-import { useOrderStore } from '../stores/orderStore';
+import { useOrderStore, useUIStore } from '../stores/orderStore';
 import { useMarketStore } from '../stores/marketStore';
 import { useWalletStore } from '../stores/walletStore';
 
@@ -20,6 +20,9 @@ if (typeof window !== 'undefined') {
       useOrderStore,
       getOrderStoreState: () => useOrderStore.getState(),
       getOrderStore: () => useOrderStore,
+      useUIStore,
+      getUIStoreState: () => useUIStore.getState(),
+      getUIStore: () => useUIStore,
       useMarketStore,
       getMarketStoreState: () => useMarketStore.getState(),
       getMarketStore: () => useMarketStore,

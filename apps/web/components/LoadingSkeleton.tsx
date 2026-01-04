@@ -237,7 +237,7 @@ export const BottomPanelSkeleton = () => (
  * PositionsTable loading skeleton
  */
 export const PositionsTableSkeleton = () => (
-  <div className="panel p-3">
+  <div className="panel p-3" data-testid="positions-table-skeleton">
     <div className="mb-2">
       <LoadingSkeleton width={120} height={20} className="rounded" />
     </div>

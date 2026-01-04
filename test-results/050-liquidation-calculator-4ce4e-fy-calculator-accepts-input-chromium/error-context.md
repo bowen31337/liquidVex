@@ -1,0 +1,107 @@
+# Page snapshot
+
+```yaml
+- main [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - heading "liquidVex" [level=1] [ref=e5]
+      - button "Select trading pair" [ref=e7]:
+        - text: BTC-PERP
+        - img [ref=e8]
+    - generic [ref=e10]:
+      - generic [ref=e11]:
+        - generic [ref=e12]: $95,420.50
+        - generic [ref=e13]: +2.34%
+      - generic [ref=e14]:
+        - generic "Mark Price" [ref=e15]: "M: $95,420.50"
+        - generic "Index Price" [ref=e16]: "I: $95,420.00"
+      - generic [ref=e17]:
+        - generic "Funding Rate" [ref=e18]: "F: 0.010%"
+        - generic "Next Funding" [ref=e19]: 1h 0m
+      - generic [ref=e20]:
+        - generic "24h Volume" [ref=e21]: "Vol: $0"
+        - generic "Open Interest" [ref=e22]: "OI: $0"
+      - button "Open settings" [ref=e23]:
+        - img [ref=e24]
+      - button "Connect wallet" [ref=e28]: Connect Wallet
+  - generic [ref=e29]:
+    - button "Full-screen Chart" [ref=e30]: Full-screen
+    - button "Toggle compact mode" [ref=e31]: Normal
+  - generic [ref=e32]:
+    - generic [ref=e33]:
+      - generic [ref=e45]: Loading Chart...
+      - separator "Resize panel"
+    - generic [ref=e46]:
+      - separator "Resize panel"
+    - region "Order Entry Form" [ref=e171]:
+      - generic [ref=e172]:
+        - button "Switch to Buy / Long order" [pressed] [ref=e174]: Buy / Long
+        - button "Switch to Sell / Short order" [ref=e176]: Sell / Short
+      - generic [ref=e177]:
+        - text: Order Type
+        - combobox "Order type selection" [ref=e178]:
+          - option "Limit" [selected]
+          - option "Market"
+          - option "Stop Limit"
+          - option "Stop Market"
+      - generic [ref=e179]:
+        - generic [ref=e180]:
+          - text: Price
+          - generic [ref=e181]:
+            - button "Decrease price by 0.5" [ref=e182]: "-"
+            - button "Increase price by 0.5" [ref=e183]: +
+        - spinbutton "Order price" [ref=e184]
+      - generic [ref=e185]:
+        - text: Size
+        - spinbutton "Order size" [ref=e186]
+        - generic [ref=e187]:
+          - button "Set size to 25% of available balance" [ref=e188]: 25%
+          - button "Set size to 50% of available balance" [ref=e189]: 50%
+          - button "Set size to 75% of available balance" [ref=e190]: 75%
+          - button "Set size to 100% of available balance" [ref=e191]: 100%
+      - generic [ref=e192]:
+        - generic [ref=e193]:
+          - text: Leverage
+          - generic [ref=e194]: 10x
+        - slider "Leverage" [ref=e195]: "10"
+      - generic [ref=e196]:
+        - generic [ref=e197]:
+          - checkbox "Reduce only - position will only decrease" [ref=e198]
+          - text: Reduce Only
+        - generic [ref=e199]:
+          - checkbox "Post only - order will not match existing orders" [ref=e200]
+          - text: Post Only
+      - generic [ref=e201]:
+        - text: Time-in-Force
+        - combobox "Time in force selection" [ref=e202]:
+          - option "Good Till Cancelled (GTC)" [selected]
+          - option "Immediate or Cancel (IOC)"
+          - option "Fill or Kill (FOK)"
+      - button "Submit buy order" [ref=e204]: Buy / Long
+      - generic [ref=e205]:
+        - generic [ref=e206]:
+          - text: Order Value
+          - generic [ref=e207]: $0.00
+        - generic [ref=e208]:
+          - text: Required Margin
+          - generic [ref=e209]: $0.00
+        - generic [ref=e210]:
+          - text: Available Margin
+          - generic [ref=e211]: $0.00
+        - generic [ref=e212]:
+          - text: Leverage
+          - generic [ref=e213]: 10x
+        - generic [ref=e214]:
+          - text: Available
+          - generic [ref=e215]: $10,000.00
+  - generic [ref=e216]:
+    - generic [ref=e217]:
+      - generic [ref=e218]:
+        - button "Positions" [ref=e219]
+        - button "Open Orders" [ref=e220]
+        - button "Order History" [ref=e221]
+        - button "Trade History" [ref=e222]
+        - button "Calculator" [active] [ref=e223]
+      - generic [ref=e226]: Disconnected
+    - generic [ref=e228]: Connect your wallet to view positions and orders
+```
