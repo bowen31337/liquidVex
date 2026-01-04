@@ -50,10 +50,11 @@ test.describe('Application Startup and Initial Render', () => {
     await expect(header.getByText('Connect Wallet')).toBeVisible();
 
     // Step 6: Verify chart panel renders with loading state or data
-    const chartPanel = page.locator('.panel').first();
+    const chartPanel = page.locator('.chart-panel').first();
     await expect(chartPanel).toBeVisible();
     await expect(chartPanel).toContainText('Chart');
-    await expect(chartPanel).toContainText('1m');
+    // Check for any timeframe button (1m, 5m, 15m, 1h, 4h, 1D)
+    await expect(chartPanel.locator('button:has-text("1m"), button:has-text("5m"), button:has-text("15m"), button:has-text("1h"), button:has-text("4h"), button:has-text("1D")').first()).toBeVisible();
 
     // Step 7: Verify order book panel renders with bid/ask columns
     const orderBookPanel = page.locator('div.panel:has-text("Order Book")').first();
@@ -67,11 +68,12 @@ test.describe('Application Startup and Initial Render', () => {
     const orderEntryPanel = page.locator('text=Buy / Long').first();
     await expect(orderEntryPanel).toBeVisible();
 
-    // Check for form fields
-    await expect(page.locator('select')).toBeVisible(); // Order type selector
-    await expect(page.locator('input[type="number"]')).toHaveCount(2); // Price and Size inputs
-    await expect(page.locator('input[type="range"]')).toBeVisible(); // Leverage slider
-    await expect(page.locator('input[type="checkbox"]')).toHaveCount(2); // Reduce Only, Post Only
+    // Check for form fields - find the order form panel first
+    const orderFormPanel = orderEntryPanel.locator('xpath=ancestor::div[contains(@class, "panel")]');
+    await expect(orderFormPanel.locator('select').first()).toBeVisible(); // Order type selector
+    await expect(orderFormPanel.locator('input[type="number"]')).toHaveCount(2); // Price and Size inputs
+    await expect(orderFormPanel.locator('input[type="range"]')).toBeVisible(); // Leverage slider
+    await expect(orderFormPanel.locator('input[type="checkbox"]')).toHaveCount(2); // Reduce Only, Post Only
 
     // Step 10: Verify bottom panel with tabs renders
     const positionsTab = page.locator('button:has-text("Positions")').first();

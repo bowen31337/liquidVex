@@ -882,7 +882,10 @@
     "passes": false,
     "is_dev_done": true,
     "is_qa_passed": false,
-    "notes": "Added Cancel All button to OrdersTable header. Uses cancelAllOrders API endpoint."
+    "notes": "Added Cancel All button to OrdersTable header. Uses cancelAllOrders API endpoint.",
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T03:36:53.855090Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -961,8 +964,11 @@
       "Step 11: Verify position size decreased"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T03:41:32.395482Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -999,8 +1005,9 @@
       "Step 11: Verify all items are shown again"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "dev_completed_at": "2026-01-04T03:40:44Z"
   },
   {
     "category": "functional",

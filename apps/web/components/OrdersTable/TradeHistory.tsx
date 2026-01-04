@@ -42,7 +42,7 @@ export function TradeHistory() {
 
   if (!isConnected) {
     return (
-      <div className="p-4 text-center text-text-tertiary text-sm">
+      <div className="p-4 text-center text-text-tertiary text-sm pointer-events-none">
         Connect your wallet to view trade history
       </div>
     );
@@ -50,7 +50,7 @@ export function TradeHistory() {
 
   if (tradeHistory.length === 0) {
     return (
-      <div className="p-4 text-center text-text-tertiary text-sm">
+      <div className="p-4 text-center text-text-tertiary text-sm pointer-events-none">
         No trade history
       </div>
     );

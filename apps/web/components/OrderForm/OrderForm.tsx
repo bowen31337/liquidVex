@@ -220,7 +220,7 @@ export function OrderForm() {
   const showPriceInput = ['limit', 'stop_limit'].includes(orderForm.type);
 
   return (
-    <div className="panel p-3 flex flex-col h-full">
+    <div className="panel p-3 flex flex-col h-full relative z-10">
       {/* Buy/Sell Toggle */}
       <div className="flex mb-4">
         <button
@@ -322,6 +322,7 @@ export function OrderForm() {
           onChange={(e) => handleInputChange('size', e.target.value)}
           placeholder="0.00"
           className="input w-full mt-1 font-mono"
+          data-testid="order-size-input"
         />
         <div className="flex gap-1 mt-2">
           {['25%', '50%', '75%', '100%'].map((pct, idx) => (

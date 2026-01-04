@@ -22,6 +22,7 @@ interface OrderState {
   positions: Position[];
   setPositions: (positions: Position[]) => void;
   addPosition: (position: Position) => void;
+  removePosition: (coin: string) => void;
   clearPositions: () => void;
 
   // Open orders
@@ -59,6 +60,7 @@ export const useOrderStore = create<OrderState>((set) => ({
   positions: [],
   setPositions: (positions) => set({ positions }),
   addPosition: (position) => set((state) => ({ positions: [...state.positions, position] })),
+  removePosition: (coin) => set((state) => ({ positions: state.positions.filter(p => p.coin !== coin) })),
   clearPositions: () => set({ positions: [] }),
 
   openOrders: [],

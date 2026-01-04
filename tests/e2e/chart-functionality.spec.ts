@@ -15,25 +15,24 @@ test.describe('Chart Functionality Tests', () => {
   });
 
   test('should render chart with timeframe buttons', async ({ page }) => {
-    const chartPanel = page.locator('.panel').filter({ hasText: 'TradingView Chart' });
+    const chartPanel = page.locator('.chart-panel');
     await expect(chartPanel).toBeVisible();
 
     // Step 1: Verify chart container is visible
     const chartContainer = chartPanel.locator('[data-testid="chart-container"]');
     await expect(chartContainer).toBeVisible();
 
-    // Step 2: Verify timeframe buttons are present
-    const timeframeButtons = chartPanel.locator('button:has-text("1m"), button:has-text("5m"), button:has-text("15m"), button:has-text("1h"), button:has-text("4h"), button:has-text("1d")');
+    // Step 2: Verify timeframe buttons are present (6 buttons: 1m, 5m, 15m, 1h, 4h, 1D)
+    const timeframeButtons = chartPanel.locator('button:has-text("1m"), button:has-text("5m"), button:has-text("15m"), button:has-text("1h"), button:has-text("4h"), button:has-text("1D")');
     await expect(timeframeButtons).toHaveCount(6);
 
-    // Step 3: Verify default timeframe is selected (1m)
-    const defaultButton = chartPanel.locator('button:has-text("1m")');
-    await expect(defaultButton).toBeVisible();
+    // Step 3: Verify default timeframe is selected (1h based on Chart component)
+    const defaultButton = chartPanel.locator('button:has-text("1h")');
+    await expect(defaultButton).toHaveClass(/bg-accent/);
   });
 
   test('should switch between timeframe buttons', async ({ page }) => {
-    // Find the specific chart panel with TradingView Chart text
-    const chartPanel = page.locator('.panel').filter({ hasText: 'TradingView Chart' });
+    const chartPanel = page.locator('.chart-panel');
 
     // Test switching to 5m timeframe
     const fiveMButton = chartPanel.locator('button:has-text("5m")').first();
@@ -61,7 +60,7 @@ test.describe('Chart Functionality Tests', () => {
   });
 
   test('should render candlestick chart by default', async ({ page }) => {
-    const chartPanel = page.locator('.panel').filter({ hasText: 'TradingView Chart' });
+    const chartPanel = page.locator('.chart-panel');
 
     // Wait for chart data to load
     await page.waitForTimeout(1000);
@@ -77,7 +76,7 @@ test.describe('Chart Functionality Tests', () => {
   });
 
   test('should switch between candlestick and line chart modes', async ({ page }) => {
-    const chartPanel = page.locator('.panel').filter({ hasText: 'TradingView Chart' });
+    const chartPanel = page.locator('.chart-panel');
 
     // Wait for initial chart to load
     await page.waitForTimeout(1000);
@@ -104,7 +103,8 @@ test.describe('Chart Functionality Tests', () => {
   });
 
   test('should handle full-screen toggle', async ({ page }) => {
-    const chartPanel = page.locator('.panel').filter({ hasText: 'TradingView Chart' });
+    // Use the chart-panel class for more specific targeting
+    const chartPanel = page.locator('.chart-panel');
 
     // Find full-screen button
     const fullscreenButton = chartPanel.locator('button:has-text("Full"), button:has-text("Exit")');
@@ -116,8 +116,9 @@ test.describe('Chart Functionality Tests', () => {
     // Wait for transition
     await page.waitForTimeout(500);
 
-    // Click to exit full screen
-    const exitFullscreenButton = chartPanel.locator('button:has-text("Exit")');
+    // After fullscreen, the panel gets fixed positioning - need to re-locate
+    // The button text changes to "Exit" after entering fullscreen
+    const exitFullscreenButton = page.locator('button:has-text("Exit")').first();
     await expect(exitFullscreenButton).toBeVisible();
     await exitFullscreenButton.click();
 
@@ -125,12 +126,12 @@ test.describe('Chart Functionality Tests', () => {
     await page.waitForTimeout(500);
 
     // Verify chart is still visible
-    const chartCanvas = chartPanel.locator('[data-testid="chart-container"] canvas').first();
+    const chartCanvas = page.locator('[data-testid="chart-container"] canvas').first();
     await expect(chartCanvas).toBeVisible();
   });
 
   test('should update chart with real-time data from WebSocket', async ({ page }) => {
-    const chartPanel = page.locator('.panel').filter({ hasText: 'TradingView Chart' });
+    const chartPanel = page.locator('.chart-panel');
 
     // Wait for initial data
     await page.waitForTimeout(2000);
@@ -153,7 +154,7 @@ test.describe('Chart Functionality Tests', () => {
   });
 
   test('should display chart controls and labels', async ({ page }) => {
-    const chartPanel = page.locator('.panel').filter({ hasText: 'TradingView Chart' });
+    const chartPanel = page.locator('.chart-panel');
 
     // Verify chart controls are present
     const timeframeControls = chartPanel.locator('div.flex.items-center.justify-between');
@@ -169,7 +170,7 @@ test.describe('Chart Functionality Tests', () => {
   });
 
   test('should handle chart loading states gracefully', async ({ page }) => {
-    const chartPanel = page.locator('.panel').filter({ hasText: 'TradingView Chart' });
+    const chartPanel = page.locator('.chart-panel');
 
     // Chart should either show data or loading state
     const chartCanvas = chartPanel.locator('[data-testid="chart-container"] canvas').first();

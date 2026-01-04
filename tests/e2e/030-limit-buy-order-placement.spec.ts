@@ -10,9 +10,9 @@ test.describe('Limit Buy Order Placement Flow', () => {
     // Navigate to the application
     await page.goto('/');
 
-    // Wait for the page to load completely
-    await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(1000);
+    // Wait for the main trading interface to be visible
+    await page.waitForSelector('[data-testid="wallet-connect-button"]', { timeout: 10000 });
+    await page.waitForTimeout(500);
 
     // Filter out expected console errors
     page.on('console', (message) => {
@@ -40,7 +40,7 @@ test.describe('Limit Buy Order Placement Flow', () => {
     await expect(walletButtonAfter).toBeVisible();
 
     // Step 2-3: Navigate to order entry form and verify Buy tab is selected
-    const buyTab = page.locator('button:has-text("Buy / Long")');
+    const buyTab = page.locator('button:has-text("Buy / Long")').first();
     await expect(buyTab).toBeVisible();
     const buyTabClass = await buyTab.getAttribute('class');
     expect(buyTabClass).toContain('bg-long');
@@ -67,7 +67,7 @@ test.describe('Limit Buy Order Placement Flow', () => {
     expect(priceValue).toBe('95.00');
 
     // Step 7: Enter valid size
-    const sizeInput = page.locator('input[type="number"]').nth(1); // Size input is second number input
+    const sizeInput = page.getByTestId('order-size-input');
     await sizeInput.fill('1.5');
     await page.waitForTimeout(300);
 
@@ -149,7 +149,7 @@ test.describe('Limit Buy Order Placement Flow', () => {
     const priceInput = page.getByTestId('order-price-input');
     await priceInput.fill('95.00');
 
-    const sizeInput = page.locator('input[type="number"]').nth(1);
+    const sizeInput = page.getByTestId('order-size-input');
     await sizeInput.fill('1.5');
 
     // Click buy button
@@ -181,7 +181,7 @@ test.describe('Limit Buy Order Placement Flow', () => {
     const priceInput = page.getByTestId('order-price-input');
     await priceInput.fill('95.00');
 
-    const sizeInput = page.locator('input[type="number"]').nth(1);
+    const sizeInput = page.getByTestId('order-size-input');
     await sizeInput.fill('1.5');
 
     // Click buy button
@@ -211,7 +211,7 @@ test.describe('Limit Buy Order Placement Flow', () => {
     const priceInput = page.getByTestId('order-price-input');
     await priceInput.fill('88.50');
 
-    const sizeInput = page.locator('input[type="number"]').nth(1);
+    const sizeInput = page.getByTestId('order-size-input');
     await sizeInput.fill('2.0');
 
     // Click buy button
@@ -242,7 +242,7 @@ test.describe('Limit Buy Order Placement Flow', () => {
     const priceInput = page.getByTestId('order-price-input');
     await priceInput.fill('92.00');
 
-    const sizeInput = page.locator('input[type="number"]').nth(1);
+    const sizeInput = page.getByTestId('order-size-input');
     await sizeInput.fill('1.0');
 
     // Submit order

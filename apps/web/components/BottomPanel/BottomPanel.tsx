@@ -7,6 +7,7 @@
 import { useOrderStore } from '../../stores/orderStore';
 import { PositionsTable } from '../PositionsTable/PositionsTable';
 import { OrdersTable } from '../OrdersTable/OrdersTable';
+import { OrderHistory } from '../OrdersTable/OrderHistory';
 import { TradeHistory } from '../OrdersTable/TradeHistory';
 
 const TABS = ['Positions', 'Open Orders', 'Order History', 'Trade History'] as const;
@@ -36,11 +37,7 @@ export function BottomPanel() {
       case 'Open Orders':
         return <OrdersTable />;
       case 'Order History':
-        return (
-          <div className="p-4 text-center text-text-tertiary text-sm">
-            Order history coming soon
-          </div>
-        );
+        return <OrderHistory />;
       case 'Trade History':
         return <TradeHistory />;
       default:

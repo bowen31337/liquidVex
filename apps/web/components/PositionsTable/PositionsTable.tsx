@@ -9,13 +9,20 @@ import { useOrderStore } from '../../stores/orderStore';
 import { useWalletStore } from '../../stores/walletStore';
 import { useApi } from '../../hooks/useApi';
 import { useMarketStore } from '../../stores/marketStore';
+import { PositionCloseModal } from '../Modal/PositionCloseModal';
+import { useToast } from '../Toast/Toast';
+import { Position } from '../../types';
 
 export function PositionsTable() {
-  const { positions, setPositions } = useOrderStore();
+  const { positions, setPositions, removePosition } = useOrderStore();
   const { isConnected, address } = useWalletStore();
-  const { getPositions } = useApi();
+  const { getPositions, closePosition } = useApi();
   const { allMids } = useMarketStore();
+  const { success, error } = useToast();
   const [markPrices, setMarkPrices] = useState<Record<string, number>>({});
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedPosition, setSelectedPosition] = useState<Position | null>(null);
+  const [isClosing, setIsClosing] = useState(false);
 
   // Load positions when wallet connects
   useEffect(() => {
@@ -85,6 +92,49 @@ export function PositionsTable() {
     return <span className={cls}>{pnl >= 0 ? '+' : ''}{formatNumber(pnl)}</span>;
   };
 
+  // Handle close position click
+  const handleOpenCloseModal = (position: Position) => {
+    setSelectedPosition(position);
+    setModalOpen(true);
+  };
+
+  // Confirm close position
+  const handleConfirmClose = async () => {
+    if (!selectedPosition || !address) return;
+
+    setIsClosing(true);
+    try {
+      // Call the API to close the position
+      await closePosition({
+        coin: selectedPosition.coin,
+        signature: 'mock-signature', // In real implementation, this would come from wallet
+        timestamp: Date.now(),
+      });
+
+      // Remove position from store
+      removePosition(selectedPosition.coin);
+
+      // Show success toast
+      success(`Position for ${selectedPosition.coin} closed successfully`);
+
+      // Close modal
+      setModalOpen(false);
+      setSelectedPosition(null);
+    } catch (err) {
+      console.error('Failed to close position:', err);
+      error(`Failed to close ${selectedPosition.coin} position`);
+    } finally {
+      setIsClosing(false);
+    }
+  };
+
+  // Cancel close modal
+  const handleCancelClose = () => {
+    setModalOpen(false);
+    setSelectedPosition(null);
+    setIsClosing(false);
+  };
+
   if (!isConnected) {
     return (
       <div className="p-4 text-center text-text-tertiary text-sm pointer-events-none">
@@ -102,50 +152,71 @@ export function PositionsTable() {
   }
 
   return (
-    <div className="overflow-auto">
-      <table className="data-table w-full">
-        <thead>
-          <tr>
-            <th>Symbol</th>
-            <th>Side</th>
-            <th>Size</th>
-            <th>Entry</th>
-            <th>Mark</th>
-            <th>Unrealized PnL</th>
-            <th>Realized PnL</th>
-            <th>Leverage</th>
-            <th>Margin</th>
-            <th>Liq. Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          {positions.map((pos, idx) => {
-            const markPrice = markPrices[pos.coin];
-            const realTimePnl = markPrice ? calculateRealTimePnl(pos) : null;
-            return (
-              <tr key={idx}>
-                <td>{pos.coin}</td>
-                <td className={pos.side === 'long' ? 'text-long' : 'text-short'}>
-                  {pos.side.toUpperCase()}
-                </td>
-                <td>{formatNumber(pos.sz, 4)}</td>
-                <td>{formatNumber(pos.entryPx)}</td>
-                <td>{markPrice ? formatNumber(markPrice) : '--'}</td>
-                <td>
-                  {realTimePnl !== null
-                    ? formatPnl(realTimePnl)
-                    : formatPnl(pos.unrealizedPnl)
-                  }
-                </td>
-                <td>{formatPnl(pos.realizedPnl)}</td>
-                <td>{pos.leverage}x</td>
-                <td>{formatNumber(pos.marginUsed)}</td>
-                <td>{formatNumber(pos.liquidationPx)}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
+    <>
+      <div className="overflow-auto">
+        <table className="data-table w-full">
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Side</th>
+              <th>Size</th>
+              <th>Entry</th>
+              <th>Mark</th>
+              <th>Unrealized PnL</th>
+              <th>Realized PnL</th>
+              <th>Leverage</th>
+              <th>Margin</th>
+              <th>Liq. Price</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {positions.map((pos, idx) => {
+              const markPrice = markPrices[pos.coin];
+              const realTimePnl = markPrice ? calculateRealTimePnl(pos) : null;
+              return (
+                <tr key={idx}>
+                  <td>{pos.coin}</td>
+                  <td className={pos.side === 'long' ? 'text-long' : 'text-short'}>
+                    {pos.side.toUpperCase()}
+                  </td>
+                  <td>{formatNumber(pos.sz, 4)}</td>
+                  <td>{formatNumber(pos.entryPx)}</td>
+                  <td>{markPrice ? formatNumber(markPrice) : '--'}</td>
+                  <td>
+                    {realTimePnl !== null
+                      ? formatPnl(realTimePnl)
+                      : formatPnl(pos.unrealizedPnl)
+                    }
+                  </td>
+                  <td>{formatPnl(pos.realizedPnl)}</td>
+                  <td>{pos.leverage}x</td>
+                  <td>{formatNumber(pos.marginUsed)}</td>
+                  <td>{formatNumber(pos.liquidationPx)}</td>
+                  <td>
+                    <button
+                      onClick={() => handleOpenCloseModal(pos)}
+                      className="px-2 py-1 text-xs bg-short hover:bg-short-muted text-white rounded disabled:opacity-50"
+                      data-testid={`close-position-${pos.coin}`}
+                    >
+                      Close
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Position Close Confirmation Modal */}
+      <PositionCloseModal
+        isOpen={modalOpen}
+        position={selectedPosition}
+        onConfirm={handleConfirmClose}
+        onCancel={handleCancelClose}
+        isSubmitting={isClosing}
+      />
+    </>
   );
 }

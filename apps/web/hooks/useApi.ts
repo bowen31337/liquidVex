@@ -3,7 +3,7 @@
  */
 
 import { useCallback } from 'react';
-import { ExchangeMeta, AssetInfo, AccountState, AccountHistory, OrderResponse, OrderRequest, CancelRequest } from '../types';
+import { ExchangeMeta, AssetInfo, AccountState, AccountHistory, OrderResponse, OrderRequest, CancelRequest, ClosePositionRequest } from '../types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -115,6 +115,11 @@ export function useApi() {
     };
   }, []);
 
+  const getOrderHistory = useCallback(async (address: string): Promise<any[]> => {
+    const history = await getAccountHistory(address);
+    return history.orders;
+  }, [getAccountHistory]);
+
   const placeOrder = useCallback(async (request: OrderRequest): Promise<OrderResponse> => {
     const response = await fetch(`${API_URL}/api/trade/place`, {
       method: 'POST',
@@ -145,6 +150,16 @@ export function useApi() {
     return response.json();
   }, []);
 
+  const closePosition = useCallback(async (request: ClosePositionRequest): Promise<OrderResponse> => {
+    const response = await fetch(`${API_URL}/api/trade/close-position`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(request),
+    });
+    if (!response.ok) throw new Error('Failed to close position');
+    return response.json();
+  }, []);
+
   return {
     getExchangeMeta,
     getAssetInfo,
@@ -153,8 +168,10 @@ export function useApi() {
     getPositions,
     getOpenOrders,
     getAccountHistory,
+    getOrderHistory,
     placeOrder,
     cancelOrder,
     cancelAllOrders,
+    closePosition,
   };
 }
