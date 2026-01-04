@@ -4,26 +4,14 @@
 
 'use client';
 
-import { useOrderStore } from '../../stores/orderStore';
+import { useAccount } from '../../hooks/useAccount';
 import { useMarketStore } from '../../stores/marketStore';
 import { formatCurrency } from '../../lib/utils';
 
 export function AccountBalance() {
-  const { accountState } = useOrderStore();
-  const { selectedAsset } = useMarketStore();
+  const { accountState, getPNLPercent } = useAccount();
 
-  // Calculate PnL percentage
-  const calculatePnLPercent = () => {
-    if (!accountState) return 0;
-    if (accountState.equity <= 0) return 0;
-
-    // Assuming initial equity was 10000 (can be made configurable)
-    const initialEquity = 10000;
-    const pnl = accountState.equity - initialEquity;
-    return (pnl / initialEquity) * 100;
-  };
-
-  const pnlPercent = calculatePnLPercent();
+  const pnlPercent = getPNLPercent();
   const isProfit = pnlPercent >= 0;
 
   // Get max leverage from asset info or fallback

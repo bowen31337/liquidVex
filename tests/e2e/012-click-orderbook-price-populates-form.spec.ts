@@ -32,11 +32,7 @@ test.describe('Order Book Price Click Integration', () => {
 
   test('should populate order form price field when clicking bid price level', async ({ page }) => {
     // Step 1: Navigate to order book panel
-    const rightSidePanel = page.locator('.col-span-2'); // Right side contains order book
-    await expect(rightSidePanel).toBeVisible();
-
-    // Find the order book within the right side panel
-    const orderBookPanel = rightSidePanel.locator('.panel').first(); // First panel in right side is order book
+    const orderBookPanel = page.locator('.orderbook-panel'); // Order book panel
     await expect(orderBookPanel).toBeVisible();
 
     // Verify order book has bid prices
@@ -51,7 +47,7 @@ test.describe('Order Book Price Click Integration', () => {
     await firstBidPrice.click({ timeout: 5000 });
 
     // Step 3: Verify order form price field is populated with clicked price
-    const orderForm = page.locator('.col-span-3'); // Order form is in the rightmost panel
+    const orderForm = page.locator('.panel').last(); // Order form is the last panel
     const priceInput = orderForm.locator('[data-testid="order-price-input"]'); // Price input field
 
     await expect(priceInput).toBeVisible();
@@ -63,11 +59,7 @@ test.describe('Order Book Price Click Integration', () => {
 
   test('should update order form price field when clicking ask price level', async ({ page }) => {
     // Step 1: Navigate to order book panel
-    const rightSidePanel = page.locator('.col-span-2');
-    await expect(rightSidePanel).toBeVisible();
-
-    // Find the order book within the right side panel
-    const orderBookPanel = rightSidePanel.locator('.panel').first();
+    const orderBookPanel = page.locator('.orderbook-panel');
     await expect(orderBookPanel).toBeVisible();
 
     // Step 2: Click on a bid price level first (to populate form)
@@ -81,7 +73,7 @@ test.describe('Order Book Price Click Integration', () => {
     await firstBidPrice.click({ timeout: 5000 });
 
     // Verify form is populated with bid price
-    const orderForm = page.locator('.col-span-3');
+    const orderForm = page.locator('.panel.last()');
     const priceInput = orderForm.locator('[data-testid="order-price-input"]');
     await expect(priceInput).toBeVisible();
 
@@ -112,8 +104,10 @@ test.describe('Order Book Price Click Integration', () => {
   });
 
   test('should handle multiple clicks and price updates correctly', async ({ page }) => {
-    const rightSidePanel = page.locator('.col-span-2'); await expect(rightSidePanel).toBeVisible(); const orderBookPanel = rightSidePanel.locator('.panel').first(); await expect(orderBookPanel).toBeVisible();
-    const orderForm = page.locator('.col-span-3');
+    // Step 1: Navigate to order book panel
+    const orderBookPanel = page.locator('.orderbook-panel');
+    await expect(orderBookPanel).toBeVisible();
+    const orderForm = page.locator('.panel.last()');
     const priceInput = orderForm.locator('[data-testid="order-price-input"]');
 
     await expect(orderBookPanel).toBeVisible();
@@ -173,8 +167,10 @@ test.describe('Order Book Price Click Integration', () => {
   });
 
   test('should work with different order types', async ({ page }) => {
-    const rightSidePanel = page.locator('.col-span-2'); await expect(rightSidePanel).toBeVisible(); const orderBookPanel = rightSidePanel.locator('.panel').first(); await expect(orderBookPanel).toBeVisible();
-    const orderForm = page.locator('.col-span-3');
+    // Step 1: Navigate to order book panel
+    const orderBookPanel = page.locator('.orderbook-panel');
+    await expect(orderBookPanel).toBeVisible();
+    const orderForm = page.locator('.panel.last()');
     const priceInput = orderForm.locator('[data-testid="order-price-input"]');
 
     await expect(orderBookPanel).toBeVisible();
@@ -223,8 +219,10 @@ test.describe('Order Book Price Click Integration', () => {
   });
 
   test('should maintain price precision from order book', async ({ page }) => {
-    const rightSidePanel = page.locator('.col-span-2'); await expect(rightSidePanel).toBeVisible(); const orderBookPanel = rightSidePanel.locator('.panel').first(); await expect(orderBookPanel).toBeVisible();
-    const orderForm = page.locator('.col-span-3');
+    // Step 1: Navigate to order book panel
+    const orderBookPanel = page.locator('.orderbook-panel');
+    await expect(orderBookPanel).toBeVisible();
+    const orderForm = page.locator('.panel.last()');
     const priceInput = orderForm.locator('[data-testid="order-price-input"]');
 
     await expect(orderBookPanel).toBeVisible();
@@ -253,8 +251,10 @@ test.describe('Order Book Price Click Integration', () => {
   });
 
   test('should handle order book loading states gracefully', async ({ page }) => {
-    const rightSidePanel = page.locator('.col-span-2'); await expect(rightSidePanel).toBeVisible(); const orderBookPanel = rightSidePanel.locator('.panel').first(); await expect(orderBookPanel).toBeVisible();
-    const orderForm = page.locator('.col-span-3');
+    // Step 1: Navigate to order book panel
+    const orderBookPanel = page.locator('.orderbook-panel');
+    await expect(orderBookPanel).toBeVisible();
+    const orderForm = page.locator('.panel.last()');
 
     await expect(orderBookPanel).toBeVisible();
 
@@ -299,8 +299,10 @@ test.describe('Order Book Price Click Integration', () => {
 
   test('should take screenshot on failure for debugging', async ({ page }, testInfo) => {
     // This test demonstrates the screenshot capability
-    const rightSidePanel = page.locator('.col-span-2'); await expect(rightSidePanel).toBeVisible(); const orderBookPanel = rightSidePanel.locator('.panel').first(); await expect(orderBookPanel).toBeVisible();
-    const orderForm = page.locator('.col-span-3');
+    // Step 1: Navigate to order book panel
+    const orderBookPanel = page.locator('.orderbook-panel');
+    await expect(orderBookPanel).toBeVisible();
+    const orderForm = page.locator('.panel.last()');
 
     await expect(orderBookPanel).toBeVisible();
     await expect(orderForm).toBeVisible();

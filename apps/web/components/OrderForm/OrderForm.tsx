@@ -11,6 +11,7 @@ import { useMarketStore } from '../../stores/marketStore';
 import { useApi } from '../../hooks/useApi';
 import { OrderConfirmModal } from '../Modal/OrderConfirmModal';
 import { useToast } from '../Toast/Toast';
+import { useFavoritesActions } from '../../contexts/FavoritesContext';
 
 export function OrderForm() {
   const { orderForm, setOrderForm, resetOrderForm, addOpenOrder } = useOrderStore();
@@ -18,6 +19,7 @@ export function OrderForm() {
   const { currentPrice, selectedAsset } = useMarketStore();
   const { placeOrder } = useApi();
   const { success: showSuccess, error: showError } = useToast();
+  const { addToRecentlyTraded } = useFavoritesActions();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -173,6 +175,9 @@ export function OrderForm() {
       const response = await placeOrder(orderRequest);
 
       if (response.success && response.orderId) {
+        // Add to recently traded
+        addToRecentlyTraded(selectedAsset);
+
         // Add to open orders
         const newOrder = {
           oid: response.orderId,

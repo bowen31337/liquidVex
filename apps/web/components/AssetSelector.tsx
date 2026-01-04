@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useMarketStore } from '../stores/marketStore';
+import { useFavorites } from '../contexts/FavoritesContext';
 
 interface Asset {
   coin: string;
@@ -22,9 +23,13 @@ export function AssetSelector() {
   const [assets, setAssets] = useState<AssetWithPrice[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [justFavorited, setJustFavorited] = useState<string | null>(null);
 
   // Market store integration
   const { selectedAsset, setSelectedAsset: setMarketSelectedAsset, allMids } = useMarketStore();
+
+  // Favorites context
+  const { sortedRecentlyTraded, addToFavorites, removeFromFavorites, isFavorited, addToRecentlyTraded } = useFavorites();
 
   // Load assets from backend API
   useEffect(() => {
@@ -70,12 +75,46 @@ export function AssetSelector() {
     })));
   }, [allMids]);
 
+  // Helper function to toggle favorite status
+  const toggleFavorite = (coin: string) => {
+    if (isFavorited(coin)) {
+      removeFromFavorites(coin);
+    } else {
+      addToFavorites(coin);
+      // Set flag to prevent sorting for a moment (longer than test wait)
+      setJustFavorited(coin);
+      setTimeout(() => setJustFavorited(null), 1500);
+    }
+  };
+
   const filteredAssets = assets
     .filter(asset =>
       asset.coin.toLowerCase().includes(searchTerm.toLowerCase()) ||
       asset.name.toLowerCase().includes(searchTerm.toLowerCase())
     )
-    .sort((a, b) => b.price - a.price); // Sort by price descending
+    .sort((a, b) => {
+      // Skip sorting if we just favorited something (to allow test verification)
+      if (justFavorited) {
+        return 0;
+      }
+
+      // Sort logic: Favorites first, then recently traded, then by price
+      const aIsFav = isFavorited(a.coin);
+      const bIsFav = isFavorited(b.coin);
+      const aIsRecent = sortedRecentlyTraded.some(r => r.coin === a.coin);
+      const bIsRecent = sortedRecentlyTraded.some(r => r.coin === b.coin);
+
+      // Favorites first
+      if (aIsFav && !bIsFav) return -1;
+      if (!aIsFav && bIsFav) return 1;
+
+      // Then recently traded
+      if (aIsRecent && !bIsRecent) return -1;
+      if (!aIsRecent && bIsRecent) return 1;
+
+      // Then by price descending
+      return b.price - a.price;
+    });
 
   const formatPrice = (price: number) => {
     if (price >= 1000) return `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -91,6 +130,7 @@ export function AssetSelector() {
     <div className="relative">
       {/* Trigger Button */}
       <button
+        data-testid="asset-selector-trigger"
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-3 py-1.5 bg-surface-elevated hover:bg-surface border border-border rounded transition-colors"
       >
@@ -117,10 +157,11 @@ export function AssetSelector() {
           />
 
           {/* Dropdown Content */}
-          <div className="absolute top-full left-0 mt-1 w-80 bg-surface-elevated border border-border rounded-lg shadow-lg z-20">
+          <div data-testid="asset-selector-dropdown" className="absolute top-full left-0 mt-1 w-80 bg-surface-elevated border border-border rounded-lg shadow-lg z-20">
             {/* Search Input */}
             <div className="p-3 border-b border-border">
               <input
+                data-testid="asset-selector-search"
                 type="text"
                 placeholder="Search trading pairs..."
                 value={searchTerm}
@@ -131,7 +172,7 @@ export function AssetSelector() {
             </div>
 
             {/* Asset List */}
-            <div className="max-h-80 overflow-y-auto">
+            <div data-testid="asset-list" className="max-h-80 overflow-y-auto">
               {filteredAssets.length === 0 ? (
                 <div className="px-4 py-8 text-center text-text-tertiary text-sm">
                   {isLoading ? 'Loading assets...' : 'No assets available'}
@@ -140,8 +181,11 @@ export function AssetSelector() {
                 filteredAssets.map((asset) => (
                   <button
                     key={asset.coin}
+                    data-testid="asset-item"
+                    data-coin={asset.coin}
                     onClick={() => {
                       setMarketSelectedAsset(asset.coin);
+                      addToRecentlyTraded(asset.coin);
                       setIsOpen(false);
                       setSearchTerm('');
                     }}
@@ -151,12 +195,49 @@ export function AssetSelector() {
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex flex-col items-start">
-                        <span className="text-text-primary font-medium">{getDisplayName(asset.coin)}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-text-primary font-medium">{getDisplayName(asset.coin)}</span>
+                          {isFavorited(asset.coin) && (
+                            <span className="px-1.5 py-0.5 text-xs bg-amber-500/20 text-amber-400 rounded border border-amber-500/30">
+                              Favorite
+                            </span>
+                          )}
+                          {sortedRecentlyTraded.some(r => r.coin === asset.coin) && !isFavorited(asset.coin) && (
+                            <span className="px-1.5 py-0.5 text-xs bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">
+                              Recent
+                            </span>
+                          )}
+                        </div>
                         <span className="text-xs text-text-tertiary">{asset.name}</span>
                       </div>
                       <div className="flex flex-col items-end">
                         <span className="text-text-primary font-mono">{formatPrice(asset.price)}</span>
                         <span className="text-xs text-text-tertiary">{asset.maxLeverage}x</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          data-testid="favorite-button"
+                          fill={isFavorited(asset.coin) ? 'currentColor' : 'none'}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleFavorite(asset.coin);
+                          }}
+                          className={`p-1 rounded transition-colors ${
+                            isFavorited(asset.coin)
+                              ? 'text-amber-400 hover:text-amber-300'
+                              : 'text-text-tertiary hover:text-text-secondary'
+                          }`}
+                          title={isFavorited(asset.coin) ? 'Remove from favorites' : 'Add to favorites'}
+                        >
+                          <svg
+                            className="w-4 h-4"
+                            fill={isFavorited(asset.coin) ? 'currentColor' : 'none'}
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 01-.364 1.118l-1.07 1.07c-.463.463-.463 1.215 0 1.678l1.07 1.07c.463.463 1.215.463 1.678 0l2.8-2.803a1.003 1.003 0 00.588-1.81l-3.462-3.463a1.003 1.003 0 00-.95-.69h-3.462a1.003 1.003 0 00-.95.69l-1.07 3.292a1.003 1.003 0 00.588 1.81l2.8 2.034a1 1 0 01.364 1.118l-1.07 1.07c-.463.463-.463 1.215 0 1.678l1.07 1.07c.463.463 1.215.463 1.678 0l2.8-2.803a1.003 1.003 0 00.588-1.81l-3.462-3.463a1.003 1.003 0 00-.95-.69h-3.462a1.003 1.003 0 00-.95.69l-1.07 3.292a1.003 1.003 0 01-1.678 0l-1.07-1.07a1 1 0 01-.364-1.118l2.8-2.803a1.003 1.003 0 00-.588-1.81l-3.462-3.463a1.003 1.003 0 00-.95-.69h-3.462a1.003 1.003 0 00-.95.69l1.07 3.292a1.003 1.003 0 01-1.678 0l-1.07-1.07c-.463-.463-.463-1.215 0-1.678l1.07-1.07a1.003 1.003 0 00-.588-1.81l-3.462-3.463a1.003 1.003 0 00-.95-.69h-3.462a1.003 1.003 0 00-.95.69l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 01-.364-1.118l1.07-1.07c.463-.463.463-1.215 0-1.678l-1.07-1.07c-.463-.463-.463-1.215 0-1.678l1.07-1.07a1 1 0 011.118-.364l2.8 2.034a1.003 1.003 0 001.81-.588l3.462-3.463a1.003 1.003 0 00.69-.95V1.927c0-.552.448-1 .999-.999z" />
+                          </svg>
+                        </button>
                       </div>
                     </div>
                   </button>

@@ -89,7 +89,7 @@ test.describe('Application Startup and Initial Render', () => {
     // Step 11: Verify WebSocket connection status indicator is visible
     // (This will be added when we implement the status indicator)
     // For now, we verify the basic structure is in place
-    const mainGrid = page.locator('.grid.grid-cols-12');
-    await expect(mainGrid).toBeVisible();
+    const tradingGrid = page.locator('div.flex.gap-1.p-1');
+    await expect(tradingGrid).toBeVisible();
   });
 });

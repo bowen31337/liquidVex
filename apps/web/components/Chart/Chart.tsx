@@ -5,7 +5,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { createChart, ColorType, IChartApi, ISeriesApi, Time } from 'lightweight-charts';
+import { createChart, ColorType, IChartApi, ISeriesApi } from 'lightweight-charts';
 import { useMarketStore } from '../../stores/marketStore';
 import { useWebSocket } from '../../hooks/useWebSocket';
 import { useApi } from '../../hooks/useApi';

@@ -3,61 +3,64 @@
  */
 
 import { create } from 'zustand';
+import { useWallet } from '../hooks/useWallet';
+import { useEffect } from 'react';
 
 interface WalletState {
   address: string | null;
   isConnected: boolean;
   connecting: boolean;
   error: string | null;
+  chainId: number | null;
 
-  connect: () => Promise<void>;
-  disconnect: () => void;
+  // Actions
   setAddress: (address: string | null) => void;
   setConnecting: (connecting: boolean) => void;
   setError: (error: string | null) => void;
+  setChainId: (chainId: number | null) => void;
 }
 
+// Create the store
 export const useWalletStore = create<WalletState>((set) => ({
   address: null,
   isConnected: false,
   connecting: false,
   error: null,
-
-  connect: async () => {
-    set({ connecting: true, error: null });
-    try {
-      // Mock wallet connection - in real implementation, use wagmi/viem
-      // For now, simulate a successful connection
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      // In a real app, this would come from wagmi
-      const mockAddress = '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb';
-      set({
-        address: mockAddress,
-        isConnected: true,
-        connecting: false,
-        error: null
-      });
-    } catch (err) {
-      set({
-        address: null,
-        isConnected: false,
-        connecting: false,
-        error: err instanceof Error ? err.message : 'Connection failed'
-      });
-    }
-  },
-
-  disconnect: () => {
-    set({
-      address: null,
-      isConnected: false,
-      connecting: false,
-      error: null
-    });
-  },
+  chainId: null,
 
   setAddress: (address) => set({ address }),
   setConnecting: (connecting) => set({ connecting }),
   setError: (error) => set({ error }),
+  setChainId: (chainId) => set({ chainId }),
 }));
+
+// Export a hook that syncs with wagmi
+export function useWalletSync() {
+  const wagmiWallet = useWallet();
+  const storeState = useWalletStore();
+
+  // Sync state directly but only if values actually changed
+  // This avoids the infinite loop that useEffect can cause
+  const newAddress = wagmiWallet.address || null;
+  const newIsConnected = wagmiWallet.isConnected;
+  const newConnecting = wagmiWallet.isConnecting;
+  const newError = wagmiWallet.connectError?.message || null;
+  const newChainId = wagmiWallet.chain?.id || null;
+
+  if (storeState.address !== newAddress ||
+      storeState.isConnected !== newIsConnected ||
+      storeState.connecting !== newConnecting ||
+      storeState.error !== newError ||
+      storeState.chainId !== newChainId) {
+    useWalletStore.setState({
+      address: newAddress,
+      isConnected: newIsConnected,
+      connecting: newConnecting,
+      error: newError,
+      chainId: newChainId,
+    });
+  }
+
+  // Return wagmi wallet methods for direct usage
+  return wagmiWallet;
+}

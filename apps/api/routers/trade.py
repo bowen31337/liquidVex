@@ -32,6 +32,8 @@ class OrderRequest(BaseModel):
 class OrderResponse(BaseModel):
     """Response after order operation."""
 
+    model_config = ConfigDict(populate_by_name=True)
+
     success: bool
     order_id: int | None = Field(default=None, alias='orderId')
     message: str | None = None
