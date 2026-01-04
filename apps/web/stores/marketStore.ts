@@ -110,7 +110,31 @@ export const useMarketStore = create<MarketState>((set, get) => ({
   setCandles: (candles) => set({ candles }),
   addCandle: (candle) => {
     const state = get();
-    const newCandles = [...state.candles, candle].slice(-500); // Keep last 500
+    // Normalize candle data from WebSocket message
+    // WebSocket sends {type, coin, interval, t, o, h, l, c, v}
+    // We want to extract just the candle part: {t, o, h, l, c, v}
+    const normalizedCandle = {
+      t: candle.t,
+      o: candle.o,
+      h: candle.h,
+      l: candle.l,
+      c: candle.c,
+      v: candle.v,
+    };
+
+    // Check if this candle already exists (update vs new)
+    const existingIndex = state.candles.findIndex((c: any) => c.t === normalizedCandle.t);
+
+    let newCandles;
+    if (existingIndex >= 0) {
+      // Update existing candle
+      newCandles = [...state.candles];
+      newCandles[existingIndex] = normalizedCandle;
+    } else {
+      // Add new candle
+      newCandles = [...state.candles, normalizedCandle].slice(-500); // Keep last 500
+    }
+
     set({ candles: newCandles });
   },
   clearCandles: () => set({ candles: [] }),
