@@ -1,5 +1,5 @@
 /**
- * Bottom Panel component with tabs for Positions, Orders, History
+ * Bottom Panel component with tabs for Positions, Orders, History, Calculator
  */
 
 'use client';
@@ -9,8 +9,9 @@ import { PositionsTable } from '../PositionsTable/PositionsTable';
 import { OrdersTable } from '../OrdersTable/OrdersTable';
 import { OrderHistory } from '../OrdersTable/OrderHistory';
 import { TradeHistory } from '../OrdersTable/TradeHistory';
+import { LiquidationCalculator } from '../LiquidationCalculator';
 
-const TABS = ['Positions', 'Open Orders', 'Order History', 'Trade History'] as const;
+const TABS = ['Positions', 'Open Orders', 'Order History', 'Trade History', 'Calculator'] as const;
 
 export function BottomPanel() {
   const { activeTab, setActiveTab, positions, openOrders, orderHistory, tradeHistory } = useOrderStore();
@@ -40,6 +41,8 @@ export function BottomPanel() {
         return <OrderHistory />;
       case 'Trade History':
         return <TradeHistory />;
+      case 'Calculator':
+        return <LiquidationCalculator />;
       default:
         return null;
     }

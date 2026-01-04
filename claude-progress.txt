@@ -1,3 +1,198 @@
+# Claude Progress Report - Session 15 (DEV AGENT)
+
+## Session Summary
+Implemented order modification flow (Feature 39). Added modifyOrder API function, created OrderModifyModal component, updated OrdersTable with Modify button and modal integration. Fixed PositionCloseModal syntax errors. Created E2E tests for order modification.
+
+## Current Project Status
+
+### Progress Metrics
+- **Features Complete (passing)**: 16/200 (8.0%)
+- **Features Dev Done**: 52/200 (26.0%)
+- **Features Pending**: 148/200 (74.0%)
+
+### Feature Implemented This Session
+
+#### Feature 39: Order Modification Flow ✅
+
+**Implementation:**
+- Added `modifyOrder` function to `useApi` hook
+- Created `OrderModifyModal` component for modifying order price/size
+- Added `updateOpenOrder` method to `orderStore`
+- Updated `OrdersTable` with Modify button and modal integration
+- Created E2E test suite for order modification flow
+
+**Code Changes:**
+- `apps/web/hooks/useApi.ts`:
+  - Added `ModifyOrderRequest` type import
+  - Added `modifyOrder` API function (POST to `/api/trade/modify`)
+  - Returns `OrderResponse`
+
+- `apps/web/types/index.ts`:
+  - Added `ModifyOrderRequest` interface
+  - Fields: `oid`, `coin`, `limitPx?`, `sz?`
+
+- `apps/web/stores/orderStore.ts`:
+  - Added `updateOpenOrder(oid, updates)` method
+  - Updates order in `openOrders` array
+
+- `apps/web/components/Modal/OrderModifyModal.tsx` (NEW):
+  - Modal with current order details display
+  - Input fields for new price and size
+  - Shows current values as defaults
+  - Validates changes before submission
+  - Disable Update button when no changes
+  - Loading state during submission
+
+- `apps/web/components/OrdersTable/OrdersTable.tsx`:
+  - Added `handleOpenModifyModal`, `handleConfirmModify`, `handleCancelModify`
+  - Added Modify button next to Cancel button
+  - Modal state management
+  - Success/error toast notifications
+
+- `apps/web/components/Modal/PositionCloseModal.tsx`:
+  - Fixed escaped quote syntax errors
+
+**Order Modify Modal UI:**
+```
+┌─────────────────────────────────────┐
+│ Modify Order                        │
+├─────────────────────────────────────┤
+│ Current Order:                      │
+│  Type: Limit  Side: BUY  Asset: BTC │
+│  Price: $50,000.00  Size: 0.5000    │
+├─────────────────────────────────────┤
+│ New Price: [50000]                  │
+│ New Size:  [0.5]                    │
+├─────────────────────────────────────┤
+│ ℹ️ Leave field unchanged to keep    │
+│ current value                       │
+├─────────────────────────────────────┤
+│ [Cancel]      [✏️ Update Order]    │
+└─────────────────────────────────────┘
+```
+
+**E2E Tests Created:**
+- `tests/e2e/039-order-modification.spec.ts` (6 tests)
+  1. Should show Modify button for open orders
+  2. Should open modification modal when Modify button is clicked
+  3. Should modify order price and size
+  4. Should cancel modification with Cancel button
+  5. Should disable Update button when no changes are made
+  6. Should show current order values in modal
+
+**Verified Functionality:**
+✓ Modify button visible in OrdersTable Actions column
+✓ Modify button has correct styling (bg-accent)
+✓ Modal opens on click
+✓ Modal shows current order details
+✓ Price and size inputs accept new values
+✓ Update button enabled only when changes made
+✓ API call made with correct parameters
+✓ Order updated in store after success
+✓ Success toast appears
+✓ Modal closes after success
+✓ Cancel button closes modal without changes
+
+**Status:** Implementation complete and committed
+
+---
+
+# Claude Progress Report - Session 14 (DEV AGENT)
+
+## Session Summary
+Implemented liquidation price calculator functionality. Created LiquidationCalculator component with input fields for position size, entry price, leverage, and margin type. Added calculator as a new tab in the BottomPanel. Created comprehensive E2E test suite.
+
+## Current Project Status
+
+### Progress Metrics
+- **Features Complete (passing)**: 16/200 (8.0%)
+- **Features Dev Done**: 50/200 (25.0%)
+- **Features Pending**: 150/200 (75.0%)
+
+### Feature Implemented This Session
+
+#### Feature 50: Liquidation Price Calculator Functionality ✅
+
+**Implementation:**
+- Created `LiquidationCalculator` component with full calculation logic
+- Added calculator as new tab in BottomPanel
+- Integrated with orderStore for tab state management
+- Added comprehensive E2E test suite (10 tests)
+
+**Code Changes:**
+- `apps/web/components/LiquidationCalculator.tsx` (NEW):
+  - Input fields: Position Size, Entry Price, Leverage, Margin Type
+  - Real-time calculation of liquidation price
+  - Risk level display (Low/Medium/High)
+  - Distance from entry percentage
+  - High risk warning for dangerous positions
+  - Educational info note about estimates
+
+- `apps/web/stores/orderStore.ts`:
+  - Added 'Calculator' to activeTab type
+  - Updated type definition for new tab
+
+- `apps/web/components/BottomPanel/BottomPanel.tsx`:
+  - Added 'Calculator' to TABS array
+  - Added LiquidationCalculator import
+  - Added case for Calculator in renderContent
+
+**Calculation Logic:**
+```
+Liquidation Price = Entry Price - (Entry Price / Leverage)
+Distance % = ((Entry - Liq) / Entry) * 100
+Risk Level = Distance > 10% = Low, > 5% = Medium, else High
+```
+
+**UI Layout:**
+```
+┌─────────────────────────────────────────┐
+│ Liquidation Calculator           [✕]    │
+├─────────────────────────────────────────┤
+│ Position Size: [1.0000]                 │
+│ Entry Price:   [50000]                  │
+│ Leverage:      [10]   x                  │
+│ Margin Type:   [Cross ▼]                │
+├─────────────────────────────────────────┤
+│ Liquidation Price        $45,000.00      │
+│ Distance from Entry            10.00%    │
+│ Risk Level                 [Low Risk]    │
+├─────────────────────────────────────────┤
+│ ⚠️ High liquidation risk!               │
+│ Consider reducing leverage...           │
+├─────────────────────────────────────────┤
+│ ℹ️ Note: This calculator provides...    │
+└─────────────────────────────────────────┘
+```
+
+**E2E Tests Created:**
+- `tests/e2e/050-liquidation-calculator.spec.ts` (10 tests)
+  1. Calculator tab is visible ✅
+  2. Clicking tab opens calculator view ✅
+  3. Enter position size ✅
+  4. Enter entry price ✅
+  5. Enter leverage ✅
+  6. Verify liquidation price calculated ✅
+  7. Verify risk level displayed ✅
+  8. Verify distance from entry displayed ✅
+  9. Verify margin type selector works ✅
+  10. Verify calculator recalculates on input change ✅
+
+**Verified Functionality:**
+✓ Calculator tab visible in bottom panel
+✓ All input fields accept values
+✓ Liquidation price calculates correctly
+✓ Risk level updates based on leverage
+✓ Distance percentage displays
+✓ Margin type selector works
+✓ Recalculates when inputs change
+✓ High risk warning for dangerous positions
+✓ Info note about estimates shown
+
+**Status:** Implementation complete and verified
+
+---
+
 # Claude Progress Report - Session 13 (DEV AGENT)
 
 ## Session Summary
@@ -38,7 +233,7 @@ Implemented one-click position close flow with confirmation modal. Added Close b
   - Added modal state management
   - Added `handleOpenCloseModal`, `handleConfirmClose`, `handleCancelClose`
   - Added Actions column with Close button
-  - Button has `data-testid="close-position-{coin}"`
+  - Button has `data-testid=\"close-position-{coin}\"`
 
 **Modal Content:**
 ```
@@ -85,7 +280,7 @@ Implemented one-click position close flow with confirmation modal. Added Close b
 # Claude Progress Report - Session 12 (DEV AGENT)
 
 ## Session Summary
-Enhanced market order execution UI/UX with proper modal and toast messaging. Fixed display issues where market orders showed "$0.00" instead of "Market". Added testability improvements with data-testids. Created comprehensive E2E test suite for market order functionality.
+Enhanced market order execution UI/UX with proper modal and toast messaging. Fixed display issues where market orders showed \"$0.00\" instead of \"Market\". Added testability improvements with data-testids. Created comprehensive E2E test suite for market order functionality.
 
 ## Current Project Status
 
@@ -104,18 +299,18 @@ Enhanced market order execution UI/UX with proper modal and toast messaging. Fix
 - `limitPx` set to 0.0 for market orders in API call
 
 **New Enhancements:**
-- OrderConfirmModal now shows "Market" instead of "$0.00" for market orders
-- Success toast message displays "Market" price for market orders
-- Added `data-testid="order-confirm-modal"` for better testability
+- OrderConfirmModal now shows \"Market\" instead of \"$0.00\" for market orders
+- Success toast message displays \"Market\" price for market orders
+- Added `data-testid=\"order-confirm-modal\"` for better testability
 - Proper handling of stop-market orders in modal display
 
 **Code Changes:**
 - `apps/web/components/Modal/OrderConfirmModal.tsx`:
   - Added `isMarketOrder` check for order types
-  - Display "Market" for market/stop-market orders
+  - Display \"Market\" for market/stop-market orders
   - Calculate order value correctly (price = 0 for market)
 - `apps/web/components/OrderForm/OrderForm.tsx`:
-  - Updated success message to show "Market" price
+  - Updated success message to show \"Market\" price
   - Format: `Order placed: BUY 1.5 @ Market`
 
 **Tests:**
@@ -127,8 +322,8 @@ Enhanced market order execution UI/UX with proper modal and toast messaging. Fix
 **Verified Functionality:**
 ✓ Market orders hide price input
 ✓ Market orders don't require price validation
-✓ Modal displays "Market" price correctly
-✓ Success message shows "Market" correctly
+✓ Modal displays \"Market\" price correctly
+✓ Success message shows \"Market\" correctly
 ✓ API receives limitPx: 0.0 for market orders
 ✓ Switching between market/limit orders works
 
@@ -145,7 +340,7 @@ const priceValue = isMarketOrder ? 0 : parseFloat(orderForm.price);
 
 ### Modal Price Display
 ```jsx
-<span className="text-text-primary font-mono font-medium">
+<span className=\"text-text-primary font-mono font-medium\">
   {isMarketOrder ? displayPrice : `$${displayPrice}`}
 </span>
 ```
@@ -165,7 +360,7 @@ showSuccess(`Order placed: ${orderForm.side.toUpperCase()} ${orderForm.size} @ $
 - `claude-progress.txt` - This file
 
 ### Committed
-- Commit: ccfca08 - "feat: Implement market order execution flow with UI improvements"
+- Commit: ccfca08 - \"feat: Implement market order execution flow with UI improvements\"
 
 ## Next Steps
 
@@ -199,7 +394,7 @@ showSuccess(`Order placed: ${orderForm.side.toUpperCase()} ${orderForm.size} @ $
 
 **Session 12 Complete | DEV AGENT | Market Order UX Enhancement ✅**
 
-**Key Achievement:** Fixed market order display to show "Market" instead of "$0.00"
+**Key Achievement:** Fixed market order display to show \"Market\" instead of \"$0.00\"
 **Next Milestone:** Implement order cancellation and modification features
 
 # Claude Progress Report - Session 11 (DEV AGENT)
@@ -237,10 +432,10 @@ Implemented 3 new features: Market Order Execution (31), Time-in-Force (35), Bat
 
 #### 3. Feature 38: Batch Order Cancellation Flow ✅
 **Implementation:**
-- Added "Cancel All" button to OrdersTable header
+- Added \"Cancel All\" button to OrdersTable header
 - Button only visible when orders exist
 - Uses `cancelAllOrders` API endpoint
-- Shows "Cancelling..." state during operation
+- Shows \"Cancelling...\" state during operation
 - Clears all orders from store after success
 - Data-testid: `cancel-all-orders`
 
@@ -282,7 +477,7 @@ const handleCancelAll = async () => {
 <th>
   Actions
   {openOrders.length > 0 && (
-    <button data-testid="cancel-all-orders">
+    <button data-testid=\"cancel-all-orders\">
       {cancellingAll ? 'Cancelling...' : 'Cancel All'}
     </button>
   )}
@@ -425,4 +620,3 @@ Successfully started work on Limit Order Placement feature.
 - Debug modal confirm button click
 - Fix form reset logic
 - Complete remaining 5/6 tests
-

@@ -1086,8 +1086,11 @@
       "Step 8: Verify new leverage applies to new positions"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T04:00:49.058140Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -1117,8 +1120,11 @@
       "Step 6: Modify inputs and verify recalculation"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-04T15:15:00.000000Z"
   },
   {
     "category": "functional",
@@ -1137,7 +1143,13 @@
     ],
     "passes": false,
     "is_dev_done": false,
-    "is_qa_passed": false
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-04T04:19:08.468152Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "functional",
@@ -1187,8 +1199,11 @@
       "Step 9: Verify settings are persisted"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T04:13:39.037327Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -1206,8 +1221,11 @@
       "Step 10: Verify all orders are canceled"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T04:16:20.438268Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
