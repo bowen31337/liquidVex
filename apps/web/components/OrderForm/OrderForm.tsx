@@ -116,6 +116,17 @@ export function OrderForm() {
           setError('Invalid limit price');
           return false;
         }
+        // Check post-only crossing spread for stop-limit orders
+        if (orderForm.postOnly) {
+          if (orderForm.side === 'buy' && limitPrice >= currentPrice) {
+            setError('Post-only buy order would cross spread');
+            return false;
+          }
+          if (orderForm.side === 'sell' && limitPrice <= currentPrice) {
+            setError('Post-only sell order would cross spread');
+            return false;
+          }
+        }
       }
     }
 
@@ -352,7 +363,7 @@ export function OrderForm() {
           />
           Reduce Only
         </label>
-        {orderForm.type === 'limit' && (
+        {(orderForm.type === 'limit' || orderForm.type === 'stop_limit') && (
           <label className="flex items-center gap-2 text-text-secondary cursor-pointer">
             <input
               type="checkbox"
@@ -388,6 +399,7 @@ export function OrderForm() {
         onClick={handleSubmit}
         disabled={isSubmitting}
         className={`${submitConfig.className} w-full py-3 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed`}
+        data-testid="order-submit-button"
       >
         {isSubmitting ? 'Processing...' : submitConfig.text}
       </button>

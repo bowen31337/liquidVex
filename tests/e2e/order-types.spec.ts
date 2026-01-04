@@ -22,8 +22,8 @@ test.describe('Order Types and Features', () => {
     await page.fill('input[type="number"]', '1.0');
 
     // Step 5: Verify order can be submitted (button enabled)
-    const buyButton = page.locator('button:has-text("Buy / Long")');
-    await expect(buyButton).toBeEnabled();
+    const submitButton = page.locator('[data-testid="order-submit-button"]');
+    await expect(submitButton).toBeEnabled();
   });
 
   test('Stop-limit order shows stop and limit price fields', async ({ page }) => {
@@ -121,8 +121,8 @@ test.describe('Order Types and Features', () => {
     await page.selectOption('select', 'stop_limit');
 
     // Step 2: Try to submit without filling required fields
-    const buyButton = page.locator('button:has-text("Buy / Long")');
-    await buyButton.click();
+    const submitButton = page.locator('[data-testid="order-submit-button"]');
+    await submitButton.click();
 
     // Step 3: Verify error message about missing stop price
     const error = page.locator('text=/Invalid stop price/').or(page.locator('text=/Connect wallet/'));

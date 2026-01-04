@@ -48,7 +48,7 @@ test.describe('Comprehensive Trading Interface Tests', () => {
     await expect(sellToggle).toBeVisible();
 
     // Order type selector
-    await expect(orderForm.locator('select')).toBeVisible();
+    await expect(orderForm.locator('select').first()).toBeVisible();
 
     // Price input (for limit orders)
     const priceInput = orderForm.locator('input[type="number"]').first();
