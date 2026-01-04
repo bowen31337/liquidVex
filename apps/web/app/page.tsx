@@ -4,10 +4,13 @@ import { RecentTrades } from '@/components/OrderBook/RecentTrades';
 import { Chart } from '@/components/Chart/Chart';
 import { OrderForm } from '@/components/OrderForm/OrderForm';
 import { BottomPanel } from '@/components/BottomPanel/BottomPanel';
+import { ToastContainer } from '@/components/Toast/Toast';
 
 export default function Home(): React.ReactElement {
   return (
     <main className="min-h-screen">
+      {/* Toast Notifications */}
+      <ToastContainer />
       {/* Header */}
       <Header />
 

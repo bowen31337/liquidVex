@@ -98,6 +98,7 @@ export function Header() {
           className={`w-2 h-2 rounded-full ${
             wsConnected ? 'bg-long animate-pulse' : 'bg-short'
           }`}
+          data-testid="ws-status"
           title={wsConnected ? 'Connected' : 'Disconnected'}
         />
       </div>
@@ -130,6 +131,7 @@ export function Header() {
         <button
           onClick={handleWalletClick}
           disabled={connecting}
+          data-testid="wallet-connect-button"
           className={`btn btn-accent min-w-[140px] ${
             isConnected ? 'bg-long hover:bg-long-muted' : ''
           }`}

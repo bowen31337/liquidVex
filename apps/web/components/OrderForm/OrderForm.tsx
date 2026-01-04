@@ -8,15 +8,20 @@ import { useState, useEffect } from 'react';
 import { useOrderStore } from '../../stores/orderStore';
 import { useWalletStore } from '../../stores/walletStore';
 import { useMarketStore } from '../../stores/marketStore';
+import { useApi } from '../../hooks/useApi';
+import { OrderConfirmModal } from '../Modal/OrderConfirmModal';
+import { useToast } from '../Toast/Toast';
 
 export function OrderForm() {
-  const { orderForm, setOrderForm, resetOrderForm } = useOrderStore();
-  const { isConnected } = useWalletStore();
-  const { currentPrice } = useMarketStore();
+  const { orderForm, setOrderForm, resetOrderForm, addOpenOrder } = useOrderStore();
+  const { isConnected, address } = useWalletStore();
+  const { currentPrice, selectedAsset } = useMarketStore();
+  const { placeOrder } = useApi();
+  const { success: showSuccess, error: showError } = useToast();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
 
   // Calculate order value
   const orderValue = (() => {
@@ -71,28 +76,46 @@ export function OrderForm() {
       return false;
     }
 
-    const price = parseFloat(orderForm.price);
     const size = parseFloat(orderForm.size);
-
-    if (orderForm.type === 'limit' && (!price || price <= 0)) {
-      setError('Invalid price');
-      return false;
-    }
-
     if (!size || size <= 0) {
       setError('Invalid size');
       return false;
     }
 
-    if (orderForm.type === 'limit' && orderForm.postOnly) {
-      // Check if order would cross spread
-      if (orderForm.side === 'buy' && price >= currentPrice) {
-        setError('Post-only buy order would cross spread');
+    // Validate price based on order type
+    if (orderForm.type === 'limit') {
+      const price = parseFloat(orderForm.price);
+      if (!price || price <= 0) {
+        setError('Invalid price');
         return false;
       }
-      if (orderForm.side === 'sell' && price <= currentPrice) {
-        setError('Post-only sell order would cross spread');
+      // Check post-only crossing spread
+      if (orderForm.postOnly) {
+        if (orderForm.side === 'buy' && price >= currentPrice) {
+          setError('Post-only buy order would cross spread');
+          return false;
+        }
+        if (orderForm.side === 'sell' && price <= currentPrice) {
+          setError('Post-only sell order would cross spread');
+          return false;
+        }
+      }
+    }
+
+    // Validate stop price for stop orders
+    if (orderForm.type === 'stop_limit' || orderForm.type === 'stop_market') {
+      const stopPrice = parseFloat(orderForm.stopPrice);
+      if (!stopPrice || stopPrice <= 0) {
+        setError('Invalid stop price');
         return false;
+      }
+      // Validate limit price for stop-limit orders
+      if (orderForm.type === 'stop_limit') {
+        const limitPrice = parseFloat(orderForm.price);
+        if (!limitPrice || limitPrice <= 0) {
+          setError('Invalid limit price');
+          return false;
+        }
       }
     }
 
@@ -103,26 +126,77 @@ export function OrderForm() {
   const handleSubmit = async () => {
     if (!validate()) return;
 
+    // Show confirmation modal
+    setShowConfirmModal(true);
+  };
+
+  // Confirm and place order
+  const handleConfirmOrder = async () => {
+    setShowConfirmModal(false);
     setIsSubmitting(true);
     setError(null);
-    setSuccess(null);
 
     try {
-      // Mock order submission
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Generate mock signature (in production, wallet would sign)
+      const signature = `0x${Math.random().toString(16).substring(2)}${Math.random().toString(16).substring(2)}`;
+      const timestamp = Date.now();
 
-      // In real implementation, call API
-      // await placeOrder({ ...orderForm, signature: '...', timestamp: Date.now() });
+      // Prepare order request
+      const orderRequest = {
+        coin: selectedAsset,
+        isBuy: orderForm.side === 'buy',
+        limitPx: orderForm.type === 'market' ? 0.0 : parseFloat(orderForm.price) || 0.0,
+        stopPx: (orderForm.type === 'stop_limit' || orderForm.type === 'stop_market')
+          ? parseFloat(orderForm.stopPrice)
+          : undefined,
+        sz: parseFloat(orderForm.size),
+        orderType: orderForm.type,
+        reduceOnly: orderForm.reduceOnly,
+        postOnly: orderForm.postOnly,
+        tif: orderForm.tif,
+        signature,
+        timestamp,
+      };
 
-      setSuccess(`Order placed: ${orderForm.side.toUpperCase()} ${orderForm.size} ${orderForm.type}`);
-      resetOrderForm();
+      // Call API
+      const response = await placeOrder(orderRequest);
 
-      setTimeout(() => setSuccess(null), 3000);
+      if (response.success && response.orderId) {
+        // Add to open orders
+        const newOrder = {
+          oid: response.orderId,
+          coin: selectedAsset,
+          side: orderForm.side === 'buy' ? 'B' : 'A',
+          limitPx: parseFloat(orderForm.price),
+          sz: parseFloat(orderForm.size),
+          origSz: parseFloat(orderForm.size),
+          status: 'open' as const,
+          timestamp,
+          orderType: orderForm.type,
+          reduceOnly: orderForm.reduceOnly,
+          postOnly: orderForm.postOnly,
+          tif: orderForm.tif,
+        };
+        addOpenOrder(newOrder);
+
+        // Show success message
+        showSuccess(`Order placed: ${orderForm.side.toUpperCase()} ${orderForm.size} @ $${orderForm.price}`);
+        resetOrderForm();
+      } else {
+        showError(response.message || 'Order placement failed');
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Order failed');
+      const errorMsg = err instanceof Error ? err.message : 'Order failed';
+      setError(errorMsg);
+      showError(errorMsg);
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  // Cancel order
+  const handleCancelOrder = () => {
+    setShowConfirmModal(false);
   };
 
   // Get submit button text and style
@@ -132,7 +206,7 @@ export function OrderForm() {
   };
 
   // Show price input for limit/stop orders
-  const showPriceInput = ['limit', 'stop_limit', 'stop_market'].includes(orderForm.type);
+  const showPriceInput = ['limit', 'stop_limit'].includes(orderForm.type);
 
   return (
     <div className="panel p-3 flex flex-col h-full">
@@ -177,12 +251,28 @@ export function OrderForm() {
         </select>
       </div>
 
+      {/* Stop Price Input (for stop orders) */}
+      {(orderForm.type === 'stop_limit' || orderForm.type === 'stop_market') && (
+        <div className="mb-3">
+          <label className="text-xs text-text-secondary uppercase tracking-wider">
+            Stop Price (Trigger)
+          </label>
+          <input
+            type="number"
+            value={orderForm.stopPrice}
+            onChange={(e) => handleInputChange('stopPrice', e.target.value)}
+            placeholder="0.00"
+            className="input w-full mt-1 font-mono"
+          />
+        </div>
+      )}
+
       {/* Price Input */}
       {showPriceInput && (
         <div className="mb-3">
           <div className="flex justify-between items-center">
             <label className="text-xs text-text-secondary uppercase tracking-wider">
-              Price
+              {orderForm.type === 'stop_limit' ? 'Limit Price' : 'Price'}
             </label>
             <div className="flex gap-1">
               <button
@@ -275,6 +365,24 @@ export function OrderForm() {
         )}
       </div>
 
+      {/* Time-in-Force */}
+      {(orderForm.type === 'limit' || orderForm.type === 'stop_limit') && (
+        <div className="mb-3">
+          <label className="text-xs text-text-secondary uppercase tracking-wider">
+            Time-in-Force
+          </label>
+          <select
+            value={orderForm.tif}
+            onChange={(e) => handleInputChange('tif', e.target.value)}
+            className="input w-full mt-1"
+          >
+            <option value="GTC">Good Till Cancelled (GTC)</option>
+            <option value="IOC">Immediate or Cancel (IOC)</option>
+            <option value="FOK">Fill or Kill (FOK)</option>
+          </select>
+        </div>
+      )}
+
       {/* Submit Button */}
       <button
         onClick={handleSubmit}
@@ -306,11 +414,16 @@ export function OrderForm() {
           {error}
         </div>
       )}
-      {success && (
-        <div className="mt-2 text-xs text-long bg-surface-elevated px-2 py-1 rounded">
-          {success}
-        </div>
-      )}
+
+      {/* Confirmation Modal */}
+      <OrderConfirmModal
+        isOpen={showConfirmModal}
+        orderForm={orderForm}
+        coin={selectedAsset}
+        onConfirm={handleConfirmOrder}
+        onCancel={handleCancelOrder}
+        isSubmitting={isSubmitting}
+      />
     </div>
   );
 }

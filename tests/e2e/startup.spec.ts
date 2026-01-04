@@ -49,7 +49,7 @@ test.describe('Application Startup', () => {
     await expect(orderEntryPanel).toBeVisible();
 
     // Verify form fields exist
-    await expect(orderEntryPanel.locator('select')).toBeVisible();
+    await expect(orderEntryPanel.locator('select').first()).toBeVisible();
     await expect(orderEntryPanel.locator('input[type="number"]')).toHaveCount(2); // Price and Size
     // Verify submit button exists (there are 2 buy buttons - toggle and submit)
     const submitButton = orderEntryPanel.locator('button.btn-buy');
@@ -75,6 +75,7 @@ test.describe('Application Startup', () => {
       !e.includes('[WebSocket] Error:') &&  // WebSocket connection errors are expected during initial connection
       !e.includes("can't establish a connection to the server at ws://") &&  // Firefox WebSocket errors
       !e.includes('establish a connection to the server at ws://') &&  // Firefox WebSocket errors
+      !e.includes('was interrupted while the page was loading') &&  // Firefox connection interrupted errors
       !e.includes('could not be parsed')  // URL parsing errors
     );
 

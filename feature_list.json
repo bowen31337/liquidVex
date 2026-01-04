@@ -671,7 +671,7 @@
     "is_dev_done": true,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_completed_at": "2026-01-04T03:13:59.590927Z",
+    "dev_completed_at": "2026-01-04T03:22:36.418547Z",
     "dev_failure_count": 0
   },
   {
@@ -715,7 +715,13 @@
     ],
     "passes": false,
     "is_dev_done": false,
-    "is_qa_passed": false
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-04T03:22:42.772128Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "functional",
@@ -750,8 +756,11 @@
       "Step 7: Verify order appears in open orders"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T03:18:40.646529Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -865,8 +874,11 @@
       "Step 10: Verify modification success notification"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T03:22:46.099405Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",

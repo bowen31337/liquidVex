@@ -11,6 +11,9 @@
     "test": "turbo run test",
     "test:e2e": "pnpm exec playwright test",
     "test:e2e:orderbook-price": "pnpm exec playwright test tests/e2e/012-click-orderbook-price-populates-form.spec.ts",
+    "test:e2e:websocket-reconnect": "pnpm exec playwright test tests/e2e/websocket-reconnect.spec.ts",
+    "test:e2e:order-book-spread": "pnpm exec playwright test tests/e2e/order-book-spread.spec.ts",
+    "test:e2e:chart-functionality": "pnpm exec playwright test tests/e2e/chart-functionality.spec.ts",
     "clean": "turbo run clean && rm -rf node_modules"
   },
   "devDependencies": {

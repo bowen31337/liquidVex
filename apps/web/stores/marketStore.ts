@@ -98,7 +98,21 @@ export const useMarketStore = create<MarketState>((set, get) => ({
   setFundingCountdown: (seconds) => set({ fundingCountdown: seconds }),
 
   allMids: {},
-  setAllMids: (mids) => set({ allMids: mids }),
+  setAllMids: (mids) => {
+    const state = get();
+    // Update prices based on current selected asset
+    const selectedPrice = mids[state.selectedAsset];
+    if (selectedPrice) {
+      set({
+        allMids: mids,
+        currentPrice: selectedPrice,
+        markPrice: selectedPrice,  // Mark price follows mid price
+        indexPrice: selectedPrice - 0.5,  // Index slightly below for realism
+      });
+    } else {
+      set({ allMids: mids });
+    }
+  },
 
   assetInfo: null,
   setAssetInfo: (info) => set({ assetInfo: info }),

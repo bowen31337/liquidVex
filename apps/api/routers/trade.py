@@ -15,9 +15,10 @@ class OrderRequest(BaseModel):
 
     coin: str
     is_buy: bool
-    limit_px: float
+    limit_px: float = 0.0  # 0 for market orders
     sz: float
-    order_type: Literal["limit", "market"] = "limit"
+    order_type: Literal["limit", "market", "stop_limit", "stop_market"] = "limit"
+    stop_px: float | None = None  # Trigger price for stop orders
     reduce_only: bool = False
     post_only: bool = False
     tif: Literal["GTC", "IOC", "FOK"] = "GTC"

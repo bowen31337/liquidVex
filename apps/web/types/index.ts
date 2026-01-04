@@ -144,8 +144,9 @@ export interface OrderRequest {
   coin: string;
   isBuy: boolean;
   limitPx: number;
+  stopPx?: number;  // Trigger price for stop orders
   sz: number;
-  orderType: 'limit' | 'market';
+  orderType: 'limit' | 'market' | 'stop_limit' | 'stop_market';
   reduceOnly: boolean;
   postOnly: boolean;
   tif: 'GTC' | 'IOC' | 'FOK';

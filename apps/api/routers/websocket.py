@@ -52,9 +52,12 @@ async def generate_orderbook_data(coin: str) -> dict[str, Any]:
     bids = []
     asks = []
 
+    # Create tighter spread - bids slightly below base price, asks slightly above
     for i in range(25):
-        bid_px = base_price - (i + 1) * base_price * 0.0001
-        ask_px = base_price + (i + 1) * base_price * 0.0001
+        # Bids: start from base_price - small amount and go down
+        bid_px = base_price - (i + 1) * 0.1  # Much smaller increment
+        # Asks: start from base_price + small amount and go up
+        ask_px = base_price + (i + 1) * 0.1  # Much smaller increment
         bid_sz = random.uniform(0.1, 10)
         ask_sz = random.uniform(0.1, 10)
 

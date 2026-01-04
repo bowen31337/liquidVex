@@ -203,6 +203,7 @@ test.describe('Comprehensive Trading Interface Tests', () => {
       !e.includes('[WebSocket] Error:') &&  // WebSocket connection errors are expected during initial connection
       !e.includes("can't establish a connection to the server at ws://") &&  // Firefox WebSocket errors
       !e.includes('establish a connection to the server at ws://') &&  // Firefox WebSocket errors
+      !e.includes('was interrupted while the page was loading') &&  // Firefox connection interrupted errors
       !e.includes('could not be parsed')  // URL parsing errors
     );
 

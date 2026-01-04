@@ -5,6 +5,18 @@
 import { create } from 'zustand';
 import { Order, Position, AccountState, AccountHistory } from '../types';
 
+export type OrderFormState = {
+  side: 'buy' | 'sell';
+  type: 'limit' | 'market' | 'stop_limit' | 'stop_market';
+  price: string;
+  stopPrice: string; // Trigger price for stop orders
+  size: string;
+  leverage: number;
+  reduceOnly: boolean;
+  postOnly: boolean;
+  tif: 'GTC' | 'IOC' | 'FOK';
+};
+
 interface OrderState {
   // Open positions
   positions: Position[];
@@ -34,16 +46,7 @@ interface OrderState {
   setAccountState: (state: AccountState) => void;
 
   // Order form state
-  orderForm: {
-    side: 'buy' | 'sell';
-    type: 'limit' | 'market' | 'stop_limit' | 'stop_market';
-    price: string;
-    size: string;
-    leverage: number;
-    reduceOnly: boolean;
-    postOnly: boolean;
-    tif: 'GTC' | 'IOC' | 'FOK';
-  };
+  orderForm: OrderFormState;
   setOrderForm: (form: Partial<OrderState['orderForm']>) => void;
   resetOrderForm: () => void;
 
@@ -79,6 +82,7 @@ export const useOrderStore = create<OrderState>((set) => ({
     side: 'buy',
     type: 'limit',
     price: '',
+    stopPrice: '',
     size: '',
     leverage: 10,
     reduceOnly: false,
@@ -91,6 +95,7 @@ export const useOrderStore = create<OrderState>((set) => ({
       side: 'buy',
       type: 'limit',
       price: '',
+      stopPrice: '',
       size: '',
       leverage: 10,
       reduceOnly: false,

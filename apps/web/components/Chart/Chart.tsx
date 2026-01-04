@@ -197,7 +197,7 @@ export function Chart() {
   };
 
   return (
-    <div className={`panel ${isFullscreen ? 'fixed inset-4 z-50' : ''} p-2 flex flex-col`}>
+    <div className={`panel chart-panel ${isFullscreen ? 'fixed inset-4 z-50' : ''} p-2 flex flex-col`}>
       {/* Chart Controls */}
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
@@ -236,7 +236,7 @@ export function Chart() {
       </div>
 
       {/* Chart Container */}
-      <div ref={chartContainerRef} className="flex-1 min-h-[400px]" />
+      <div ref={chartContainerRef} className="flex-1 min-h-[400px]" data-testid="chart-container" />
     </div>
   );
 }
