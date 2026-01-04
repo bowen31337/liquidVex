@@ -2859,12 +2859,14 @@
       "Step 8: Verify all panels show consistent, synchronized data",
       "Step 9: Verify no stale data or mismatches between panels"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T12:35:00.950150Z",
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "test_file": "tests/e2e/128-real-time-data-sync.spec.ts",
+    "notes": "All 8 E2E tests passed in Chromium. Real-time data synchronization verified across all panels: order book, recent trades, chart, and header price."
   },
   {
     "category": "functional",
@@ -3491,8 +3493,8 @@
       "Step 3: Verify focus ring is visible",
       "Step 4: Verify ring uses accent color"
     ],
-    "passes": false,
-    "is_dev_done": false,
+    "passes": true,
+    "is_dev_done": true,
     "is_qa_passed": false
   },
   {
