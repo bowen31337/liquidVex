@@ -4,7 +4,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useMarketStore } from '../../stores/marketStore';
 import { useOrderStore } from '../../stores/orderStore';
 import { useWebSocket } from '../../hooks/useWebSocket';
@@ -23,6 +23,22 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
   const { setOrderForm } = useOrderStore();
   const [aggregation, setAggregation] = useState<number>(1); // Price grouping in decimals
   const [selectedPrecision, setSelectedPrecision] = useState<number>(2); // Price precision
+
+  // Refs for scrollable containers
+  const asksContainerRef = useRef<HTMLDivElement>(null);
+  const bidsContainerRef = useRef<HTMLDivElement>(null);
+
+  // Center on current price function
+  const centerOnPrice = () => {
+    // Scroll asks to bottom to show the spread
+    if (asksContainerRef.current) {
+      asksContainerRef.current.scrollTop = asksContainerRef.current.scrollHeight;
+    }
+    // Scroll bids to top to show the spread
+    if (bidsContainerRef.current) {
+      bidsContainerRef.current.scrollTop = 0;
+    }
+  };
 
   // Connect to order book WebSocket
   const { isConnected } = useWebSocket(
@@ -65,6 +81,11 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
       key: 'c',
       description: 'Set aggregation to 10',
       callback: () => setAggregation(10),
+    },
+    {
+      key: 'v',
+      description: 'Center on current price',
+      callback: centerOnPrice,
     },
   ];
 
@@ -117,6 +138,11 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
   // Format size
   const formatSize = (size: number) => {
     return size.toFixed(4);
+  };
+
+  // Format total volume with commas
+  const formatTotalVolume = (volume: number) => {
+    return volume.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 4 });
   };
 
   // Handle price click to populate order form
@@ -177,7 +203,7 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
         <div className="text-xs font-medium text-text-secondary uppercase tracking-wider">
           Order Book
         </div>
-        <div className="flex gap-2 text-[10px] text-text-tertiary">
+        <div className="flex gap-2 text-[10px] text-text-tertiary items-center">
           {/* Precision Controls */}
           <div className="flex gap-1">
             <span className="px-1 py-0.5 rounded bg-surface-elevated">Precision:</span>
@@ -207,6 +233,17 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
               </Tooltip>
             ))}
           </div>
+          {/* Center Button */}
+          <Tooltip content="Press 'v' or click to center on current price" position="bottom">
+            <button
+              onClick={centerOnPrice}
+              className="px-2 py-0.5 rounded bg-accent text-white hover:bg-accent/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              data-testid="center-on-price-button"
+              aria-label="Center on current price"
+            >
+              Center
+            </button>
+          </Tooltip>
         </div>
       </div>
 
@@ -252,30 +289,47 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
       {/* Order Book Content */}
       <div className="flex-1 overflow-hidden flex flex-col gap-1">
         {/* Asks (Sell Orders) - Top */}
-        <div className="flex-1 overflow-y-auto flex flex-col-reverse">
+        <div ref={asksContainerRef} className="flex-1 overflow-y-auto flex flex-col-reverse">
           {renderData.asks.length > 0 ? (
             renderData.asks.map((level, idx) => {
               const barWidth = maxCumulative > 0 ? (level.cumulative / maxCumulative) * 100 : 0;
-              return (
-                <div
-                  key={`ask-${idx}`}
-                  className="relative flex items-center text-xs font-mono py-0.5 px-1 hover:bg-surface-elevated cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent" role="button" tabIndex={0}
-                  onClick={() => handlePriceClick(level.px)}
-                >
-                  {/* Depth Bar */}
-                  <div
-                    className="absolute right-0 top-0 bottom-0 bg-short opacity-20"
-                    style={{ width: `${barWidth}%` }}
-                  />
-                  {/* Empty (Left for symmetry) */}
-                  <div className="flex-1"></div>
-                  {/* Price (Center) */}
-                  <div className="flex-1 text-center text-text-primary z-10 font-medium" data-testid="ask-price">
-                    {formatPrice(level.px)}
+              const tooltipContent = (
+                <div className="text-xs">
+                  <div className="font-semibold mb-1">Price: {formatPrice(level.px)}</div>
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+                    <span className="text-text-tertiary">Total Volume:</span>
+                    <span className="font-mono text-short">{formatTotalVolume(level.sz)}</span>
+                    <span className="text-text-tertiary">Orders:</span>
+                    <span className="font-mono">{level.n}</span>
+                    <span className="text-text-tertiary">Cumulative:</span>
+                    <span className="font-mono">{formatTotalVolume(level.cumulative)}</span>
                   </div>
-                  {/* Size (Right) */}
-                  <div className="flex-1 text-right text-short z-10">{formatSize(level.sz)}</div>
                 </div>
+              );
+              return (
+                <Tooltip key={`ask-${idx}`} content={tooltipContent} position="left">
+                  <div
+                    className="relative flex items-center text-xs font-mono py-0.5 px-1 hover:bg-surface-elevated cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => handlePriceClick(level.px)}
+                    data-testid="ask-level"
+                  >
+                    {/* Depth Bar */}
+                    <div
+                      className="absolute right-0 top-0 bottom-0 bg-short opacity-20"
+                      style={{ width: `${barWidth}%` }}
+                    />
+                    {/* Empty (Left for symmetry) */}
+                    <div className="flex-1"></div>
+                    {/* Price (Center) */}
+                    <div className="flex-1 text-center text-text-primary z-10 font-medium" data-testid="ask-price">
+                      {formatPrice(level.px)}
+                    </div>
+                    {/* Size (Right) */}
+                    <div className="flex-1 text-right text-short z-10">{formatSize(level.sz)}</div>
+                  </div>
+                </Tooltip>
               );
             })
           ) : (
@@ -286,30 +340,47 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
         </div>
 
         {/* Bids (Buy Orders) - Bottom */}
-        <div className="flex-1 overflow-y-auto">
+        <div ref={bidsContainerRef} className="flex-1 overflow-y-auto">
           {renderData.bids.length > 0 ? (
             renderData.bids.map((level, idx) => {
               const barWidth = maxCumulative > 0 ? (level.cumulative / maxCumulative) * 100 : 0;
-              return (
-                <div
-                  key={`bid-${idx}`}
-                  className="relative flex items-center text-xs font-mono py-0.5 px-1 hover:bg-surface-elevated cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent" role="button" tabIndex={0}
-                  onClick={() => handlePriceClick(level.px)}
-                >
-                  {/* Depth Bar */}
-                  <div
-                    className="absolute left-0 top-0 bottom-0 bg-long opacity-20"
-                    style={{ width: `${barWidth}%` }}
-                  />
-                  {/* Size (Left) */}
-                  <div className="flex-1 text-left text-long z-10">{formatSize(level.sz)}</div>
-                  {/* Price (Center) */}
-                  <div className="flex-1 text-center text-text-primary z-10 font-medium" data-testid="bid-price">
-                    {formatPrice(level.px)}
+              const tooltipContent = (
+                <div className="text-xs">
+                  <div className="font-semibold mb-1">Price: {formatPrice(level.px)}</div>
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+                    <span className="text-text-tertiary">Total Volume:</span>
+                    <span className="font-mono text-long">{formatTotalVolume(level.sz)}</span>
+                    <span className="text-text-tertiary">Orders:</span>
+                    <span className="font-mono">{level.n}</span>
+                    <span className="text-text-tertiary">Cumulative:</span>
+                    <span className="font-mono">{formatTotalVolume(level.cumulative)}</span>
                   </div>
-                  {/* Empty (Right for symmetry) */}
-                  <div className="flex-1"></div>
                 </div>
+              );
+              return (
+                <Tooltip key={`bid-${idx}`} content={tooltipContent} position="right">
+                  <div
+                    className="relative flex items-center text-xs font-mono py-0.5 px-1 hover:bg-surface-elevated cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => handlePriceClick(level.px)}
+                    data-testid="bid-level"
+                  >
+                    {/* Depth Bar */}
+                    <div
+                      className="absolute left-0 top-0 bottom-0 bg-long opacity-20"
+                      style={{ width: `${barWidth}%` }}
+                    />
+                    {/* Size (Left) */}
+                    <div className="flex-1 text-left text-long z-10">{formatSize(level.sz)}</div>
+                    {/* Price (Center) */}
+                    <div className="flex-1 text-center text-text-primary z-10 font-medium" data-testid="bid-price">
+                      {formatPrice(level.px)}
+                    </div>
+                    {/* Empty (Right for symmetry) */}
+                    <div className="flex-1"></div>
+                  </div>
+                </Tooltip>
               );
             })
           ) : (

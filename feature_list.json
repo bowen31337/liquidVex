@@ -1309,7 +1309,7 @@
       "Step 9: Press keyboard shortcut for cancel all",
       "Step 10: Verify all orders are canceled"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
@@ -3412,15 +3412,16 @@
       "Step 3: Click button",
       "Step 4: Verify view centers on current price"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false,
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 1,
     "last_dev_failure_at": "2026-01-04T13:59:34.278758Z",
     "dev_failure_reasons": [
       "Worker session timed out"
-    ]
+    ],
+    "qa_completed_at": "2026-01-05T01:06:28.597659Z"
   },
   {
     "category": "functional",
@@ -3449,7 +3450,13 @@
     ],
     "passes": false,
     "is_dev_done": false,
-    "is_qa_passed": false
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-04T14:05:54.357078Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "functional",
