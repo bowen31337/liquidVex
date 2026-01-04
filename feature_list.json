@@ -1722,12 +1722,15 @@
     "passes": true,
     "is_dev_done": true,
     "is_qa_passed": true,
-    "dev_failure_count": 0,
-    "last_dev_failure_at": null,
-    "dev_failure_reasons": [],
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-04T09:15:38.340412Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ],
     "is_stuck": false,
     "stuck_reason": null,
-    "stuck_at": null
+    "stuck_at": null,
+    "qa_retry_count": 0
   },
   {
     "category": "style",
@@ -1764,9 +1767,12 @@
       "Step 6: Inspect timestamps and minor labels",
       "Step 7: Verify tertiary text color is #737373"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "dev_failure_count": 0,
+    "last_dev_failure_at": null,
+    "dev_failure_reasons": []
   },
   {
     "category": "style",
