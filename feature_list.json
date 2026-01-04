@@ -1526,7 +1526,13 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "dev_failure_count": 0,
-    "qa_retry_count": 0
+    "qa_retry_count": 0,
+    "test_file": "tests/e2e/069-api-trade-cancel-all.spec.ts",
+    "test_results": {
+      "total": 24,
+      "passed": 24,
+      "failed": 0
+    }
   },
   {
     "category": "functional",
@@ -1545,7 +1551,15 @@
     ],
     "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false
+    "is_qa_passed": true,
+    "qa_retry_count": 0,
+    "dev_failure_count": 0,
+    "test_file": "tests/e2e/070-api-account-endpoints.spec.ts",
+    "test_results": {
+      "total": 45,
+      "passed": 45,
+      "failed": 0
+    }
   },
   {
     "category": "functional",
@@ -1570,8 +1584,8 @@
       "Step 4: Test from unauthorized origin",
       "Step 5: Verify CORS error for unauthorized origin"
     ],
-    "passes": false,
-    "is_dev_done": false,
+    "passes": true,
+    "is_dev_done": true,
     "is_qa_passed": false
   },
   {
