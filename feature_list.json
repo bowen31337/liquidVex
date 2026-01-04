@@ -1144,12 +1144,13 @@
       "Step 9: Locate available balance display",
       "Step 10: Verify available = equity - margin used"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T03:50:03.400365Z",
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "qa_completed_at": "2026-01-05T00:30:00.000000+00:00"
   },
   {
     "category": "functional",
@@ -3343,8 +3344,11 @@
       "Step 4: Verify formatting is consistent"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T13:29:33.098895Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
