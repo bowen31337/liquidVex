@@ -24,6 +24,9 @@ test.describe('Order History Tests', () => {
     await expect(orderHistoryTab).toBeVisible();
     await orderHistoryTab.click();
 
+    // Wait for state to update
+    await page.waitForTimeout(500);
+
     // Step 3: Verify order history section is displayed
     const orderHistoryContent = page.locator('[data-testid="order-history"]');
     await expect(orderHistoryContent).toBeVisible();
@@ -173,9 +176,10 @@ test.describe('Order History Tests', () => {
     // Wait for data to load
     await page.waitForTimeout(1000);
 
-    // Step 1: Verify order count is displayed
-    const orderCount = page.locator('text=/orders?$/i');
+    // Step 1: Verify order count is displayed (look for the count in the filter bar)
+    const orderCount = page.locator('[data-testid="order-history"] .ml-auto');
     await expect(orderCount).toBeVisible();
+    await expect(orderCount).toContainText(/orders?/);
   });
 
   test('should handle empty state when no orders match filters', async ({ page }) => {

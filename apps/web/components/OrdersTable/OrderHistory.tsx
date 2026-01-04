@@ -41,8 +41,52 @@ export function OrderHistory() {
 
   // Load order history when wallet connects
   useEffect(() => {
-    // In test mode, don't load from API (orders are added directly to store)
     if (isTestMode) {
+      // In test mode, load mock data directly
+      setOrderHistory([
+        {
+          oid: 1001,
+          coin: 'BTC',
+          side: 'B',
+          limitPx: 43250.50,
+          sz: 0.5,
+          origSz: 0.5,
+          status: 'filled',
+          timestamp: Date.now() - 3600000,
+          orderType: 'limit',
+          reduceOnly: false,
+          postOnly: false,
+          tif: 'GTC',
+        },
+        {
+          oid: 1002,
+          coin: 'ETH',
+          side: 'A',
+          limitPx: 2280.75,
+          sz: 2.0,
+          origSz: 2.0,
+          status: 'canceled',
+          timestamp: Date.now() - 7200000,
+          orderType: 'limit',
+          reduceOnly: false,
+          postOnly: true,
+          tif: 'GTC',
+        },
+        {
+          oid: 1003,
+          coin: 'SOL',
+          side: 'B',
+          limitPx: 98.45,
+          sz: 10.0,
+          origSz: 10.0,
+          status: 'filled',
+          timestamp: Date.now() - 86400000,
+          orderType: 'market',
+          reduceOnly: false,
+          postOnly: false,
+          tif: 'IOC',
+        },
+      ]);
       return;
     }
 
@@ -101,7 +145,7 @@ export function OrderHistory() {
         }
       };
       loadHistory();
-    } else if (!isTestMode) {
+    } else {
       setOrderHistory([]);
     }
   }, [isConnected, address, isTestMode]);
