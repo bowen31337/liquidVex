@@ -4,7 +4,7 @@
 
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { createChart, ColorType, IChartApi, ISeriesApi } from 'lightweight-charts';
 import { useMarketStore } from '../../stores/marketStore';
 import { useWebSocket } from '../../hooks/useWebSocket';
@@ -302,32 +302,8 @@ export function Chart() {
     loadCandles();
   }, [selectedAsset, timeframe, chartType, isTestMode]);
 
-  // Handle historical data loading on scroll
-  useEffect(() => {
-    if (!chartRef.current || isTestMode || !hasMoreHistorical || isLoadingHistorical) {
-      return;
-    }
-
-    const unsubscribe = chartRef.current.timeScale().subscribeVisibleLogicalRangeChange((range) => {
-      if (!range || range.from === null || range.to === null) return;
-
-      // Check if user is scrolling near the beginning of loaded data
-      // Load more historical data when getting close to the left edge
-      const visibleRangeWidth = range.to - range.from;
-      const threshold = range.from + (visibleRangeWidth * 0.1); // 10% from left edge
-
-      if (range.from <= threshold && candles.length > 0) {
-        loadHistoricalData();
-      }
-    });
-
-    return () => {
-      unsubscribe?.();
-    };
-  }, [chartRef, candles, hasMoreHistorical, isLoadingHistorical, isTestMode, selectedAsset, timeframe]);
-
   // Load historical candle data (before the current oldest candle)
-  const loadHistoricalData = async () => {
+  const loadHistoricalData = useCallback(async () => {
     if (isLoadingHistorical || !hasMoreHistorical || candles.length === 0 || isTestMode) {
       return;
     }
@@ -386,7 +362,31 @@ export function Chart() {
     } finally {
       setIsLoadingHistorical(false);
     }
-  };
+  }, [isLoadingHistorical, hasMoreHistorical, candles, isTestMode, selectedAsset, timeframe, getCandles, chartType, setCandles]);
+
+  // Handle historical data loading on scroll
+  useEffect(() => {
+    if (!chartRef.current || isTestMode || !hasMoreHistorical || isLoadingHistorical) {
+      return;
+    }
+
+    const unsubscribe = chartRef.current.timeScale().subscribeVisibleLogicalRangeChange((range) => {
+      if (!range || range.from === null || range.to === null) return;
+
+      // Check if user is scrolling near the beginning of loaded data
+      // Load more historical data when getting close to the left edge
+      const visibleRangeWidth = range.to - range.from;
+      const threshold = range.from + (visibleRangeWidth * 0.1); // 10% from left edge
+
+      if (range.from <= threshold && candles.length > 0) {
+        loadHistoricalData();
+      }
+    });
+
+    return () => {
+      unsubscribe?.();
+    };
+  }, [chartRef, candles, hasMoreHistorical, isLoadingHistorical, isTestMode, selectedAsset, timeframe, loadHistoricalData]);
 
   // Handle chart with new candles from WebSocket
   useEffect(() => {

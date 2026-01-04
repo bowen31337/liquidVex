@@ -3290,9 +3290,11 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 0,
-    "last_dev_failure_at": null,
-    "dev_failure_reasons": [],
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-04T14:10:09.671894Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ],
     "is_stuck": false,
     "stuck_reason": null,
     "stuck_at": null
@@ -3416,12 +3418,9 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 1,
-    "last_dev_failure_at": "2026-01-04T13:59:34.278758Z",
-    "dev_failure_reasons": [
-      "Worker session timed out"
-    ],
-    "qa_completed_at": "2026-01-05T01:06:28.597659Z"
+    "dev_failure_count": 0,
+    "qa_completed_at": "2026-01-05T01:06:28.597659Z",
+    "dev_completed_at": "2026-01-04T14:09:12.822213Z"
   },
   {
     "category": "functional",
@@ -3485,8 +3484,11 @@
       "Step 5: Verify subsequent orders don't require signing"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T14:07:19.451491Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -3511,8 +3513,11 @@
       "Step 4: Verify max leverage, tick size, min size displayed"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T14:07:43.881869Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
