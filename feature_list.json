@@ -3426,7 +3426,7 @@
     "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 0,
-    "qa_completed_at": "2026-01-05T01:06:28.597659Z",
+    "qa_completed_at": "2026-01-04T15:13:48.604724+00:00",
     "dev_completed_at": "2026-01-04T14:09:12.822213Z"
   },
   {
@@ -3546,12 +3546,13 @@
       "Step 2: Verify all expected pairs are listed",
       "Step 3: Verify pair data matches exchange metadata"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T14:14:36.861830Z",
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "qa_completed_at": "2026-01-04T15:15:31.733993Z"
   },
   {
     "category": "functional",
@@ -3805,9 +3806,13 @@
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 0,
+    "dev_failure_count": 1,
     "dev_completed_at": "2026-01-05T02:10:00.000000Z",
-    "qa_completed_at": "2026-01-05T02:10:00.000000Z"
+    "qa_completed_at": "2026-01-05T02:10:00.000000Z",
+    "last_dev_failure_at": "2026-01-04T15:14:39.048449Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "style",
@@ -3910,7 +3915,7 @@
     "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 0,
-    "dev_completed_at": "2026-01-05T02:10:00.000000Z",
+    "dev_completed_at": "2026-01-04T15:15:33.459234Z",
     "qa_completed_at": "2026-01-05T02:10:00.000000Z"
   },
   {

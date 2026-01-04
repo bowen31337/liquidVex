@@ -7,18 +7,37 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Bottom Panel Tab Navigation', () => {
   test.beforeEach(async ({ page }) => {
-    // Navigate to the application
-    await page.goto('http://localhost:3002');
+    // Navigate to the application with test mode
+    await page.goto('/?testMode=true');
     await page.waitForLoadState('networkidle');
 
-    // Check that the main trading interface is loaded
-    try {
-      await expect(page.locator('[data-testid="bottom-panel"]')).toBeVisible({ timeout: 10000 });
-    } catch (error) {
-      // If bottom panel doesn't load immediately, wait a bit more
-      await page.waitForTimeout(5000);
-      await expect(page.locator('[data-testid="bottom-panel"]')).toBeVisible();
-    }
+    // Wait for stores to be available
+    await page.waitForFunction(() => {
+      return typeof window !== 'undefined' && (window as any).stores;
+    }, { timeout: 10000 });
+
+    // Populate account state to make bottom panel visible
+    await page.evaluate(() => {
+      const stores = (window as any).stores;
+      if (stores && stores.getOrderStoreState) {
+        const orderStoreState = stores.getOrderStoreState();
+        if (orderStoreState && orderStoreState.setAccountState) {
+          orderStoreState.setAccountState({
+            equity: 10000.0,
+            marginUsed: 2500.0,
+            availableBalance: 7500.0,
+            withdrawable: 5000.0,
+            crossMarginSummary: {
+              accountValue: 10000.0,
+              totalMarginUsed: 2500.0,
+            },
+          });
+        }
+      }
+    });
+
+    // Wait for bottom panel to be visible
+    await expect(page.locator('[data-testid="bottom-panel"]')).toBeVisible({ timeout: 10000 });
   });
 
   test('should display bottom panel with all tabs', async ({ page }) => {
