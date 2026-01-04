@@ -17,6 +17,9 @@ export interface Order {
   reduceOnly: boolean;
   postOnly: boolean;
   tif: 'GTC' | 'IOC' | 'FOK';
+  // Optional fields for order fill tracking
+  filledSz?: number;
+  avgFillPx?: number;
 }
 
 // Position types

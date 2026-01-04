@@ -177,6 +177,8 @@ async def get_candles(
     coin: str,
     interval: str = "1h",
     limit: int = 500,
+    startTime: int | None = None,
+    endTime: int | None = None,
 ) -> list[Candle]:
     """
     Get OHLCV candlestick data for charting.
@@ -185,6 +187,8 @@ async def get_candles(
         coin: The coin symbol
         interval: Timeframe (1m, 5m, 15m, 1h, 4h, 1d)
         limit: Maximum number of candles (default 500)
+        startTime: Start timestamp in milliseconds (optional)
+        endTime: End timestamp in milliseconds (optional)
 
     Returns:
         List of OHLCV candles sorted by timestamp descending.
@@ -202,12 +206,22 @@ async def get_candles(
         "1d": 86400000,
     }.get(interval, 3600000)
 
-    now = int(time.time() * 1000)
+    # If endTime is not provided, use current time
+    if endTime is None:
+        endTime = int(time.time() * 1000)
+
+    # If startTime is not provided, calculate from endTime and limit
+    if startTime is None:
+        startTime = endTime - (limit * interval_ms)
+
     base_price = 95000.0 if coin.upper() == "BTC" else 3500.0
 
+    # Generate candles from endTime going backwards
     candles = []
-    for i in range(min(limit, 500)):
-        t = now - i * interval_ms
+    current_time = endTime
+    count = 0
+
+    while count < limit and current_time > startTime:
         volatility = base_price * 0.001
         o = base_price + random.uniform(-volatility, volatility)
         c = o + random.uniform(-volatility, volatility)
@@ -215,8 +229,10 @@ async def get_candles(
         low = min(o, c) - random.uniform(0, volatility)
         v = random.uniform(100, 10000)
 
-        candles.append(Candle(t=t, o=o, h=h, l=low, c=c, v=v))
+        candles.append(Candle(t=current_time, o=o, h=h, l=low, c=c, v=v))
         base_price = c
+        current_time -= interval_ms
+        count += 1
 
     return candles
 

@@ -7,14 +7,14 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Feature 99 - Connection Status and Keyboard Shortcut Hints', () => {
   test.beforeEach(async ({ page }) => {
-    // Navigate to the application
-    await page.goto('http://localhost:3002');
+    // Navigate to the application with test mode
+    await page.goto('http://localhost:3002?testMode=true');
 
     // Wait for initial load
     await page.waitForLoadState('networkidle');
 
-    // Wait for market data to load
-    await page.waitForSelector('[data-testid="market-header"]', { timeout: 10000 });
+    // Wait for the header to load (connection status indicator)
+    await page.waitForSelector('[data-testid="connection-status-dot"]', { timeout: 10000 });
   });
 
   test('should display connection status indicator with green dot when connected', async ({ page }) => {
@@ -46,13 +46,13 @@ test.describe('Feature 99 - Connection Status and Keyboard Shortcut Hints', () =
     await buyButton.hover();
 
     // Step 6: Verify tooltip shows shortcut key
-    const buyTooltip = page.locator('div:has-text("Press \'B\' to switch to Buy")');
+    const buyTooltip = page.locator('div:has-text("Press \'B\' to switch to Buy")').first();
     await expect(buyTooltip).toBeVisible();
 
     // Hover over sell button
     await sellButton.hover();
 
-    const sellTooltip = page.locator('div:has-text("Press \'S\' to switch to Sell")');
+    const sellTooltip = page.locator('div:has-text("Press \'S\' to switch to Sell")').first();
     await expect(sellTooltip).toBeVisible();
   });
 
@@ -62,7 +62,7 @@ test.describe('Feature 99 - Connection Status and Keyboard Shortcut Hints', () =
     await submitButton.hover();
 
     // Verify tooltip shows Enter shortcut
-    const submitTooltip = page.locator('div:has-text("Press \'Enter\' to submit order")');
+    const submitTooltip = page.locator('div:has-text("Press \'Enter\' to submit order")').first();
     await expect(submitTooltip).toBeVisible();
   });
 
@@ -84,7 +84,7 @@ test.describe('Feature 99 - Connection Status and Keyboard Shortcut Hints', () =
         await button.hover();
 
         // Verify tooltip shows the shortcut key
-        const tooltip = page.locator(`div:has-text("Press '${prec}' to set precision to ${prec} decimals")`);
+        const tooltip = page.locator(`div:has-text("Press '${prec}' to set precision to ${prec} decimals")`).first();
         await expect(tooltip).toBeVisible({ timeout: 1000 });
       }
     }
@@ -111,7 +111,7 @@ test.describe('Feature 99 - Connection Status and Keyboard Shortcut Hints', () =
         await button.hover();
 
         // Verify tooltip shows the shortcut key
-        const tooltip = page.locator(`div:has-text("Press '${key}' to set aggregation to ${buttonText}")`);
+        const tooltip = page.locator(`div:has-text("Press '${key}' to set aggregation to ${buttonText}")`).first();
         await expect(tooltip).toBeVisible({ timeout: 1000 });
       }
     }
@@ -124,19 +124,19 @@ test.describe('Feature 99 - Connection Status and Keyboard Shortcut Hints', () =
     // Verify buy button has B shortcut tooltip
     const buyButton = page.locator('button:has-text("Buy / Long")').first();
     await buyButton.hover();
-    const buyTooltip = page.locator('div:has-text("Press \'B\' to switch to Buy")');
+    const buyTooltip = page.locator('div:has-text("Press \'B\' to switch to Buy")').first();
     await expect(buyTooltip).toBeVisible();
 
     // Verify sell button has S shortcut tooltip
     const sellButton = page.locator('button:has-text("Sell / Short")').first();
     await sellButton.hover();
-    const sellTooltip = page.locator('div:has-text("Press \'S\' to switch to Sell")');
+    const sellTooltip = page.locator('div:has-text("Press \'S\' to switch to Sell")').first();
     await expect(sellTooltip).toBeVisible();
 
     // Verify Enter shortcut tooltip on submit button
     const submitButton = page.locator('[data-testid="order-submit-button"]').first();
     await submitButton.hover();
-    const submitTooltip = page.locator('div:has-text("Press \'Enter\' to submit order")');
+    const submitTooltip = page.locator('div:has-text("Press \'Enter\' to submit order")').first();
     await expect(submitTooltip).toBeVisible();
   });
 

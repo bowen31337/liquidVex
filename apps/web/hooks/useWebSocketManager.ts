@@ -79,6 +79,7 @@ class WebSocketManagerClass {
       isConnecting: true,
       lastError: null,
       messageQueue: [],
+      lastFlushTime: 0,
     };
 
     this.connections.set(url, connection);
@@ -127,8 +128,8 @@ class WebSocketManagerClass {
       // Report WebSocket error
       reportWebSocketError(`WebSocket connection error for ${url}`, {
         url,
-        errorType: error.type || 'unknown',
-        message: error.message || 'WebSocket error occurred',
+        errorType: (error as any).type || 'unknown',
+        message: (error as any).message || 'WebSocket error occurred',
         timestamp: Date.now()
       });
 

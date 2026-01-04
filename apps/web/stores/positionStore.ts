@@ -30,6 +30,9 @@ interface PositionState {
 
   setPositions: (positions: Position[]) => void;
   setAccountState: (state: AccountState | null) => void;
+
+  // Real-time position updates
+  updatePositionFromFill: (fill: any) => void;
 }
 
 export const usePositionStore = create<PositionState>((set, get) => ({
@@ -89,6 +92,70 @@ export const usePositionStore = create<PositionState>((set, get) => ({
     } catch (error) {
       console.error('Failed to close position:', error);
     }
+  },
+
+  /**
+   * Update position based on an order fill
+   * This allows for real-time position updates without waiting for API refresh
+   */
+  updatePositionFromFill: (fill: any) => {
+    set((state) => {
+      const existingPosition = state.positions.find(p => p.coin === fill.coin);
+
+      if (!existingPosition) {
+        // New position - calculate entry price and size
+        const newPosition: Position = {
+          coin: fill.coin,
+          side: fill.side === 'B' ? 'long' : 'short',
+          entryPx: fill.px,
+          sz: fill.sz,
+          leverage: 10, // Default leverage
+          marginUsed: fill.sz * fill.px / 10, // Basic margin calculation
+          unrealizedPnl: 0,
+          realizedPnl: 0,
+          liquidationPx: fill.side === 'B' ? fill.px * 0.8 : fill.px * 1.2, // Basic liquidation calc
+          marginType: 'cross',
+          returnOnEquity: 0,
+        };
+
+        return {
+          positions: [...state.positions, newPosition]
+        };
+      } else {
+        // Existing position - update size and calculate new entry price
+        const isSameSide = (existingPosition.side === 'long' && fill.side === 'B') ||
+                          (existingPosition.side === 'short' && fill.side === 'A');
+
+        let newSz = existingPosition.sz;
+        let newEntryPx = existingPosition.entryPx;
+
+        if (isSameSide) {
+          // Adding to position
+          const totalValue = (existingPosition.sz * existingPosition.entryPx) + (fill.sz * fill.px);
+          newSz = existingPosition.sz + fill.sz;
+          newEntryPx = totalValue / newSz;
+        } else {
+          // Reducing position
+          if (fill.sz >= existingPosition.sz) {
+            // Closing position
+            return {
+              positions: state.positions.filter(p => p.coin !== fill.coin)
+            };
+          } else {
+            // Partial close
+            newSz = existingPosition.sz - fill.sz;
+          }
+        }
+
+        return {
+          positions: state.positions.map(p =>
+            p.coin === fill.coin
+              ? { ...p, sz: newSz, entryPx: newEntryPx }
+              : p
+          )
+        };
+      }
+    });
   },
 
   setPositions: (positions: Position[]) => {

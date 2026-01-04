@@ -16,6 +16,7 @@ import { useToast } from '../Toast/Toast';
 import { useFavoritesActions } from '../../contexts/FavoritesContext';
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 import type { KeyboardShortcut } from '../../hooks/useKeyboardShortcuts';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 export function OrderForm() {
   const { orderForm, setOrderForm, resetOrderForm, addOpenOrder } = useOrderStore();
@@ -509,30 +510,34 @@ export function OrderForm() {
     <div className="panel p-3 flex flex-col h-full relative z-10" data-testid="order-entry-panel" role="region" aria-label="Order Entry Form">
       {/* Buy/Sell Toggle */}
       <div className="flex mb-4">
-        <button
-          onClick={() => handleSideToggle('buy')}
-          className={`flex-1 py-2 text-center rounded-l font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-long focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
-            orderForm.side === 'buy'
-              ? 'bg-long text-white'
-              : 'bg-surface-elevated text-text-secondary hover:text-text-primary'
-          }`}
-          aria-pressed={orderForm.side === 'buy'}
-          aria-label="Switch to Buy / Long order"
-        >
-          Buy / Long
-        </button>
-        <button
-          onClick={() => handleSideToggle('sell')}
-          className={`flex-1 py-2 text-center rounded-r font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-short focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
-            orderForm.side === 'sell'
-              ? 'bg-short text-white'
-              : 'bg-surface-elevated text-text-secondary hover:text-text-primary'
-          }`}
-          aria-pressed={orderForm.side === 'sell'}
-          aria-label="Switch to Sell / Short order"
-        >
-          Sell / Short
-        </button>
+        <Tooltip content="Press 'B' to switch to Buy" position="top">
+          <button
+            onClick={() => handleSideToggle('buy')}
+            className={`flex-1 py-2 text-center rounded-l font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-long focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+              orderForm.side === 'buy'
+                ? 'bg-long text-white'
+                : 'bg-surface-elevated text-text-secondary hover:text-text-primary'
+            }`}
+            aria-pressed={orderForm.side === 'buy'}
+            aria-label="Switch to Buy / Long order"
+          >
+            Buy / Long
+          </button>
+        </Tooltip>
+        <Tooltip content="Press 'S' to switch to Sell" position="top">
+          <button
+            onClick={() => handleSideToggle('sell')}
+            className={`flex-1 py-2 text-center rounded-r font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-short focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+              orderForm.side === 'sell'
+                ? 'bg-short text-white'
+                : 'bg-surface-elevated text-text-secondary hover:text-text-primary'
+            }`}
+            aria-pressed={orderForm.side === 'sell'}
+            aria-label="Switch to Sell / Short order"
+          >
+            Sell / Short
+          </button>
+        </Tooltip>
       </div>
 
       {/* Order Type */}
@@ -714,15 +719,17 @@ export function OrderForm() {
       )}
 
       {/* Submit Button */}
-      <button
-        onClick={handleSubmit}
-        disabled={isSubmitting}
-        className={`${submitConfig.className} w-full py-3 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background ${orderForm.side === 'buy' ? 'focus-visible:ring-long' : 'focus-visible:ring-short'}`}
-        data-testid="order-submit-button"
-        aria-label={isSubmitting ? 'Processing order' : `Submit ${orderForm.side} order`}
-      >
-        {isSubmitting ? 'Processing...' : submitConfig.text}
-      </button>
+      <Tooltip content="Press 'Enter' to submit order" position="top">
+        <button
+          onClick={handleSubmit}
+          disabled={isSubmitting}
+          className={`${submitConfig.className} w-full py-3 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background ${orderForm.side === 'buy' ? 'focus-visible:ring-long' : 'focus-visible:ring-short'}`}
+          data-testid="order-submit-button"
+          aria-label={isSubmitting ? 'Processing order' : `Submit ${orderForm.side} order`}
+        >
+          {isSubmitting ? 'Processing...' : submitConfig.text}
+        </button>
+      </Tooltip>
 
       {/* Order Summary */}
       <div className="text-xs text-text-tertiary space-y-1 pt-2 border-t border-border">

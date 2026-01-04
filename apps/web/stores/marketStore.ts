@@ -14,6 +14,11 @@ interface PersistedMarketState {
   selectedTimeframe: string;
   setSelectedAsset: (asset: string) => void;
   setSelectedTimeframe: (timeframe: string) => void;
+  // Cached candles by asset and timeframe for persistence
+  candlesCache: Record<string, CandleData[]>;
+  setCandlesCache: (asset: string, timeframe: string, candles: CandleData[]) => void;
+  getCandlesFromCache: (asset: string, timeframe: string) => CandleData[] | null;
+  clearCandlesCache: () => void;
 }
 
 // Interface for non-persisted market state
@@ -88,6 +93,14 @@ interface NonPersistedMarketState {
   addCandle: (candle: CandleData) => void;
   clearCandles: () => void;
 
+  // Chart indicators
+  indicators: {
+    volume: boolean;
+    rsi: boolean;
+    macd: boolean;
+  };
+  setIndicators: (indicators: Partial<{ volume: boolean; rsi: boolean; macd: boolean }>) => void;
+
   // Placeholder functions for MarketDataProvider compatibility
   fetchAllMarkets: () => Promise<void>;
   fetchMarketInfo: (coin: string) => Promise<void>;
@@ -103,6 +116,24 @@ export const useMarketStore = create<MarketState>()(
       // Persisted state
       selectedAsset: 'BTC',
       selectedTimeframe: '1h',
+      // Cache candles by asset and timeframe (e.g., "BTC-1h", "ETH-5m")
+      candlesCache: {},
+      setCandlesCache: (asset, timeframe, candles) => {
+        const cacheKey = `${asset}-${timeframe}`;
+        set((state) => ({
+          candlesCache: {
+            ...state.candlesCache,
+            [cacheKey]: candles,
+          },
+        }));
+      },
+      getCandlesFromCache: (asset, timeframe) => {
+        const cacheKey = `${asset}-${timeframe}`;
+        const state = get();
+        return state.candlesCache[cacheKey] || null;
+      },
+      clearCandlesCache: () => set({ candlesCache: {} }),
+
       setSelectedAsset: (asset) => {
         // Reset loading states when switching assets
         set({
@@ -218,17 +249,9 @@ export const useMarketStore = create<MarketState>()(
       setCandles: (candles) => set({ candles, isLoadingCandles: false }),
       addCandle: (candle) => {
         const state = get();
-        // Normalize candle data from WebSocket message
-        // WebSocket sends {type, coin, interval, t, o, h, l, c, v}
-        // We want to extract just the candle part: {t, o, h, l, c, v}
-        const normalizedCandle = {
-          t: candle.t,
-          o: candle.o,
-          h: candle.h,
-          l: candle.l,
-          c: candle.c,
-          v: candle.v,
-        };
+        // WebSocket sends full CandleData structure: {type, coin, interval, t, o, h, l, c, v}
+        // Use the candle as-is since it already matches CandleData interface
+        const normalizedCandle = candle;
 
         // Check if this candle already exists (update vs new)
         const existingIndex = state.candles.findIndex((c: any) => c.t === normalizedCandle.t);
@@ -243,8 +266,34 @@ export const useMarketStore = create<MarketState>()(
           newCandles = [...state.candles, normalizedCandle].slice(-500); // Keep last 500
         }
 
+        // Update the cache for this asset/timeframe combination
+        // Extract interval from candle data if available
+        const candleData = candle as any;
+        if (candleData.coin && candleData.interval) {
+          const cacheKey = `${candleData.coin}-${candleData.interval}`;
+          const cachedCandles = state.candlesCache[cacheKey] || [];
+          const cacheIndex = cachedCandles.findIndex((c: any) => c.t === normalizedCandle.t);
+
+          let updatedCache;
+          if (cacheIndex >= 0) {
+            // Update existing candle in cache
+            updatedCache = [...cachedCandles];
+            updatedCache[cacheIndex] = normalizedCandle;
+          } else {
+            // Add new candle to cache
+            updatedCache = [...cachedCandles, normalizedCandle].slice(-500);
+          }
+
+          // Update cache
+          state.candlesCache = {
+            ...state.candlesCache,
+            [cacheKey]: updatedCache,
+          };
+        }
+
         set({
           candles: newCandles,
+          candlesCache: state.candlesCache,
           isLoadingCandles: false,
           performanceMetrics: {
             ...state.performanceMetrics,
@@ -254,6 +303,21 @@ export const useMarketStore = create<MarketState>()(
         });
       },
       clearCandles: () => set({ candles: [], isLoadingCandles: true }),
+
+      indicators: {
+        volume: true,
+        rsi: false,
+        macd: false,
+      },
+      setIndicators: (updates) => {
+        const state = get();
+        set({
+          indicators: {
+            ...state.indicators,
+            ...updates,
+          },
+        });
+      },
 
       // Placeholder functions - these are no-ops but prevent errors
       fetchAllMarkets: async () => {
@@ -275,6 +339,7 @@ export const useMarketStore = create<MarketState>()(
       partialize: (state) => ({
         selectedAsset: state.selectedAsset,
         selectedTimeframe: state.selectedTimeframe,
+        candlesCache: state.candlesCache,
       }),
     }
   )

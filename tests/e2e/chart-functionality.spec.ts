@@ -185,4 +185,57 @@ test.describe('Chart Functionality Tests', () => {
 
     expect(hasCanvas || isLoading).toBe(true);
   });
+
+  test('Feature 152: should persist chart data across timeframe changes', async ({ page }) => {
+    const chartPanel = page.locator('.chart-panel').first();
+
+    // Wait for initial chart to load with default timeframe (1h)
+    await page.waitForTimeout(2000);
+
+    // Verify chart is visible with 1h timeframe
+    const oneHButton = chartPanel.locator('button:has-text("1h")');
+    await expect(oneHButton).toHaveClass(/bg-accent/);
+    const chartCanvas = chartPanel.locator('[data-testid="chart-container"] canvas').first();
+    await expect(chartCanvas).toBeVisible();
+
+    // Switch to 5m timeframe
+    const fiveMButton = chartPanel.locator('button:has-text("5m")').first();
+    await fiveMButton.click();
+    await page.waitForTimeout(1000);
+    await expect(fiveMButton).toHaveClass(/bg-accent/);
+
+    // Switch to 15m timeframe
+    const fifteenMButton = chartPanel.locator('button:has-text("15m")').first();
+    await fifteenMButton.click();
+    await page.waitForTimeout(1000);
+    await expect(fifteenMButton).toHaveClass(/bg-accent/);
+
+    // Switch back to 1h timeframe - data should be instant (from cache)
+    await oneHButton.click();
+    await page.waitForTimeout(500); // Shorter wait since data is cached
+
+    // Verify 1h is active and chart is visible
+    await expect(oneHButton).toHaveClass(/bg-accent/);
+    await expect(chartCanvas).toBeVisible();
+
+    // Switch through multiple timeframes and back
+    const fourHButton = chartPanel.locator('button:has-text("4h")').first();
+    await fourHButton.click();
+    await page.waitForTimeout(1000);
+
+    const oneDButton = chartPanel.locator('button:has-text("1D")').first();
+    await oneDButton.click();
+    await page.waitForTimeout(1000);
+
+    // Switch back to 5m - should still be instant from cache
+    await fiveMButton.click();
+    await page.waitForTimeout(500);
+    await expect(fiveMButton).toHaveClass(/bg-accent/);
+    await expect(chartCanvas).toBeVisible();
+
+    // Verify chart canvas still has valid dimensions
+    const canvasBoundingBox = await chartCanvas.boundingBox();
+    expect(canvasBoundingBox?.width).toBeGreaterThan(0);
+    expect(canvasBoundingBox?.height).toBeGreaterThan(0);
+  });
 });

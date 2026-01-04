@@ -150,6 +150,27 @@ export const tradeAPI = {
       body: JSON.stringify({ coin }),
     });
   },
+
+  /**
+   * Modify a position (add/reduce size)
+   */
+  async modifyPosition(coin: string, addSize?: number, reduceSize?: number): Promise<{ success: boolean }> {
+    return fetchAPI('/api/trade/modify-position', {
+      method: 'POST',
+      body: JSON.stringify({
+        coin,
+        addSize,
+        reduceSize,
+      }),
+    });
+  },
+
+  /**
+   * Get position updates for a specific coin (for real-time updates)
+   */
+  async getPositionUpdates(coin: string): Promise<{ positions: Position[] }> {
+    return fetchAPI(`/api/account/positions/${coin}/updates`);
+  },
 };
 
 /**

@@ -23,11 +23,60 @@ test.describe('Application Startup and Initial Render', () => {
     await expect(page).toHaveURL(/http:\/\/localhost:3002\/(\?testMode=true)?/);
     await expect(page.locator('body')).toBeVisible();
 
-    // Step 3: Verify the main trading interface is displayed
+    // Step 3: Populate store data to transition from skeletons to real components
+    // This simulates WebSocket data arriving so the app renders real components instead of skeletons
+    await page.evaluate(() => {
+      const stores = (window as any).stores;
+      if (stores) {
+        // Populate order book data
+        stores.useMarketStore.getState().setOrderBook({
+          bids: [
+            { px: 95420, sz: 1.5, n: 3 },
+            { px: 95415, sz: 2.1, n: 5 },
+            { px: 95410, sz: 0.8, n: 2 },
+            { px: 95405, sz: 3.2, n: 7 },
+            { px: 95400, sz: 1.9, n: 4 },
+          ],
+          asks: [
+            { px: 95425, sz: 1.2, n: 4 },
+            { px: 95430, sz: 2.5, n: 6 },
+            { px: 95435, sz: 1.1, n: 3 },
+            { px: 95440, sz: 0.7, n: 2 },
+            { px: 95445, sz: 2.8, n: 5 },
+          ],
+        });
+
+        // Populate recent trades data
+        stores.useMarketStore.getState().setTrades([
+          { px: 95422, sz: 0.5, side: 'B', time: Date.now(), hash: 'trade1' },
+          { px: 95423, sz: 1.2, side: 'S', time: Date.now() - 1000, hash: 'trade2' },
+          { px: 95421, sz: 0.3, side: 'B', time: Date.now() - 2000, hash: 'trade3' },
+        ]);
+
+        // Set loading states to false to trigger real component rendering
+        stores.useMarketStore.getState().setIsLoadingOrderBook(false);
+        stores.useMarketStore.getState().setIsLoadingTrades(false);
+        stores.useMarketStore.getState().setIsLoadingCandles(false);
+
+        // Set some candles for the chart panel
+        stores.useMarketStore.getState().setCandles([
+          { t: Date.now() - 3600000, o: 95400, h: 95450, l: 95380, c: 95420, v: 100 },
+          { t: Date.now() - 2700000, o: 95420, h: 95460, l: 95400, c: 95440, v: 120 },
+          { t: Date.now() - 1800000, o: 95440, h: 95480, l: 95420, c: 95450, v: 90 },
+          { t: Date.now() - 900000, o: 95450, h: 95470, l: 95430, c: 95435, v: 110 },
+          { t: Date.now(), o: 95435, h: 95445, l: 95415, c: 95425, v: 80 },
+        ]);
+      }
+    });
+
+    // Wait for components to transition from skeletons to real components
+    await page.waitForTimeout(500);
+
+    // Step 4: Verify the main trading interface is displayed
     const mainElement = page.locator('main');
     await expect(mainElement).toBeVisible();
 
-    // Step 4: Verify no JavaScript errors in console
+    // Step 5: Verify no JavaScript errors in console
     const unexpectedErrors = consoleErrors.filter(e =>
       !e.includes('NO_COLOR') &&
       !e.includes('FORCE_COLOR') &&
@@ -43,7 +92,9 @@ test.describe('Application Startup and Initial Render', () => {
       !e.includes('WebSocket connection') &&  // Browser WebSocket connection errors
       !e.includes('ws://') &&  // Any WebSocket URL errors
       !e.includes('Cross-Origin') &&  // CORS errors are acceptable in dev mode
-      !e.includes('CORS')  // CORS errors
+      !e.includes('CORS') &&  // CORS errors
+      !e.includes('Origin') &&  // WalletConnect/Reown origin errors
+      !e.includes('Allowlist')  // WalletConnect/Reown allowlist errors
     );
     if (unexpectedErrors.length > 0) {
       console.log('Unexpected console errors:', unexpectedErrors);

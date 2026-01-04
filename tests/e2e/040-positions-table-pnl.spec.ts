@@ -132,7 +132,7 @@ test.describe('Feature 40: Positions Table with Real-time PnL', () => {
     const secondRow = page.locator('tbody tr').nth(1);
     await expect(secondRow.locator('td').nth(0)).toContainText('ETH'); // Symbol
     await expect(secondRow.locator('td').nth(1)).toContainText('SHORT'); // Side
-    await expect(secondRow.locator('td').nth(2)).toContainText('10.0000'); // Size
+    await expect(secondRow.locator('td').nth(2)).toContainText('10'); // Size
     await expect(secondRow.locator('td').nth(3)).toContainText('3,000.00'); // Entry (with comma)
     await expect(secondRow.locator('td').nth(6)).toContainText('+50.00'); // Realized PnL
     await expect(secondRow.locator('td').nth(7)).toContainText('5x'); // Leverage
@@ -567,7 +567,7 @@ test.describe('Feature 40: Positions Table with Real-time PnL', () => {
     await page.waitForTimeout(500);
 
     // Mark price should now show the updated value
-    await expect(markCell).toContainText('46000');
+    await expect(markCell).toContainText('46,000.00');
   });
 
   test('should calculate real-time PnL based on mark price', async ({ page }) => {
@@ -623,7 +623,7 @@ test.describe('Feature 40: Positions Table with Real-time PnL', () => {
     await page.waitForTimeout(500);
 
     // PnL should update
-    await expect(unrealizedPnlCell).toContainText('+1000');
+    await expect(unrealizedPnlCell).toContainText('+1,000.00');
   });
 
   test('should calculate real-time PnL correctly for short positions', async ({ page }) => {
@@ -665,7 +665,7 @@ test.describe('Feature 40: Positions Table with Real-time PnL', () => {
     // Check unrealized PnL shows calculated value
     const firstRow = page.locator('tbody tr').first();
     const unrealizedPnlCell = firstRow.locator('td').nth(5);
-    await expect(unrealizedPnlCell).toContainText('+1000');
+    await expect(unrealizedPnlCell).toContainText('+1,000.00');
     await expect(unrealizedPnlCell).toHaveClass(/text-long/);
 
     // Now update to a higher price (bad for short)
@@ -679,7 +679,7 @@ test.describe('Feature 40: Positions Table with Real-time PnL', () => {
     await page.waitForTimeout(500);
 
     // PnL should update and show negative
-    await expect(unrealizedPnlCell).toContainText('-1000');
+    await expect(unrealizedPnlCell).toContainText('-1,000.00');
     await expect(unrealizedPnlCell).toHaveClass(/text-short/);
   });
 
@@ -725,13 +725,13 @@ test.describe('Feature 40: Positions Table with Real-time PnL', () => {
 
     // Check cross margin has correct styling
     const firstRow = page.locator('tbody tr').first();
-    const marginTypeCell = firstRow.locator('td').nth(10);
+    const marginTypeCell = firstRow.locator('td').nth(11);
     await expect(marginTypeCell).toContainText('CROSS');
     await expect(marginTypeCell).toHaveClass(/bg-long/); // Cross uses long color
 
     // Check isolated margin has correct styling
     const secondRow = page.locator('tbody tr').nth(1);
-    const marginTypeCell2 = secondRow.locator('td').nth(10);
+    const marginTypeCell2 = secondRow.locator('td').nth(11);
     await expect(marginTypeCell2).toContainText('ISOLATED');
     await expect(marginTypeCell2).toHaveClass(/bg-short/); // Isolated uses short color
   });
@@ -767,14 +767,14 @@ test.describe('Feature 40: Positions Table with Real-time PnL', () => {
     // Size should show 4 decimal places
     await expect(firstRow.locator('td').nth(2)).toContainText('0.1234');
 
-    // Entry should show 2 decimal places
-    await expect(firstRow.locator('td').nth(3)).toContainText('45123.45');
+    // Entry should show 2 decimal places with commas
+    await expect(firstRow.locator('td').nth(3)).toContainText('45,123.45');
 
-    // Margin should show 2 decimal places
-    await expect(firstRow.locator('td').nth(8)).toContainText('1234.56');
+    // Margin should show 2 decimal places with commas
+    await expect(firstRow.locator('td').nth(8)).toContainText('1,234.56');
 
-    // Liq price should show 2 decimal places
-    await expect(firstRow.locator('td').nth(9)).toContainText('40123.45');
+    // Liq price should show 2 decimal places with commas
+    await expect(firstRow.locator('td').nth(9)).toContainText('40,123.45');
 
     // Leverage should show as integer or decimal
     await expect(firstRow.locator('td').nth(7)).toContainText('10.5');

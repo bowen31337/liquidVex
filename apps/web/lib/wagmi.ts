@@ -15,9 +15,7 @@ if (typeof window !== 'undefined') {
     walletConnect({
       projectId,
       showQrModal: true,
-      termsOfUseUrl: 'https://liquidvex.example.com/terms',
-      privacyPolicyUrl: 'https://liquidvex.example.com/privacy',
-    })
+    }) as any // Type assertion to bypass wagmi version compatibility issues
   );
 }
 

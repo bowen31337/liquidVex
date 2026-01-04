@@ -47,8 +47,24 @@ export function useApi() {
     };
   }, []);
 
-  const getCandles = useCallback(async (coin: string, interval: string = '1h', limit: number = 500): Promise<any[]> => {
-    const response = await fetch(`${API_URL}/api/info/candles/${coin}?interval=${interval}&limit=${limit}`);
+  const getCandles = useCallback(async (
+    coin: string,
+    interval: string = '1h',
+    limit: number = 500,
+    startTime?: number,
+    endTime?: number
+  ): Promise<any[]> => {
+    let url = `${API_URL}/api/info/candles/${coin}?interval=${interval}&limit=${limit}`;
+
+    // Add optional time range parameters
+    if (startTime !== undefined) {
+      url += `&startTime=${startTime}`;
+    }
+    if (endTime !== undefined) {
+      url += `&endTime=${endTime}`;
+    }
+
+    const response = await fetch(url);
     if (!response.ok) throw new Error(`Failed to fetch candles for ${coin}`);
     return response.json();
   }, []);
