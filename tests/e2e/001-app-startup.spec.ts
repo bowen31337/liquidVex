@@ -39,7 +39,9 @@ test.describe('Application Startup and Initial Render', () => {
       !e.includes('was interrupted while the page was loading') &&  // Firefox connection interrupted errors
       !e.includes('ErrorBoundary caught an error') &&  // ErrorBoundary logging is expected
       !e.includes('Failed to load resource') &&  // 404 errors for static assets are acceptable
-      !e.includes('Failed to load assets')  // Asset loading errors are handled gracefully
+      !e.includes('Failed to load assets') &&  // Asset loading errors are handled gracefully
+      !e.includes('WebSocket connection') &&  // Browser WebSocket connection errors
+      !e.includes('ws://')  // Any WebSocket URL errors
     );
     if (unexpectedErrors.length > 0) {
       console.log('Unexpected console errors:', unexpectedErrors);

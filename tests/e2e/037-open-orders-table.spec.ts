@@ -13,8 +13,8 @@ test.describe('Feature 37: Open Orders Table Complete Functionality', () => {
   test('should display open orders table with correct structure', async ({ page }) => {
     // Add a test order via the store
     await page.evaluate(() => {
-      const store = (window as any).stores.getOrderStoreState();
-      store.addOpenOrder({
+      const store = (window as any).stores.useOrderStore;
+      store.getState().addOpenOrder({
         oid: 1,
         coin: 'BTC',
         side: 'B',
@@ -62,10 +62,10 @@ test.describe('Feature 37: Open Orders Table Complete Functionality', () => {
   test('should display order information correctly', async ({ page }) => {
     // Add test orders
     await page.evaluate(() => {
-      const store = (window as any).stores.getOrderStoreState();
+      const store = (window as any).stores.useOrderStore;
 
       // Add buy order
-      store.addOpenOrder({
+      store.getState().addOpenOrder({
         oid: 1,
         coin: 'BTC',
         side: 'B',
@@ -81,7 +81,7 @@ test.describe('Feature 37: Open Orders Table Complete Functionality', () => {
       });
 
       // Add sell order
-      store.addOpenOrder({
+      store.getState().addOpenOrder({
         oid: 2,
         coin: 'ETH',
         side: 'A',
@@ -125,9 +125,9 @@ test.describe('Feature 37: Open Orders Table Complete Functionality', () => {
   test('should color code buy and sell orders correctly', async ({ page }) => {
     // Add test orders
     await page.evaluate(() => {
-      const store = (window as any).stores.getOrderStoreState();
+      const store = (window as any).stores.useOrderStore;
 
-      store.addOpenOrder({
+      store.getState().addOpenOrder({
         oid: 1,
         coin: 'BTC',
         side: 'B',
@@ -142,7 +142,7 @@ test.describe('Feature 37: Open Orders Table Complete Functionality', () => {
         tif: 'GTC',
       });
 
-      store.addOpenOrder({
+      store.getState().addOpenOrder({
         oid: 2,
         coin: 'ETH',
         side: 'A',
@@ -178,9 +178,9 @@ test.describe('Feature 37: Open Orders Table Complete Functionality', () => {
   test('should display modify and cancel buttons for each order', async ({ page }) => {
     // Add test order
     await page.evaluate(() => {
-      const store = (window as any).stores.getOrderStoreState();
+      const store = (window as any).stores.useOrderStore;
 
-      store.addOpenOrder({
+      store.getState().addOpenOrder({
         oid: 1,
         coin: 'BTC',
         side: 'B',
@@ -215,9 +215,9 @@ test.describe('Feature 37: Open Orders Table Complete Functionality', () => {
   test('should display cancel all button when orders exist', async ({ page }) => {
     // Add test orders
     await page.evaluate(() => {
-      const store = (window as any).stores.getOrderStoreState();
+      const store = (window as any).stores.useOrderStore;
 
-      store.addOpenOrder({
+      store.getState().addOpenOrder({
         oid: 1,
         coin: 'BTC',
         side: 'B',
@@ -232,7 +232,7 @@ test.describe('Feature 37: Open Orders Table Complete Functionality', () => {
         tif: 'GTC',
       });
 
-      store.addOpenOrder({
+      store.getState().addOpenOrder({
         oid: 2,
         coin: 'ETH',
         side: 'A',
@@ -273,9 +273,9 @@ test.describe('Feature 37: Open Orders Table Complete Functionality', () => {
   test('should integrate with bottom panel tabs', async ({ page }) => {
     // Add test order
     await page.evaluate(() => {
-      const store = (window as any).stores.getOrderStoreState();
+      const store = (window as any).stores.useOrderStore;
 
-      store.addOpenOrder({
+      store.getState().addOpenOrder({
         oid: 1,
         coin: 'BTC',
         side: 'B',
@@ -308,9 +308,9 @@ test.describe('Feature 37: Open Orders Table Complete Functionality', () => {
   test('should handle cancel order action', async ({ page }) => {
     // Add test order
     await page.evaluate(() => {
-      const store = (window as any).stores.getOrderStoreState();
+      const store = (window as any).stores.useOrderStore;
 
-      store.addOpenOrder({
+      store.getState().addOpenOrder({
         oid: 1,
         coin: 'BTC',
         side: 'B',
@@ -350,9 +350,9 @@ test.describe('Feature 37: Open Orders Table Complete Functionality', () => {
   test('should handle cancel all orders action', async ({ page }) => {
     // Add test orders
     await page.evaluate(() => {
-      const store = (window as any).stores.getOrderStoreState();
+      const store = (window as any).stores.useOrderStore;
 
-      store.addOpenOrder({
+      store.getState().addOpenOrder({
         oid: 1,
         coin: 'BTC',
         side: 'B',
@@ -367,7 +367,7 @@ test.describe('Feature 37: Open Orders Table Complete Functionality', () => {
         tif: 'GTC',
       });
 
-      store.addOpenOrder({
+      store.getState().addOpenOrder({
         oid: 2,
         coin: 'ETH',
         side: 'A',
@@ -393,6 +393,13 @@ test.describe('Feature 37: Open Orders Table Complete Functionality', () => {
     const cancelAllButton = page.getByTestId('cancel-all-orders');
     await cancelAllButton.click();
 
+    // Wait for modal to appear
+    await page.waitForTimeout(500);
+
+    // Click confirm in the modal
+    const confirmButton = page.getByTestId('confirm-cancel-all');
+    await confirmButton.click();
+
     // Wait for cancellation to process
     await page.waitForTimeout(1000);
 
@@ -407,9 +414,9 @@ test.describe('Feature 37: Open Orders Table Complete Functionality', () => {
   test('should open modify modal when modify button is clicked', async ({ page }) => {
     // Add test order
     await page.evaluate(() => {
-      const store = (window as any).stores.getOrderStoreState();
+      const store = (window as any).stores.useOrderStore;
 
-      store.addOpenOrder({
+      store.getState().addOpenOrder({
         oid: 1,
         coin: 'BTC',
         side: 'B',
@@ -444,9 +451,9 @@ test.describe('Feature 37: Open Orders Table Complete Functionality', () => {
   test('should display correct filled amount', async ({ page }) => {
     // Add test order with partial fill
     await page.evaluate(() => {
-      const store = (window as any).stores.getOrderStoreState();
+      const store = (window as any).stores.useOrderStore;
 
-      store.addOpenOrder({
+      store.getState().addOpenOrder({
         oid: 1,
         coin: 'BTC',
         side: 'B',
@@ -476,10 +483,10 @@ test.describe('Feature 37: Open Orders Table Complete Functionality', () => {
   test('should handle multiple orders efficiently', async ({ page }) => {
     // Add multiple test orders
     await page.evaluate(() => {
-      const store = (window as any).stores.getOrderStoreState();
+      const store = (window as any).stores.useOrderStore;
 
       for (let i = 1; i <= 10; i++) {
-        store.addOpenOrder({
+        store.getState().addOpenOrder({
           oid: i,
           coin: i % 2 === 0 ? 'BTC' : 'ETH',
           side: i % 2 === 0 ? 'B' : 'A',
@@ -514,9 +521,9 @@ test.describe('Feature 37: Open Orders Table Complete Functionality', () => {
   test('should disable buttons during cancellation', async ({ page }) => {
     // Add test order
     await page.evaluate(() => {
-      const store = (window as any).stores.getOrderStoreState();
+      const store = (window as any).stores.useOrderStore;
 
-      store.addOpenOrder({
+      store.getState().addOpenOrder({
         oid: 1,
         coin: 'BTC',
         side: 'B',
@@ -550,9 +557,9 @@ test.describe('Feature 37: Open Orders Table Complete Functionality', () => {
     // Add test order with specific timestamp
     const testTimestamp = Date.now();
     await page.evaluate((timestamp) => {
-      const store = (window as any).stores.getOrderStoreState();
+      const store = (window as any).stores.useOrderStore;
 
-      store.addOpenOrder({
+      store.getState().addOpenOrder({
         oid: 1,
         coin: 'BTC',
         side: 'B',

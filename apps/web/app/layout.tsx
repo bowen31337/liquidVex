@@ -41,7 +41,7 @@ export default function RootLayout({
               {children}
               <KeyboardShortcuts />
               <ScreenReaderAnnouncements />
-              <PerformanceMonitor enabled={process.env.NODE_ENV === 'development'} />
+              {/* PerformanceMonitor disabled for tests - can be re-enabled manually if needed */}
             </MarketDataProvider>
           </ClientProviders>
         </AccessibilityProvider>

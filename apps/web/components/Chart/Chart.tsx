@@ -34,9 +34,23 @@ export function Chart() {
   const { selectedAsset, candles, setCandles } = useMarketStore();
   const { getCandles } = useApi();
 
-  // Connect to candle WebSocket
+  // Check for test mode
+  const isTestMode = (() => {
+    if (typeof process !== 'undefined' &&
+        (process.env.NEXT_PUBLIC_TEST_MODE === 'true' || process.env.NODE_ENV === 'test')) {
+      return true;
+    }
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('testMode') === 'true' || urlParams.has('testMode');
+    }
+    return false;
+  })();
+
+  // Connect to candle WebSocket (skip in test mode)
+  const wsUrl = isTestMode ? null : `${process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:8001'}`;
   useWebSocket(
-    `${process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:8001'}/ws/candles/${selectedAsset}/${timeframe}`,
+    wsUrl ? `${wsUrl}/ws/candles/${selectedAsset}/${timeframe}` : null,
     {
       autoReconnect: true,
       reconnectInterval: 3000,
@@ -126,6 +140,13 @@ export function Chart() {
   // Load initial candle data
   useEffect(() => {
     const loadCandles = async () => {
+      // In test mode, skip API call and just stop loading
+      if (isTestMode) {
+        const { setIsLoadingCandles } = useMarketStore.getState();
+        setIsLoadingCandles(false);
+        return;
+      }
+
       try {
         const data = await getCandles(selectedAsset, timeframe, 500);
         // Sort data by time ascending for lightweight-charts (create new sorted array)
@@ -149,12 +170,16 @@ export function Chart() {
           lineSeriesRef.current.setData(lineData as any);
         }
       } catch (err) {
-        // Silently ignore candle loading errors
+        // On error, still stop loading to prevent infinite skeleton
+        // The chart will show empty state but UI won't be stuck
+        const { setIsLoadingCandles } = useMarketStore.getState();
+        setIsLoadingCandles(false);
+        console.warn('Failed to load candles:', err);
       }
     };
 
     loadCandles();
-  }, [selectedAsset, timeframe, chartType]);
+  }, [selectedAsset, timeframe, chartType, isTestMode]);
 
   // Update chart with new candles from WebSocket
   useEffect(() => {

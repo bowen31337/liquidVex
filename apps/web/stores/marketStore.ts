@@ -45,6 +45,7 @@ interface NonPersistedMarketState {
   trades: TradeData[];
   addTrade: (trade: TradeData) => void;
   clearTrades: () => void;
+  setTrades: (trades: TradeData[]) => void;
 
   // Current price and 24h change
   currentPrice: number;
@@ -169,6 +170,7 @@ export const useMarketStore = create<MarketState>()(
         });
       },
       clearTrades: () => set({ trades: [], isLoadingTrades: true }),
+      setTrades: (trades) => set({ trades, isLoadingTrades: false }),
 
       currentPrice: 95420.50,
       priceChange24h: 2.34,

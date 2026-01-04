@@ -43,6 +43,19 @@ test.describe('Feature 125: Complete trading flow - connect, place order, manage
       await page.waitForTimeout(300);
     }
 
+    // Close performance monitor if visible
+    const perfMonitor = page.locator('div:has-text("Performance Monitor"), div:has-text("Efficiency:")');
+    if (await perfMonitor.first().isVisible().catch(() => false)) {
+      // Try to find and click close button or press Escape
+      const closeBtn = page.locator('button:has-text("×"), button:has-text("close"), button[aria-label*="close"]');
+      if (await closeBtn.first().isVisible().catch(() => false)) {
+        await closeBtn.first().click();
+      } else {
+        await page.keyboard.press('Escape');
+      }
+      await page.waitForTimeout(300);
+    }
+
     // Filter out expected console errors
     page.on('console', (message) => {
       const text = message.text();
@@ -67,12 +80,38 @@ test.describe('Feature 125: Complete trading flow - connect, place order, manage
     await page.waitForTimeout(500);
 
     // Step 3: Connect wallet in test mode using setState
-    await page.evaluate(() => {
+    // First verify stores are available
+    const storesAvailable = await page.evaluate(() => {
+      return typeof (window as any).stores !== 'undefined';
+    });
+    console.log('Stores available:', storesAvailable);
+
+    // Set state and verify it was set
+    const stateAfterSet = await page.evaluate(() => {
       const walletStore = (window as any).stores.useWalletStore;
-      walletStore.setState({
-        address: '0x1234567890123456789012345678901234567890',
-        isConnected: true,
-      });
+      if (walletStore) {
+        walletStore.setState({
+          address: '0x1234567890123456789012345678901234567890',
+          isConnected: true,
+        });
+        // Return current state to verify
+        return walletStore.getState();
+      }
+      return null;
+    });
+    console.log('State after set:', stateAfterSet);
+
+    // Wait for React to re-render
+    await page.waitForTimeout(1000);
+
+    // Force a re-render by triggering a small action
+    await page.evaluate(() => {
+      // Trigger a state change that causes re-render
+      const orderStore = (window as any).stores.getOrderStoreState();
+      if (orderStore?.setActiveTab) {
+        orderStore.setActiveTab('Open Orders');
+        setTimeout(() => orderStore.setActiveTab('Positions'), 100);
+      }
     });
 
     await page.waitForTimeout(500);

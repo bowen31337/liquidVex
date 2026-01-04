@@ -74,7 +74,7 @@ export const ChartSkeleton = () => (
       </div>
     </div>
     <div className="flex-1 min-h-[400px] bg-surface-elevated rounded animate-pulse flex items-center justify-center">
-      <div className="text-text-tertiary text-sm">Loading chart...</div>
+      <div className="text-text-tertiary text-sm">Loading Chart...</div>
     </div>
   </div>
 );

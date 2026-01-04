@@ -25,14 +25,24 @@ export function RecentTrades() {
     return size.toFixed(4);
   };
 
-  // Format timestamp
+  // Format timestamp - shows time only for today, date for older trades
   const formatTime = (timestamp: number) => {
     const date = new Date(timestamp);
-    return date.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const now = new Date();
+    const isToday = date.toDateString() === now.toDateString();
+
+    if (isToday) {
+      // Show only time for today's trades
+      return date.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    } else {
+      // Show date and time for older trades
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' ' +
+             date.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+    }
   };
 
   return (
-    <div className="panel p-2 flex flex-col h-full">
+    <div className="panel p-2 flex flex-col h-full" data-testid="recent-trades-panel">
       {/* Header */}
       <div className="flex items-center justify-between mb-2">
         <div className="text-xs font-medium text-text-secondary uppercase tracking-wider">

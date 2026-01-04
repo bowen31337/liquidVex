@@ -14,6 +14,7 @@ import { PositionModifyModal } from '../Modal/PositionModifyModal';
 import { MarginModeModal } from '../Modal/MarginModeModal';
 import { useToast } from '../Toast/Toast';
 import { Position } from '../../types';
+import { useLiquidationMonitor } from '../../hooks/useLiquidationMonitor';
 
 export function PositionsTable() {
   const { positions, setPositions, removePosition } = useOrderStore();
@@ -21,6 +22,7 @@ export function PositionsTable() {
   const { getPositions, closePosition, modifyPosition, setMarginMode } = useApi();
   const { allMids } = useMarketStore();
   const { success, error } = useToast();
+  const { calculateLiquidationRisk, getRiskBadgeClass, getRiskLabel } = useLiquidationMonitor();
   const [markPrices, setMarkPrices] = useState<Record<string, number>>({});
   const [modalOpen, setModalOpen] = useState(false);
   const [modifyModalOpen, setModifyModalOpen] = useState(false);
@@ -111,7 +113,12 @@ export function PositionsTable() {
   };
 
   const formatNumber = (num: number, decimals = 2) => {
-    return num.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+    // Format with commas and specified decimals, trimming trailing zeros
+    const formatted = num.toLocaleString('en-US', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: decimals
+    });
+    return formatted;
   };
 
   const formatPnl = (pnl: number) => {
@@ -287,6 +294,7 @@ export function PositionsTable() {
               <th>Leverage</th>
               <th>Margin</th>
               <th>Liq. Price</th>
+              <th>Liq. Risk</th>
               <th>Margin Type</th>
               <th>Actions</th>
             </tr>
@@ -295,14 +303,18 @@ export function PositionsTable() {
             {positions.map((pos, idx) => {
               const markPrice = markPrices[pos.coin];
               const realTimePnl = markPrice ? calculateRealTimePnl(pos) : null;
+              const risk = calculateLiquidationRisk(pos);
+              const rowClass = risk && risk.riskLevel !== 'low'
+                ? `border-l-4 ${risk.riskLevel === 'critical' ? 'border-red-500' : risk.riskLevel === 'high' ? 'border-orange-500' : 'border-yellow-500'}`
+                : '';
               return (
-                <tr key={idx}>
+                <tr key={idx} className={rowClass}>
                   <td>{pos.coin}</td>
                   <td className={pos.side === 'long' ? 'text-long' : 'text-short'}>
                     {pos.side.toUpperCase()}
                   </td>
                   <td>{formatNumber(pos.sz, 4)}</td>
-                  <td>{formatNumber(pos.entryPx, 0)}</td>
+                  <td>{formatNumber(pos.entryPx, 2)}</td>
                   <td>{markPrice ? formatNumber(markPrice) : '--'}</td>
                   <td>
                     {realTimePnl !== null
@@ -314,6 +326,18 @@ export function PositionsTable() {
                   <td>{pos.leverage}x</td>
                   <td>{formatNumber(pos.marginUsed)}</td>
                   <td>{formatNumber(pos.liquidationPx)}</td>
+                  <td>
+                    {risk && risk.riskLevel !== 'low' && (
+                      <span className={`px-2 py-1 rounded text-xs font-medium border ${getRiskBadgeClass(risk.riskLevel)}`} data-testid={`liquidation-risk-${pos.coin}`}>
+                        {getRiskLabel(risk.riskLevel)} ({risk.distancePercent.toFixed(1)}%)
+                      </span>
+                    )}
+                    {(!risk || risk.riskLevel === 'low') && (
+                      <span className="px-2 py-1 rounded text-xs font-medium bg-green-500/10 text-green-400 border border-green-500/30" data-testid={`liquidation-risk-${pos.coin}`}>
+                        SAFE
+                      </span>
+                    )}
+                  </td>
                   <td>
                     <span className={`px-2 py-1 rounded text-xs font-medium ${
                       pos.marginType === 'cross'

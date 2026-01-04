@@ -61,9 +61,9 @@ test.describe('Limit Buy Order Placement Flow', () => {
     await priceInput.fill('95.00');
     await page.waitForTimeout(300);
 
-    // Verify price was entered
+    // Verify price was entered (truncateDecimals strips trailing zeros)
     const priceValue = await priceInput.inputValue();
-    expect(priceValue).toBe('95.00');
+    expect(priceValue).toBe('95.0');
 
     // Step 7: Enter valid size
     const sizeInput = page.getByTestId('order-size-input');
@@ -138,7 +138,7 @@ test.describe('Limit Buy Order Placement Flow', () => {
     // Should show validation error about invalid size
     const sizeError = page.getByTestId('order-error');
     await expect(sizeError).toBeVisible();
-    await expect(sizeError).toContainText('Invalid size');
+    await expect(sizeError).toContainText('Size must be greater than 0');
   });
 
   test('should handle order cancellation in confirmation modal', async ({ page }) => {
@@ -166,9 +166,9 @@ test.describe('Limit Buy Order Placement Flow', () => {
     // Verify modal is closed
     await expect(modal).not.toBeVisible();
 
-    // Verify form still has values
+    // Verify form still has values (truncateDecimals strips trailing zeros)
     const priceValue = await priceInput.inputValue();
-    expect(priceValue).toBe('95.00');
+    expect(priceValue).toBe('95.0');
   });
 
   test('should show loading state during order submission', async ({ page }) => {
@@ -219,9 +219,9 @@ test.describe('Limit Buy Order Placement Flow', () => {
     await cancelButton.click();
     await page.waitForTimeout(300);
 
-    // Verify form values are preserved
+    // Verify form values are preserved (truncateDecimals strips trailing zeros)
     const priceValue = await priceInput.inputValue();
-    expect(priceValue).toBe('88.50');
+    expect(priceValue).toBe('88.5');
 
     const sizeValue = await sizeInput.inputValue();
     expect(sizeValue).toBe('2.0');

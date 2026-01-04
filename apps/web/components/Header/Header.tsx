@@ -31,8 +31,10 @@ export function Header() {
     setOpenInterest,
   } = useMarketStore();
 
-  const wagmiWallet = useWalletSync();
-  const { address, isConnected, isConnecting, disconnect } = wagmiWallet;
+  // useWalletSync handles both test mode and normal mode
+  const wallet = useWalletSync();
+  const { address, isConnected, isConnecting, disconnect } = wallet;
+
   const { getExchangeMeta } = useApi();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [walletModalOpen, setWalletModalOpen] = useState(false);
