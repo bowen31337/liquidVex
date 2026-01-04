@@ -1,0 +1,225 @@
+# Claude Progress Report - Session 29 (DEV AGENT)
+
+## Session Summary
+Attempted to stabilize development environment infrastructure for testing. Identified and partially fixed critical SSR (Server-Side Rendering) issues with WalletConnect integration causing frontend crashes. Updated CORS configuration and port settings.
+
+## Current Project Status
+
+### Progress Metrics
+- **Features Complete (passing)**: 48/201 (23.9%)
+- **Features Dev Done**: 82/201 (40.8%)
+- **Features Pending**: 119/201 (59.2%)
+
+## Infrastructure Issues Identified
+
+### 1. SSR WalletConnect Crash (CRITICAL)
+**Problem:** The frontend crashes during server-side rendering because WalletConnect's idb-keyval library tries to access `indexedDB` which doesn't exist on the server.
+
+**Error:**
+```
+ReferenceError: indexedDB is not defined
+    at getDB (webpack-internal:///(ssr)/../../node_modules/.pnpm/idb-keyval@6.2.2/node_modules/idb-keyval/dist/index.js:30:25)
+```
+
+**Fix Attempted:**
+Modified `apps/web/components/ClientProviders.tsx` to conditionally render WagmiProvider only on client-side:
+```typescript
+const [mounted, setMounted] = useState(false);
+
+useEffect(() => {
+  setMounted(true);
+}, []);
+
+if (!mounted) {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <FavoritesProvider>
+        {children}
+      </FavoritesProvider>
+    </QueryClientProvider>
+  );
+}
+
+return (
+  <WagmiProvider config={wagmiConfig}>
+    <QueryClientProvider client={queryClient}>
+      <FavoritesProvider>
+        {children}
+      </FavoritesProvider>
+    </QueryClientProvider>
+  </WagmiProvider>
+);
+```
+
+**Status:** Fix implemented but frontend still crashes intermittently. The issue persists because components are trying to use wagmi hooks during SSR before the client-side mount.
+
+### 2. Port Configuration Mismatch
+**Problem:** Tests expect port 3000/3001 but backend was configured for 8000, frontend configuration was inconsistent.
+
+**Fixes Applied:**
+- Updated `apps/web/package.json`: `dev` script now uses port 3001
+- Updated root `package.json`: `dev:api` script now uses port 8001
+- Updated `apps/api/main.py`: Added port 3001 to CORS allowed origins
+- Updated all test files to use port 3001 instead of 3000
+
+**Status:** ✅ FIXED - Ports now consistent:
+- Frontend: 3001
+- Backend: 8001
+
+### 3. CORS Configuration
+**Problem:** Backend only allowed port 3000, blocking requests from frontend on port 3001.
+
+**Fix Applied:**
+Updated `apps/api/main.py` allowed_origins:
+```python
+allowed_origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:3001",
+    "http://127.0.0.1:3001",
+]
+```
+
+**Status:** ✅ FIXED
+
+## Files Modified This Session
+
+### Configuration Files:
+1. `package.json` - Updated dev:api port to 8001
+2. `apps/web/package.json` - Updated dev port to 3001 (changed multiple times, currently 3001)
+3. `apps/api/main.py` - Added port 3001 to CORS allowed origins
+4. `.env` - Verified NEXT_PUBLIC_APP_URL is port 3001
+
+### Source Files:
+1. `apps/web/components/ClientProviders.tsx` - Added SSR-safe WagmiProvider rendering
+2. `tests/e2e/*.spec.ts` - Updated 45 test files to use port 3001
+
+## Test Infrastructure
+
+### Playwright Configuration:
+- Configured to run tests against http://localhost:3001
+- Chromium: Primary test browser (most stable)
+- Firefox: Has issues with connection refused
+- WebKit: Missing system dependencies
+
+### Test Status:
+**Startup Test (Feature 1):** FAILED
+- Frontend crashes due to SSR WalletConnect issue
+- Backend serving correctly on port 8001
+- CORS properly configured
+
+## Root Cause Analysis
+
+### Why Frontend Keeps Crashing:
+1. **Direct SSR Attempts**: Next.js tries to render pages on the server
+2. **WalletConnect Initialization**: During SSR, wagmi connectors try to initialize
+3. **IndexedDB Access**: idb-keyval (dependency of WalletConnect) tries to access browser API
+4. **Server Environment**: Node.js doesn't have indexedDB, causing crash
+5. **Even with client-side rendering guard**: Components using `useWallet` or other wagmi hooks still execute during SSR
+
+## Recommended Solutions
+
+### Option 1: Dynamic Imports (RECOMMENDED)
+Move all wallet-dependent components to dynamic imports with `ssr: false`:
+
+```typescript
+// In components that use wallet
+const WalletConnectButton = dynamic(
+  () => import('./WalletConnectButton'),
+  { ssr: false }
+);
+```
+
+### Option 2: Disable SSR for WalletConnect Pages
+Configure Next.js to disable SSR for routes that need wallet:
+```javascript
+// In next.config.js
+export const dynamic = 'force-dynamic'
+```
+
+### Option 3: Polyfill IndexedDB for SSR
+Add a mock polyfill for server-side:
+```typescript
+if (typeof window === 'undefined') {
+  global.indexedDB = {
+    // Mock implementation
+  };
+}
+```
+
+### Option 4: Lazy Wagmi Provider Initialization
+Delay wagmi config creation until client mount:
+```typescript
+// Don't create config at module level
+// Create it in useEffect or on client only
+```
+
+## Next Priority Actions
+
+### Critical (Blocking All Testing):
+1. **Fix SSR WalletConnect Issue** - Implement Option 1 or 2 above
+2. **Verify Frontend Stability** - Ensure server stays running for >5 minutes
+3. **Run Startup Test** - Confirm Feature 1 passes
+
+### High Priority:
+4. **Verify Features 2-9** - Core UI components (header, chart, order book, etc.)
+5. **Fix Feature 30** - Limit buy order placement (2/6 tests passing)
+6. **Test Order Form Features** - Features 26-28 recently completed
+
+### Medium Priority:
+7. **Complete Feature 30** - Fix remaining 4 tests with API mocking
+8. **Verify Feature 31** - Market order execution
+9. **Verify Feature 32** - Stop-limit order placement
+
+## Infrastructure Status
+
+### Servers (When Running):
+- **Backend API** (port 8001): ✅ Working
+  - CORS configured correctly
+  - Health endpoint accessible
+  - All endpoints proxied to Hyperliquid
+
+- **Frontend Web** (port 3001): ⚠️ Unstable
+  - Compiles successfully
+  - Crashes during first page load due to SSR
+  - Needs WalletConnect SSR fix
+
+### Test Infrastructure:
+- Playwright: ✅ Configured
+- Test Files: ✅ Updated to port 3001
+- Browser Automation: ✅ Chromium working
+
+## Session Statistics
+- **Duration:** ~2 hours
+- **Infrastructure Fixes:** 3 (Ports, CORS, ClientProviders)
+- **Files Modified:** 50+ (45 test files + 5 config files)
+- **Tests Run:** 1 attempt (blocked by SSR issue)
+- **Features Verified:** 0 new (infrastructure blocking)
+
+## Git Status
+**Modified Files:**
+- apps/api/main.py (CORS)
+- apps/web/components/ClientProviders.tsx (SSR fix)
+- apps/web/package.json (port)
+- package.json (port)
+- 45 test files (port 3001)
+- feature_list.json (from previous session)
+
+**Uncommitted Changes:** All changes from this session need to be committed
+
+## Recommendation for Next Session
+
+**Start with:**
+1. Implement proper SSR fix for WalletConnect (Option 1 - Dynamic Imports)
+2. Test that frontend stays running
+3. Run Feature 1 test to verify basic infrastructure
+4. Move to Feature verification (features 2-9 are UI/structural)
+
+**Do NOT:**
+- Spend more time on port/CORS issues (RESOLVED)
+- Try more band-aid fixes to ClientProviders (need proper solution)
+- Start new feature implementation until infrastructure stable
+
+---
+
+**Session Conclusion:** Infrastructure mostly configured but blocked by critical SSR WalletConnect bug. Need to implement proper client-side-only rendering for wallet components before proceeding with feature verification.

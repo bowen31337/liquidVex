@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Market Order Execution Flow', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3001');
     // Wait for main content to load instead of networkidle (WebSocket keeps network active)
     await page.waitForSelector('[data-testid="order-submit-button"]', { timeout: 10000 });
   });

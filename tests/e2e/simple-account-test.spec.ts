@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Account Equity Text', () => {
   test('should find Account Equity text on page', async ({ page }) => {
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3001');
     await page.waitForLoadState('networkidle');
 
     // Check if "Account Equity" text exists anywhere on the page
@@ -10,7 +10,7 @@ test.describe('Account Equity Text', () => {
   });
 
   test('should find equity value', async ({ page }) => {
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3001');
     await page.waitForLoadState('networkidle');
 
     // Check for any currency-formatted number (equity value)

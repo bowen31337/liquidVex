@@ -8,7 +8,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Bottom Panel Tab Navigation', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the application
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3001');
     await page.waitForLoadState('networkidle');
 
     // Check that the main trading interface is loaded

@@ -13,6 +13,7 @@ import { SettingsModal } from '../Settings/SettingsModal';
 import { AccountBalance } from '../AccountBalance/AccountBalance';
 import { WalletModal } from '../WalletModal/WalletModal';
 import { ConnectionStatus } from '../ConnectionStatus/ConnectionStatus';
+import { NetworkWarning } from '../NetworkWarning';
 
 export function Header() {
   const {
@@ -92,17 +93,21 @@ export function Header() {
   }, [getExchangeMeta, selectedAsset]);
 
   return (
-    <header className="h-14 border-b border-border bg-surface flex items-center justify-between px-4">
-      {/* Left side: Logo and Asset Selector */}
-      <div className="flex items-center gap-4">
-        <h1 className="text-xl font-semibold text-text-primary">liquidVex</h1>
+    <>
+      {/* Network Warning Banner */}
+      <NetworkWarning />
 
-        {/* Asset Selector */}
-        <AssetSelector />
+      <header className="h-14 border-b border-border bg-surface flex items-center justify-between px-4">
+        {/* Left side: Logo and Asset Selector */}
+        <div className="flex items-center gap-4">
+          <h1 className="text-xl font-semibold text-text-primary">liquidVex</h1>
 
-        {/* Connection Status Indicator */}
-        <ConnectionStatus showText={false} />
-      </div>
+          {/* Asset Selector */}
+          <AssetSelector />
+
+          {/* Connection Status Indicator */}
+          <ConnectionStatus showText={false} />
+        </div>
 
       {/* Right side: Price and Wallet */}
       <div className="flex items-center gap-4">
@@ -177,5 +182,6 @@ export function Header() {
         <WalletModal isOpen={walletModalOpen} onClose={() => setWalletModalOpen(false)} />
       </div>
     </header>
+    </>
   );
 }

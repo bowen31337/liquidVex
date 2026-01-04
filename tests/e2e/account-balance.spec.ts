@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Account Balance Component', () => {
   test('should display account balance in header', async ({ page }) => {
     // Navigate to the application
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3001');
 
     // Wait for the page to load
     await page.waitForLoadState('networkidle');
@@ -21,7 +21,7 @@ test.describe('Account Balance Component', () => {
   });
 
   test('should show loading state initially', async ({ page }) => {
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3001');
 
     // Wait for the account balance to load
     const accountBalance = page.locator('[class*="AccountBalance"]').first();
@@ -32,7 +32,7 @@ test.describe('Account Balance Component', () => {
   });
 
   test('should display PnL percentage with correct color', async ({ page }) => {
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3001');
     await page.waitForLoadState('networkidle');
 
     const accountBalance = page.locator('[class*="AccountBalance"]').first();

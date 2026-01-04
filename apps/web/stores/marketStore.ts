@@ -3,16 +3,21 @@
  */
 
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import { OrderBookData, TradeData, CandleData, AssetInfo } from '../types';
 
-interface MarketState {
-  // Current selected asset
+// Interface for persisted market state
+interface PersistedMarketState {
   selectedAsset: string;
+  selectedTimeframe: string;
   setSelectedAsset: (asset: string) => void;
+  setSelectedTimeframe: (timeframe: string) => void;
+}
 
+// Interface for non-persisted market state
+interface NonPersistedMarketState {
   // Aliases for compatibility
   selectedCoin: string;
-  selectedTimeframe: string;
 
   // Loading states
   isLoadingOrderBook: boolean;
@@ -72,124 +77,158 @@ interface MarketState {
   fetchCandles: (coin: string, timeframe: string) => Promise<void>;
 }
 
-export const useMarketStore = create<MarketState>((set, get) => ({
-  selectedAsset: 'BTC',
-  setSelectedAsset: (asset) => set({
-    selectedAsset: asset,
-    // Reset loading states when switching assets
-    isLoadingOrderBook: true,
-    isLoadingTrades: true,
-    isLoadingCandles: true,
-    // Clear existing data
-    orderBook: null,
-    trades: [],
-    candles: [],
-  }),
+// Combined store interface
+interface MarketState extends PersistedMarketState, NonPersistedMarketState {}
 
-  // Aliases for compatibility
-  selectedCoin: 'BTC',
-  selectedTimeframe: '1h',
+export const useMarketStore = create<MarketState>()(
+  persist(
+    (set, get) => ({
+      // Persisted state
+      selectedAsset: 'BTC',
+      selectedTimeframe: '1h',
+      setSelectedAsset: (asset) => {
+        // Reset loading states when switching assets
+        set({
+          selectedAsset: asset,
+          isLoadingOrderBook: true,
+          isLoadingTrades: true,
+          isLoadingCandles: true,
+          // Clear existing data
+          orderBook: null,
+          trades: [],
+          candles: [],
+        });
+      },
+      setSelectedTimeframe: (timeframe) => set({ selectedTimeframe: timeframe }),
 
-  // Loading states
-  isLoadingOrderBook: true,
-  isLoadingTrades: true,
-  isLoadingCandles: true,
-  setIsLoadingOrderBook: (loading) => set({ isLoadingOrderBook: loading }),
-  setIsLoadingTrades: (loading) => set({ isLoadingTrades: loading }),
-  setIsLoadingCandles: (loading) => set({ isLoadingCandles: loading }),
+      // Non-persisted state
+      selectedCoin: 'BTC',
 
-  orderBook: null,
-  setOrderBook: (data) => set({ orderBook: data, isLoadingOrderBook: false }),
+      isLoadingOrderBook: true,
+      isLoadingTrades: true,
+      isLoadingCandles: true,
+      setIsLoadingOrderBook: (loading) => set({ isLoadingOrderBook: loading }),
+      setIsLoadingTrades: (loading) => set({ isLoadingTrades: loading }),
+      setIsLoadingCandles: (loading) => set({ isLoadingCandles: loading }),
 
-  trades: [],
-  addTrade: (trade) => {
-    const state = get();
-    const newTrades = [trade, ...state.trades].slice(0, 50); // Keep last 50
-    set({ trades: newTrades, isLoadingTrades: false });
-  },
-  clearTrades: () => set({ trades: [], isLoadingTrades: true }),
+      orderBook: null,
+      setOrderBook: (data) => set({ orderBook: data, isLoadingOrderBook: false }),
 
-  currentPrice: 95420.50,
-  priceChange24h: 2.34,
-  setCurrentPrice: (price, change) => set({ currentPrice: price, priceChange24h: change }),
+      trades: [],
+      addTrade: (trade) => {
+        const state = get();
+        const newTrades = [trade, ...state.trades].slice(0, 50); // Keep last 50
+        set({ trades: newTrades, isLoadingTrades: false });
+      },
+      clearTrades: () => set({ trades: [], isLoadingTrades: true }),
 
-  markPrice: 95420.50,
-  indexPrice: 95420.00,
-  setMarkPrice: (price) => set({ markPrice: price }),
-  setIndexPrice: (price) => set({ indexPrice: price }),
+      currentPrice: 95420.50,
+      priceChange24h: 2.34,
+      setCurrentPrice: (price, change) => set({ currentPrice: price, priceChange24h: change }),
 
-  fundingRate: 0.0001,
-  fundingCountdown: 3600,
-  setFundingRate: (rate) => set({ fundingRate: rate }),
-  setFundingCountdown: (seconds) => set({ fundingCountdown: seconds }),
+      markPrice: 95420.50,
+      indexPrice: 95420.00,
+      setMarkPrice: (price) => set({ markPrice: price }),
+      setIndexPrice: (price) => set({ indexPrice: price }),
 
-  allMids: {},
-  setAllMids: (mids) => {
-    const state = get();
-    // Update prices based on current selected asset
-    const selectedPrice = mids[state.selectedAsset];
-    if (selectedPrice) {
-      set({
-        allMids: mids,
-        currentPrice: selectedPrice,
-        markPrice: selectedPrice,  // Mark price follows mid price
-        indexPrice: selectedPrice - 0.5,  // Index slightly below for realism
-      });
-    } else {
-      set({ allMids: mids });
+      fundingRate: 0.0001,
+      fundingCountdown: 3600,
+      setFundingRate: (rate) => set({ fundingRate: rate }),
+      setFundingCountdown: (seconds) => set({ fundingCountdown: seconds }),
+
+      allMids: {},
+      setAllMids: (mids) => {
+        const state = get();
+        // Update prices based on current selected asset
+        const selectedPrice = mids[state.selectedAsset];
+        if (selectedPrice) {
+          set({
+            allMids: mids,
+            currentPrice: selectedPrice,
+            markPrice: selectedPrice,  // Mark price follows mid price
+            indexPrice: selectedPrice - 0.5,  // Index slightly below for realism
+          });
+        } else {
+          set({ allMids: mids });
+        }
+      },
+
+      assetInfo: null,
+      setAssetInfo: (info) => set({ assetInfo: info }),
+
+      wsConnected: false,
+      setWsConnected: (connected) => set({ wsConnected: connected }),
+
+      candles: [],
+      setCandles: (candles) => set({ candles, isLoadingCandles: false }),
+      addCandle: (candle) => {
+        const state = get();
+        // Normalize candle data from WebSocket message
+        // WebSocket sends {type, coin, interval, t, o, h, l, c, v}
+        // We want to extract just the candle part: {t, o, h, l, c, v}
+        const normalizedCandle = {
+          t: candle.t,
+          o: candle.o,
+          h: candle.h,
+          l: candle.l,
+          c: candle.c,
+          v: candle.v,
+        };
+
+        // Check if this candle already exists (update vs new)
+        const existingIndex = state.candles.findIndex((c: any) => c.t === normalizedCandle.t);
+
+        let newCandles;
+        if (existingIndex >= 0) {
+          // Update existing candle
+          newCandles = [...state.candles];
+          newCandles[existingIndex] = normalizedCandle;
+        } else {
+          // Add new candle
+          newCandles = [...state.candles, normalizedCandle].slice(-500); // Keep last 500
+        }
+
+        set({ candles: newCandles, isLoadingCandles: false });
+      },
+      clearCandles: () => set({ candles: [], isLoadingCandles: true }),
+
+      // Placeholder functions - these are no-ops but prevent errors
+      fetchAllMarkets: async () => {
+        // Placeholder - could fetch from API in future
+        console.log('fetchAllMarkets called (placeholder)');
+      },
+      fetchMarketInfo: async (coin: string) => {
+        // Placeholder - could fetch from API in future
+        console.log('fetchMarketInfo called for:', coin);
+      },
+      fetchCandles: async (coin: string, timeframe: string) => {
+        // Placeholder - candles are fetched via WebSocket in Chart component
+        console.log('fetchCandles called for:', coin, timeframe);
+      },
+    }),
+    {
+      name: 'liquidvex-market-storage',
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({
+        selectedAsset: state.selectedAsset,
+        selectedTimeframe: state.selectedTimeframe,
+      }),
     }
-  },
+  )
+);
 
-  assetInfo: null,
-  setAssetInfo: (info) => set({ assetInfo: info }),
+// Helper function to update selected asset with proper state management
+export const useMarketStoreActions = () => {
+  const setSelectedAsset = useMarketStore((state) => state.setSelectedAsset);
+  const selectedAsset = useMarketStore((state) => state.selectedAsset);
 
-  wsConnected: false,
-  setWsConnected: (connected) => set({ wsConnected: connected }),
+  const updateSelectedAsset = (asset: string) => {
+    const store = useMarketStore.getState();
+    store.setSelectedAsset(asset);
+  };
 
-  candles: [],
-  setCandles: (candles) => set({ candles, isLoadingCandles: false }),
-  addCandle: (candle) => {
-    const state = get();
-    // Normalize candle data from WebSocket message
-    // WebSocket sends {type, coin, interval, t, o, h, l, c, v}
-    // We want to extract just the candle part: {t, o, h, l, c, v}
-    const normalizedCandle = {
-      t: candle.t,
-      o: candle.o,
-      h: candle.h,
-      l: candle.l,
-      c: candle.c,
-      v: candle.v,
-    };
-
-    // Check if this candle already exists (update vs new)
-    const existingIndex = state.candles.findIndex((c: any) => c.t === normalizedCandle.t);
-
-    let newCandles;
-    if (existingIndex >= 0) {
-      // Update existing candle
-      newCandles = [...state.candles];
-      newCandles[existingIndex] = normalizedCandle;
-    } else {
-      // Add new candle
-      newCandles = [...state.candles, normalizedCandle].slice(-500); // Keep last 500
-    }
-
-    set({ candles: newCandles, isLoadingCandles: false });
-  },
-  clearCandles: () => set({ candles: [], isLoadingCandles: true }),
-
-  // Placeholder functions - these are no-ops but prevent errors
-  fetchAllMarkets: async () => {
-    // Placeholder - could fetch from API in future
-    console.log('fetchAllMarkets called (placeholder)');
-  },
-  fetchMarketInfo: async (coin: string) => {
-    // Placeholder - could fetch from API in future
-    console.log('fetchMarketInfo called for:', coin);
-  },
-  fetchCandles: async (coin: string, timeframe: string) => {
-    // Placeholder - candles are fetched via WebSocket in Chart component
-    console.log('fetchCandles called for:', coin, timeframe);
-  },
-}));
+  return {
+    updateSelectedAsset,
+    selectedAsset,
+  };
+};

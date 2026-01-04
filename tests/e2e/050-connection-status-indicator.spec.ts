@@ -9,8 +9,8 @@ import { test, expect } from '@playwright/test';
 test.describe('Connection Status Indicator', () => {
   test('Connection status indicator displays correctly in header', async ({ page }) => {
     // Step 1: Navigate to the application
-    await page.goto('http://localhost:3000');
-    await expect(page).toHaveURL('http://localhost:3000/');
+    await page.goto('http://localhost:3001');
+    await expect(page).toHaveURL('http://localhost:3001/');
 
     // Step 2: Wait for the page to load and WebSocket connections to establish
     // The component polls every 500ms, so wait for connections to be established
@@ -51,7 +51,7 @@ test.describe('Connection Status Indicator', () => {
 
   test('Connection status shows multiple connections count', async ({ page }) => {
     // Step 1: Navigate to the application
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3001');
     await page.waitForTimeout(2000); // Wait for connections to establish
 
     // Step 2: Check the bottom panel for connection count
@@ -70,7 +70,7 @@ test.describe('Connection Status Indicator', () => {
 
   test('Connection status indicator handles connection state changes', async ({ page }) => {
     // Step 1: Navigate to the application
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3001');
     await page.waitForTimeout(1000);
 
     // Step 2: Get initial connection state
@@ -101,7 +101,7 @@ test.describe('Connection Status Indicator', () => {
 
   test('Connection status text displays when showText is true', async ({ page }) => {
     // Step 1: Navigate to the application
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3001');
     await page.waitForTimeout(2000);
 
     // Step 2: Check the bottom panel for the text display

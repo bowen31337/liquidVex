@@ -17,10 +17,10 @@ test.describe('Application Startup and Initial Render', () => {
     });
 
     // Step 1: Navigate to the application root URL
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3001');
 
     // Step 2: Wait for the page to fully load
-    await expect(page).toHaveURL('http://localhost:3000/');
+    await expect(page).toHaveURL('http://localhost:3001/');
     await expect(page.locator('body')).toBeVisible();
 
     // Step 3: Verify the main trading interface is displayed

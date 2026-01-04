@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Header Integration', () => {
   test('header should be visible', async ({ page }) => {
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3001');
     await page.waitForLoadState('networkidle');
 
     // Check if header is visible
@@ -17,7 +17,7 @@ test.describe('Header Integration', () => {
   });
 
   test('header should contain AccountBalance component', async ({ page }) => {
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3001');
     await page.waitForLoadState('networkidle');
 
     // Check for any element with AccountBalance in class name

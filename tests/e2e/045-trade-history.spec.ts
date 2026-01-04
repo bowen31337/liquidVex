@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Trade History Tests', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the application
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3001');
 
     // Wait for the page to load
     await page.waitForLoadState('networkidle');

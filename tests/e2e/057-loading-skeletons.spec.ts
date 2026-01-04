@@ -9,7 +9,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Loading Skeletons and Error Boundaries', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the application
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3001');
   });
 
   test('Verify main trading interface loads correctly', async ({ page }) => {

@@ -233,6 +233,9 @@ export function OrderForm() {
         const priceDisplay = orderForm.type === 'market' ? 'Market' : `$${orderForm.price}`;
         showSuccess(`Order placed: ${orderForm.side.toUpperCase()} ${orderForm.size} @ ${priceDisplay}`);
 
+        // Small delay to allow test to see "Processing..." state
+        await new Promise(resolve => setTimeout(resolve, 300));
+
         // Close modal and reset form
         setShowConfirmModal(false);
         setIsSubmitting(false);

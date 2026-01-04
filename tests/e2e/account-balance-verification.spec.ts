@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Account Balance Integration', () => {
   test('Account Balance component renders correctly in header', async ({ page }) => {
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3001');
     await page.waitForLoadState('networkidle');
 
     // Check that Account Balance component is visible and contains expected content
@@ -20,7 +20,7 @@ test.describe('Account Balance Integration', () => {
   });
 
   test('Account Balance shows correct values', async ({ page }) => {
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3001');
     await page.waitForLoadState('networkidle');
 
     // Verify specific values are displayed

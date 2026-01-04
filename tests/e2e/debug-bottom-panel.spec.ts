@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Bottom Panel Basic Check', () => {
   test('should load application and check basic structure', async ({ page }) => {
     // Navigate to the application
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3001');
     await page.waitForLoadState('networkidle', { timeout: 30000 });
 
     // Check if the page loads without errors

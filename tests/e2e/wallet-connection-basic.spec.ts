@@ -7,7 +7,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Wallet Connection - Basic', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3001');
   });
 
   test('Page loads with wallet connect button', async ({ page }) => {

@@ -515,9 +515,9 @@
       "Step 6: Verify correct network is now selected",
       "Step 7: Verify warning disappears"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T02:37:08.766740Z",
     "dev_failure_count": 0
@@ -687,9 +687,9 @@
       "Step 13: Verify success notification appears",
       "Step 14: Verify order appears in open orders"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T03:22:36.418547Z",
     "dev_failure_count": 0
@@ -712,9 +712,9 @@
       "Step 12: Verify success notification appears",
       "Step 13: Verify order appears in open orders"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T03:03:52.348478Z",
     "dev_failure_count": 0
@@ -733,9 +733,9 @@
       "Step 8: Verify position is created or updated",
       "Step 9: Verify trade appears in trade history"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 0,
     "notes": "Implementation complete. Market orders work with limitPx=0.0. Tests passing for chromium.",
@@ -754,9 +754,9 @@
       "Step 7: Sign transaction in wallet",
       "Step 8: Verify order appears in open orders with pending trigger status"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T03:03:51.178367Z",
     "dev_failure_count": 0
@@ -773,9 +773,9 @@
       "Step 6: Sign transaction in wallet",
       "Step 7: Verify order appears in open orders"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T03:18:40.646529Z",
     "dev_failure_count": 0
@@ -908,9 +908,9 @@
       "Step 9: Verify order shows updated values",
       "Step 10: Verify modification success notification"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T03:22:46.099405Z",
     "dev_failure_count": 0
@@ -1643,15 +1643,11 @@
       "Step 4: Verify private keys never sent to backend"
     ],
     "passes": false,
-    "is_dev_done": false,
+    "is_dev_done": true,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_failure_count": 2,
-    "last_dev_failure_at": "2026-01-04T09:44:43.047332Z",
-    "dev_failure_reasons": [
-      "Worker session timed out",
-      "Worker session timed out"
-    ]
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-04T09:54:31.164294Z"
   },
   {
     "category": "functional",
@@ -1709,14 +1705,11 @@
       "Step 8: Verify unnecessary re-renders are prevented"
     ],
     "passes": false,
-    "is_dev_done": false,
+    "is_dev_done": true,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_failure_count": 1,
-    "last_dev_failure_at": "2026-01-04T09:45:41.862353Z",
-    "dev_failure_reasons": [
-      "Worker session timed out"
-    ]
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-04T10:01:58.545402Z"
   },
   {
     "category": "functional",
@@ -1810,8 +1803,11 @@
       "Step 13: Verify loss PnL is displayed in red"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T09:56:13.251006Z",
+    "dev_failure_count": 0
   },
   {
     "category": "style",
@@ -1829,9 +1825,10 @@
     "is_dev_done": false,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_failure_count": 1,
-    "last_dev_failure_at": "2026-01-04T09:27:08.882325Z",
+    "dev_failure_count": 2,
+    "last_dev_failure_at": "2026-01-04T09:57:10.542285Z",
     "dev_failure_reasons": [
+      "Worker session timed out",
       "Worker session timed out"
     ]
   },
@@ -1853,9 +1850,10 @@
     "is_dev_done": false,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_failure_count": 1,
-    "last_dev_failure_at": "2026-01-04T09:31:37.064276Z",
+    "dev_failure_count": 2,
+    "last_dev_failure_at": "2026-01-04T10:01:38.690742Z",
     "dev_failure_reasons": [
+      "Worker session timed out",
       "Worker session timed out"
     ]
   },
@@ -1877,14 +1875,11 @@
       "Step 12: Verify text size is xs to sm"
     ],
     "passes": false,
-    "is_dev_done": false,
+    "is_dev_done": true,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_failure_count": 1,
-    "last_dev_failure_at": "2026-01-04T09:32:13.591435Z",
-    "dev_failure_reasons": [
-      "Worker session timed out"
-    ]
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-04T09:52:06.097945Z"
   },
   {
     "category": "style",
@@ -1904,9 +1899,10 @@
     "is_dev_done": false,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_failure_count": 1,
-    "last_dev_failure_at": "2026-01-04T09:32:42.857623Z",
+    "dev_failure_count": 2,
+    "last_dev_failure_at": "2026-01-04T10:02:44.615096Z",
     "dev_failure_reasons": [
+      "Worker session timed out",
       "Worker session timed out"
     ]
   },

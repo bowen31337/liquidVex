@@ -8,10 +8,10 @@ import { test, expect } from '@playwright/test';
 test.describe('Application Startup', () => {
   test('Complete application startup and initial render verification', async ({ page }) => {
     // Step 1: Navigate to the application
-    await page.goto('http://localhost:3000');
+    await page.goto('http://localhost:3001');
 
     // Step 2: Wait for the page to fully load
-    await expect(page).toHaveURL('http://localhost:3000/');
+    await expect(page).toHaveURL('http://localhost:3001/');
 
     // Step 3: Verify the main trading interface is displayed
     const mainElement = page.locator('main');

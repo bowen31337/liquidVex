@@ -4,6 +4,8 @@
 
 import { create } from 'zustand';
 import { useWallet } from '../hooks/useWallet';
+import { useContext } from 'react';
+import { WagmiContext } from 'wagmi';
 
 interface WalletState {
   address: string | null;
