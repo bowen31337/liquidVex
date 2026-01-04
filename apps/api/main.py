@@ -66,10 +66,31 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             ip = forwarded_for.split(",")[0].strip()
 
         # Check rate limit
-        from rate_limiter import check_rate_limit
-        await check_rate_limit(request)
+        from rate_limiter import rate_limiter
+        from fastapi import HTTPException
 
-        # Add rate limit info to response headers
+        allowed, error_info = await rate_limiter.is_allowed(ip)
+
+        if not allowed and error_info:
+            # Return rate limit error response
+            from fastapi.responses import JSONResponse
+            return JSONResponse(
+                status_code=429,
+                content={
+                    "error": error_info["error"],
+                    "limit": error_info["limit"],
+                    "window": error_info["window"],
+                    "retry_after": error_info["retry_after"],
+                },
+                headers={
+                    "Retry-After": str(error_info["retry_after"]),
+                    "X-RateLimit-Limit": str(error_info["limit"]),
+                    "X-RateLimit-Window": error_info["window"],
+                    "X-RateLimit-Remaining": "0",
+                }
+            )
+
+        # Request is allowed - proceed and add rate limit info to response headers
         response = await call_next(request)
 
         stats = rate_limiter.get_stats(ip)
