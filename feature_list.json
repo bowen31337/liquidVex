@@ -3325,14 +3325,16 @@
       "Step 4: Verify previous data is cached/loads quickly"
     ],
     "passes": false,
-    "is_dev_done": false,
+    "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
-    "dev_failure_count": 1,
+    "dev_failure_count": 0,
     "last_dev_failure_at": "2026-01-04T13:45:55.683782Z",
-    "dev_failure_reasons": [
-      "Worker session timed out"
-    ]
+    "dev_failure_reasons": [],
+    "dev_completed_at": "2026-01-05T01:04:20.795855",
+    "is_stuck": false,
+    "stuck_reason": null,
+    "stuck_at": null
   },
   {
     "category": "functional",
@@ -3430,8 +3432,11 @@
       "Step 4: Verify color changes with risk level"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T14:00:32.165302Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
