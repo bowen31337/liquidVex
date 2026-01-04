@@ -355,10 +355,11 @@
     "is_dev_done": false,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_failure_count": 1,
-    "last_dev_failure_at": "2026-01-04T02:26:28.412280Z",
+    "dev_failure_count": 2,
+    "last_dev_failure_at": "2026-01-04T02:56:57.060913Z",
     "dev_failure_reasons": [
-      "All 1 API pairs failed for this request"
+      "All 1 API pairs failed for this request",
+      "Worker session timed out"
     ]
   },
   {
@@ -443,7 +444,13 @@
     ],
     "passes": false,
     "is_dev_done": false,
-    "is_qa_passed": false
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-04T02:57:01.159614Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "functional",
@@ -613,8 +620,11 @@
       "Step 11: Verify checkbox is checked"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T02:53:39.366243Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",

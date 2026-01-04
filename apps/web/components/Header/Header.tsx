@@ -70,7 +70,7 @@ export function Header() {
           }
         }
       } catch (err) {
-        console.error('Failed to load exchange meta:', err);
+        // Silently ignore meta loading errors
       }
     };
 

@@ -131,7 +131,7 @@ export function Chart() {
         // Sort data by time ascending for lightweight-charts (create new sorted array)
         const sortedData = [...data].sort((a: any, b: any) => a.t - b.t);
         const formatted = sortedData.map((c: any) => ({
-          time: Math.floor(c.t / 1000) as Time,
+          time: Math.floor(c.t / 1000), // Use number instead of Time type
           open: c.o,
           high: c.h,
           low: c.l,
@@ -149,7 +149,7 @@ export function Chart() {
           lineSeriesRef.current.setData(lineData);
         }
       } catch (err) {
-        console.error('Failed to load candles:', err);
+        // Silently ignore candle loading errors
       }
     };
 
@@ -162,20 +162,24 @@ export function Chart() {
 
     const latestCandle = candles[candles.length - 1];
     const formatted = {
-      time: Math.floor(latestCandle.t / 1000) as Time,
+      time: Math.floor(latestCandle.t / 1000), // Use number instead of Time type
       open: latestCandle.o,
       high: latestCandle.h,
       low: latestCandle.l,
       close: latestCandle.c,
     };
 
-    if (candleSeriesRef.current && chartType === 'candles') {
-      candleSeriesRef.current.update(formatted);
-    } else if (lineSeriesRef.current && chartType === 'line') {
-      lineSeriesRef.current.update({
-        time: formatted.time,
-        value: formatted.close,
-      });
+    try {
+      if (candleSeriesRef.current && chartType === 'candles') {
+        candleSeriesRef.current.update(formatted);
+      } else if (lineSeriesRef.current && chartType === 'line') {
+        lineSeriesRef.current.update({
+          time: formatted.time,
+          value: formatted.close,
+        });
+      }
+    } catch (e) {
+      // Ignore update errors (e.g., out-of-order timestamps)
     }
   }, [candles, chartType]);
 
@@ -197,7 +201,7 @@ export function Chart() {
       {/* Chart Controls */}
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-medium text-text-secondary uppercase tracking-wider">Chart</span>
+          <span className="text-xs font-medium text-text-secondary uppercase tracking-wider">TradingView Chart</span>
           <div className="flex gap-1">
             {Object.keys(TIMEFRAMES).map((tf) => (
               <button

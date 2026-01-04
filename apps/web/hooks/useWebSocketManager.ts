@@ -147,3 +147,8 @@ class WebSocketManagerClass {
 
 // Export singleton instance
 export const wsManager = new WebSocketManagerClass();
+
+// Expose for testing
+if (typeof window !== 'undefined') {
+  (window as any).wsManager = wsManager;
+}

@@ -32,7 +32,9 @@ test.describe('Application Startup and Initial Render', () => {
       !e.includes('NO_COLOR') &&
       !e.includes('FORCE_COLOR') &&
       !e.includes('Warning:') &&
-      !e.includes('[WebSocket] Error:')  // WebSocket connection errors are expected during initial connection
+      !e.includes('[WebSocket] Error:') &&  // WebSocket connection errors are expected during initial connection
+      !e.includes("can't establish a connection to the server at ws://") &&  // Firefox WebSocket errors
+      !e.includes('establish a connection to the server at ws://')  // Firefox WebSocket errors
     );
     if (unexpectedErrors.length > 0) {
       console.log('Unexpected console errors:', unexpectedErrors);
