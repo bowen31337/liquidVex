@@ -23,7 +23,7 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
 
   // Connect to order book WebSocket
   const { isConnected } = useWebSocket(
-    `${process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:8000'}/ws/orderbook/${selectedAsset}`
+    `${process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:8001'}/ws/orderbook/${selectedAsset}`
   );
 
   // Group price levels by aggregation

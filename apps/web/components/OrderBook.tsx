@@ -21,7 +21,7 @@ export function OrderBook({ coin = 'BTC' }: { coin?: string }) {
     // Fetch initial order book data
     const fetchOrderBook = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/info/orderbook/${coin}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001'}/api/info/orderbook/${coin}`);
         if (response.ok) {
           const data = await response.json();
           setOrderBook(data);

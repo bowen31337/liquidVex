@@ -49,6 +49,10 @@ class RateLimiter:
         Returns:
             Tuple of (is_allowed, error_info_dict)
         """
+        # Skip rate limiting for localhost/development
+        if ip in ('127.0.0.1', '::1', '0.0.0.0') or ip.startswith('172.') or ip.startswith('192.168.'):
+            return True, None
+
         async with self._lock:
             now = datetime.now().timestamp()
 

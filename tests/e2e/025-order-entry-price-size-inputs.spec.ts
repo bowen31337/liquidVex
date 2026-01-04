@@ -30,11 +30,11 @@ test.describe('Order Entry Price and Size Inputs', () => {
 
   test('should handle price input correctly', async ({ page }) => {
     // Step 1: Navigate to order entry form with Limit selected
-    const orderForm = page.locator('.panel').filter({ hasText: /Leverage/ });
+    const orderForm = page.locator('div.panel:has(label:has-text("Order Type"))').first();
     await expect(orderForm).toBeVisible();
 
     // Ensure Limit order type is selected
-    const orderTypeSelect = orderForm.locator('label:has-text(\"Order Type\") + select, label:has-text(\"Order Type\") ~ select').first();
+    const orderTypeSelect = orderForm.locator('label:has-text("Order Type") + select, label:has-text("Order Type") ~ select').first();
     await orderTypeSelect.selectOption('limit');
     await page.waitForTimeout(300);
 
@@ -80,7 +80,7 @@ test.describe('Order Entry Price and Size Inputs', () => {
 
   test('should handle size input correctly', async ({ page }) => {
     // Step 10: Navigate to order entry form
-    const orderForm = page.locator('.panel').filter({ hasText: /Leverage/ });
+    const orderForm = page.locator('div.panel:has(label:has-text("Order Type"))').first();
     await expect(orderForm).toBeVisible();
 
     // Step 10: Click on size input field
@@ -103,8 +103,8 @@ test.describe('Order Entry Price and Size Inputs', () => {
   });
 
   test('should handle price input visibility based on order type', async ({ page }) => {
-    const orderForm = page.locator('.panel').filter({ hasText: /Leverage/ });
-    const orderTypeSelect = orderForm.locator('label:has-text(\"Order Type\") + select, label:has-text(\"Order Type\") ~ select').first();
+    const orderForm = page.locator('div.panel:has(label:has-text("Order Type"))').first();
+    const orderTypeSelect = orderForm.locator('label:has-text("Order Type") + select, label:has-text("Order Type") ~ select').first();
     const priceInput = orderForm.locator('input[data-testid="order-price-input"]');
 
     // Limit order - price input should be visible
@@ -131,8 +131,8 @@ test.describe('Order Entry Price and Size Inputs', () => {
   });
 
   test('should handle stop price input for stop orders', async ({ page }) => {
-    const orderForm = page.locator('.panel').filter({ hasText: /Leverage/ });
-    const orderTypeSelect = orderForm.locator('label:has-text(\"Order Type\") + select, label:has-text(\"Order Type\") ~ select').first();
+    const orderForm = page.locator('div.panel:has(label:has-text("Order Type"))').first();
+    const orderTypeSelect = orderForm.locator('label:has-text("Order Type") + select, label:has-text("Order Type") ~ select').first();
 
     // Select stop limit order
     await orderTypeSelect.selectOption('stop_limit');

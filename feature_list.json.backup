@@ -613,13 +613,12 @@
       "Step 14: Drag slider to 20x",
       "Step 15: Verify leverage display shows 20x"
     ],
-    "passes": true,
+    "passes": false,
     "is_dev_done": true,
-    "is_qa_passed": true,
+    "is_qa_passed": false,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T02:50:47.548061Z",
-    "dev_failure_count": 0,
-    "test_file": "tests/e2e/026-percentage-buttons-leverage.spec.ts"
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -637,13 +636,12 @@
       "Step 10: Click to enable post-only",
       "Step 11: Verify checkbox is checked"
     ],
-    "passes": true,
+    "passes": false,
     "is_dev_done": true,
-    "is_qa_passed": true,
+    "is_qa_passed": false,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T02:53:39.366243Z",
-    "dev_failure_count": 0,
-    "test_file": "tests/e2e/027-order-options-checkboxes.spec.ts"
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -659,13 +657,12 @@
       "Step 8: Verify available balance is displayed",
       "Step 9: Verify balance matches account state"
     ],
-    "passes": true,
+    "passes": false,
     "is_dev_done": true,
-    "is_qa_passed": true,
+    "is_qa_passed": false,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T03:01:37.326485Z",
-    "dev_failure_count": 0,
-    "test_file": "tests/e2e/028-order-value-balance-display.spec.ts"
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -1627,10 +1624,7 @@
     ],
     "passes": false,
     "is_dev_done": true,
-    "is_qa_passed": false,
-    "notes": "Validation middleware implemented: SQL injection, XSS, path traversal, large payload (4/14 tests passing). Missing: timestamp validation, coin symbol validation, signature format validation.",
-    "dev_completed_at": "2026-01-04T20:20:18.187925",
-    "test_results": "5/14 passing (35.7%)"
+    "is_qa_passed": false
   },
   {
     "category": "functional",
@@ -1643,13 +1637,7 @@
     ],
     "passes": false,
     "is_dev_done": false,
-    "is_qa_passed": false,
-    "qa_retry_count": 0,
-    "dev_failure_count": 1,
-    "last_dev_failure_at": "2026-01-04T09:14:41.534945Z",
-    "dev_failure_reasons": [
-      "Worker session timed out"
-    ]
+    "is_qa_passed": false
   },
   {
     "category": "functional",
@@ -1662,11 +1650,8 @@
       "Step 5: Verify 401 error and re-authentication required"
     ],
     "passes": false,
-    "is_dev_done": true,
-    "is_qa_passed": false,
-    "qa_retry_count": 0,
-    "dev_failure_count": 0,
-    "dev_completed_at": "2026-01-04T09:26:53.472082Z"
+    "is_dev_done": false,
+    "is_qa_passed": false
   },
   {
     "category": "functional",
@@ -1725,15 +1710,12 @@
     "passes": true,
     "is_dev_done": true,
     "is_qa_passed": true,
-    "dev_failure_count": 1,
-    "last_dev_failure_at": "2026-01-04T09:15:38.340412Z",
-    "dev_failure_reasons": [
-      "Worker session timed out"
-    ],
+    "dev_failure_count": 0,
+    "last_dev_failure_at": null,
+    "dev_failure_reasons": [],
     "is_stuck": false,
     "stuck_reason": null,
-    "stuck_at": null,
-    "qa_retry_count": 0
+    "stuck_at": null
   },
   {
     "category": "style",
@@ -1755,8 +1737,8 @@
     "is_dev_done": true,
     "is_qa_passed": false,
     "dev_failure_count": 0,
-    "qa_retry_count": 0,
-    "dev_completed_at": "2026-01-04T09:05:35.389772Z"
+    "last_dev_failure_at": null,
+    "dev_failure_reasons": []
   },
   {
     "category": "style",
@@ -1770,12 +1752,9 @@
       "Step 6: Inspect timestamps and minor labels",
       "Step 7: Verify tertiary text color is #737373"
     ],
-    "passes": true,
-    "is_dev_done": true,
-    "is_qa_passed": true,
-    "dev_failure_count": 0,
-    "last_dev_failure_at": null,
-    "dev_failure_reasons": []
+    "passes": false,
+    "is_dev_done": false,
+    "is_qa_passed": false
   },
   {
     "category": "style",
@@ -1813,13 +1792,7 @@
     ],
     "passes": false,
     "is_dev_done": false,
-    "is_qa_passed": false,
-    "qa_retry_count": 0,
-    "dev_failure_count": 1,
-    "last_dev_failure_at": "2026-01-04T09:27:08.882325Z",
-    "dev_failure_reasons": [
-      "Worker session timed out"
-    ]
+    "is_qa_passed": false
   },
   {
     "category": "style",
@@ -2050,9 +2023,9 @@
       "Step 4: Verify Order History tab label is clear",
       "Step 5: Verify Trade History tab label is clear"
     ],
-    "passes": true,
-    "is_dev_done": true,
-    "is_qa_passed": true
+    "passes": false,
+    "is_dev_done": false,
+    "is_qa_passed": false
   },
   {
     "category": "style",

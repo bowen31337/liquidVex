@@ -5,7 +5,7 @@
 import { useCallback } from 'react';
 import { ExchangeMeta, AssetInfo, AccountState, AccountHistory, OrderResponse, OrderRequest, CancelRequest, ClosePositionRequest, ModifyPositionRequest, SetMarginModeRequest, ModifyOrderRequest } from '../types';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001';
 
 export function useApi() {
   const getExchangeMeta = useCallback(async (): Promise<ExchangeMeta> => {

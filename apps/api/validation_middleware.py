@@ -9,6 +9,7 @@ Validates all incoming requests for security issues including:
 """
 
 from fastapi import Request, HTTPException
+from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 import json
 
@@ -35,45 +36,41 @@ class ValidationMiddleware(BaseHTTPMiddleware):
 
         # For POST/PUT/DELETE requests, validate body
         if request.method in ["POST", "PUT", "DELETE", "PATCH"]:
-            try:
-                # Read request body
-                body = await request.body()
+            # Read request body with limit to prevent memory exhaustion
+            body = await request.body()
 
-                # Parse JSON if present
-                if body:
-                    # Check total payload size (1MB limit)
-                    if len(body) > 1_000_000:
-                        return JSONResponse(
-                            status_code=413,
-                            content={"error": "Request body too large", "max_size": "1MB"},
-                        )
-
-                    # Parse and validate JSON
-                    try:
-                        body_data = json.loads(body.decode())
-
-                        # Validate each field for security issues
-                        from validators import SecurityValidator
-
-                        for field_name, field_value in body_data.items():
-                            # Skip signature validation (handled separately)
-                            if field_name in ["signature", "timestamp"]:
-                                continue
-
-                            # Check for SQL injection, XSS, path traversal
-                            SecurityValidator.validate_input(field_name, field_value)
-
-                    except json.JSONDecodeError:
-                        # Not JSON, skip validation
-                        pass
-
-            except HTTPException as e:
-                # Re-raise HTTP exceptions from validation
-                from fastapi.responses import JSONResponse
+            # Check total payload size (1MB limit) BEFORE parsing
+            if len(body) > 1_000_000:
                 return JSONResponse(
-                    status_code=e.status_code,
-                    content=e.detail,
+                    status_code=413,
+                    content={"error": "Request body too large", "max_size": "1MB"},
                 )
+
+            # Parse JSON if present
+            if body:
+                try:
+                    body_data = json.loads(body.decode())
+
+                    # Validate each field for security issues
+                    from validators import SecurityValidator
+
+                    for field_name, field_value in body_data.items():
+                        # Skip signature validation (handled separately)
+                        if field_name in ["signature", "timestamp"]:
+                            continue
+
+                        # Check for SQL injection, XSS, path traversal
+                        SecurityValidator.validate_input(field_name, field_value)
+
+                except json.JSONDecodeError:
+                    # Not JSON, skip validation
+                    pass
+                except HTTPException as e:
+                    # Validation failed, return error
+                    return JSONResponse(
+                        status_code=e.status_code,
+                        content=e.detail,
+                    )
 
         # Request is valid - proceed
         return await call_next(request)

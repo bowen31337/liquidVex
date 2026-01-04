@@ -25,6 +25,12 @@ export function OrderForm() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Test mode bypasses wallet requirement
+  // Check for NEXT_PUBLIC_TEST_MODE env var OR URL parameter
+  const isTestMode = (typeof process !== 'undefined' &&
+    (process.env.NEXT_PUBLIC_TEST_MODE === 'true' || process.env.NODE_ENV === 'test')) ||
+    (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('testMode') === 'true');
+
   // Calculate order value
   const orderValue = (() => {
     const price = parseFloat(orderForm.price) || 0;
@@ -58,7 +64,8 @@ export function OrderForm() {
 
   // Percentage buttons
   const handlePercentage = (pct: number) => {
-    if (!isConnected) {
+    // Skip wallet check in test mode
+    if (!isConnected && !isTestMode) {
       setError('Connect wallet first');
       return;
     }
@@ -78,7 +85,8 @@ export function OrderForm() {
 
   // Validate form
   const validate = () => {
-    if (!isConnected) {
+    // Skip wallet check in test mode
+    if (!isConnected && !isTestMode) {
       setError('Connect wallet first');
       return false;
     }

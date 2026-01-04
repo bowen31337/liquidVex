@@ -21,14 +21,14 @@ export function MarketDataProvider({ children }: { children: React.ReactNode }) 
 
   // Connect to allMids stream for price updates across all assets
   const allMidsResult = useWebSocket(
-    `${process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:8000'}/ws/allMids`,
+    `${process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:8001'}/ws/allMids`,
     { autoReconnect: true, reconnectInterval: 3000 }
   );
 
   // Connect to orderbook stream for current asset
   const orderBookResult = useWebSocket(
     selectedAsset
-      ? `${process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:8000'}/ws/orderbook/${selectedAsset}`
+      ? `${process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:8001'}/ws/orderbook/${selectedAsset}`
       : null,
     { autoReconnect: true, reconnectInterval: 3000 }
   );
@@ -36,7 +36,7 @@ export function MarketDataProvider({ children }: { children: React.ReactNode }) 
   // Connect to trades stream for current asset
   const tradesResult = useWebSocket(
     selectedAsset
-      ? `${process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:8000'}/ws/trades/${selectedAsset}`
+      ? `${process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:8001'}/ws/trades/${selectedAsset}`
       : null,
     { autoReconnect: true, reconnectInterval: 3000 }
   );

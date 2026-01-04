@@ -30,7 +30,9 @@ test.describe('Order Entry Form UI', () => {
 
   test('should display complete order entry form UI', async ({ page }) => {
     // Step 1: Navigate to order entry panel
-    const orderForm = page.locator('.panel').filter({ hasText: /Leverage/ });
+    // The OrderForm has class "panel p-3 flex flex-col h-full relative z-10"
+    // Find it by looking for the Order Type label which is unique to the form
+    const orderForm = page.locator('div.panel:has(label:has-text("Order Type"))').first();
     await expect(orderForm).toBeVisible();
 
     // Step 2: Verify buy/sell toggle tabs are visible
@@ -170,20 +172,21 @@ test.describe('Order Entry Form UI', () => {
   });
 
   test('should maintain correct styling and colors', async ({ page }) => {
-    const orderForm = page.locator('.panel').filter({ hasText: /Leverage/ });
+    // Find the order form panel by looking for the Order Type label
+    const orderForm = page.locator('div.panel:has(label:has-text("Order Type"))').first();
 
     // Verify panel has proper background
     const panelClass = await orderForm.getAttribute('class');
-    expect(panelClass).toMatch(/panel/);
+    expect(panelClass).toContain('panel');
 
     // Verify inputs have proper styling
-    const inputs = orderForm.locator('input.input, select.input');
+    const inputs = orderForm.locator('input[type="number"], select');
     const count = await inputs.count();
     expect(count).toBeGreaterThan(0);
 
     // Check first input has input class
     const firstInput = inputs.first();
     const inputClass = await firstInput.getAttribute('class');
-    expect(inputClass).toMatch(/input/);
+    expect(inputClass).toContain('input');
   });
 });

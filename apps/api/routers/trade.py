@@ -5,7 +5,9 @@ Trade Router - Order placement, modification, and cancellation endpoints.
 from typing import Literal
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+
+from validators import SecurityValidator, validate_trading_signature
 
 router = APIRouter()
 
@@ -28,6 +30,40 @@ class OrderRequest(BaseModel):
     signature: str
     timestamp: int
 
+    @field_validator('coin')
+    @classmethod
+    def validate_coin(cls, v: str) -> str:
+        """Validate coin symbol format."""
+        if not SecurityValidator.validate_coin_symbol(v):
+            raise ValueError(f"Invalid coin symbol: {v}. Must be uppercase letters, 2-10 chars.")
+        return v
+
+    @field_validator('signature')
+    @classmethod
+    def validate_signature(cls, v: str) -> str:
+        """Validate signature format."""
+        if not SecurityValidator.validate_signature_format(v):
+            raise ValueError("Invalid signature format. Must be hex string (0x...).")
+        return v
+
+    @field_validator('timestamp')
+    @classmethod
+    def validate_timestamp(cls, v: int) -> int:
+        """Validate timestamp is within valid range."""
+        import time
+        current = int(time.time())
+        diff = abs(current - v)
+        if diff > 60:
+            raise ValueError(f"Timestamp expired or invalid. Diff: {diff}s, max: 60s")
+        return v
+
+    @model_validator(mode='after')
+    def validate_limit_px_for_limit_orders(self) -> 'OrderRequest':
+        """Validate limit_px is provided for limit and stop-limit orders."""
+        if self.order_type in ['limit', 'stop_limit'] and self.limit_px <= 0:
+            raise ValueError(f"limit_px must be positive for {self.order_type} orders")
+        return self
+
 
 class OrderResponse(BaseModel):
     """Response after order operation."""
@@ -49,6 +85,29 @@ class CancelRequest(BaseModel):
     signature: str
     timestamp: int
 
+    @field_validator('coin')
+    @classmethod
+    def validate_coin(cls, v: str) -> str:
+        if not SecurityValidator.validate_coin_symbol(v):
+            raise ValueError(f"Invalid coin symbol: {v}")
+        return v
+
+    @field_validator('signature')
+    @classmethod
+    def validate_signature(cls, v: str) -> str:
+        if not SecurityValidator.validate_signature_format(v):
+            raise ValueError("Invalid signature format")
+        return v
+
+    @field_validator('timestamp')
+    @classmethod
+    def validate_timestamp(cls, v: int) -> int:
+        import time
+        current = int(time.time())
+        if abs(current - v) > 60:
+            raise ValueError("Timestamp expired")
+        return v
+
 
 class ModifyRequest(BaseModel):
     """Request body for modifying an existing order."""
@@ -62,6 +121,29 @@ class ModifyRequest(BaseModel):
     signature: str
     timestamp: int
 
+    @field_validator('coin')
+    @classmethod
+    def validate_coin(cls, v: str) -> str:
+        if not SecurityValidator.validate_coin_symbol(v):
+            raise ValueError(f"Invalid coin symbol: {v}")
+        return v
+
+    @field_validator('signature')
+    @classmethod
+    def validate_signature(cls, v: str) -> str:
+        if not SecurityValidator.validate_signature_format(v):
+            raise ValueError("Invalid signature format")
+        return v
+
+    @field_validator('timestamp')
+    @classmethod
+    def validate_timestamp(cls, v: int) -> int:
+        import time
+        current = int(time.time())
+        if abs(current - v) > 60:
+            raise ValueError("Timestamp expired")
+        return v
+
 
 class CancelAllRequest(BaseModel):
     """Request body for canceling all orders."""
@@ -72,6 +154,29 @@ class CancelAllRequest(BaseModel):
     signature: str
     timestamp: int
 
+    @field_validator('coin')
+    @classmethod
+    def validate_coin(cls, v: str | None) -> str | None:
+        if v and not SecurityValidator.validate_coin_symbol(v):
+            raise ValueError(f"Invalid coin symbol: {v}")
+        return v
+
+    @field_validator('signature')
+    @classmethod
+    def validate_signature(cls, v: str) -> str:
+        if not SecurityValidator.validate_signature_format(v):
+            raise ValueError("Invalid signature format")
+        return v
+
+    @field_validator('timestamp')
+    @classmethod
+    def validate_timestamp(cls, v: int) -> int:
+        import time
+        current = int(time.time())
+        if abs(current - v) > 60:
+            raise ValueError("Timestamp expired")
+        return v
+
 
 class ClosePositionRequest(BaseModel):
     """Request body for closing a position."""
@@ -81,6 +186,29 @@ class ClosePositionRequest(BaseModel):
     coin: str
     signature: str
     timestamp: int
+
+    @field_validator('coin')
+    @classmethod
+    def validate_coin(cls, v: str) -> str:
+        if not SecurityValidator.validate_coin_symbol(v):
+            raise ValueError(f"Invalid coin symbol: {v}")
+        return v
+
+    @field_validator('signature')
+    @classmethod
+    def validate_signature(cls, v: str) -> str:
+        if not SecurityValidator.validate_signature_format(v):
+            raise ValueError("Invalid signature format")
+        return v
+
+    @field_validator('timestamp')
+    @classmethod
+    def validate_timestamp(cls, v: int) -> int:
+        import time
+        current = int(time.time())
+        if abs(current - v) > 60:
+            raise ValueError("Timestamp expired")
+        return v
 
 
 class ModifyPositionRequest(BaseModel):
@@ -94,6 +222,29 @@ class ModifyPositionRequest(BaseModel):
     signature: str
     timestamp: int
 
+    @field_validator('coin')
+    @classmethod
+    def validate_coin(cls, v: str) -> str:
+        if not SecurityValidator.validate_coin_symbol(v):
+            raise ValueError(f"Invalid coin symbol: {v}")
+        return v
+
+    @field_validator('signature')
+    @classmethod
+    def validate_signature(cls, v: str) -> str:
+        if not SecurityValidator.validate_signature_format(v):
+            raise ValueError("Invalid signature format")
+        return v
+
+    @field_validator('timestamp')
+    @classmethod
+    def validate_timestamp(cls, v: int) -> int:
+        import time
+        current = int(time.time())
+        if abs(current - v) > 60:
+            raise ValueError("Timestamp expired")
+        return v
+
 
 class SetMarginModeRequest(BaseModel):
     """Request body for setting margin mode."""
@@ -104,6 +255,29 @@ class SetMarginModeRequest(BaseModel):
     marginType: Literal['cross', 'isolated']
     signature: str
     timestamp: int
+
+    @field_validator('coin')
+    @classmethod
+    def validate_coin(cls, v: str) -> str:
+        if not SecurityValidator.validate_coin_symbol(v):
+            raise ValueError(f"Invalid coin symbol: {v}")
+        return v
+
+    @field_validator('signature')
+    @classmethod
+    def validate_signature(cls, v: str) -> str:
+        if not SecurityValidator.validate_signature_format(v):
+            raise ValueError("Invalid signature format")
+        return v
+
+    @field_validator('timestamp')
+    @classmethod
+    def validate_timestamp(cls, v: int) -> int:
+        import time
+        current = int(time.time())
+        if abs(current - v) > 60:
+            raise ValueError("Timestamp expired")
+        return v
 
 
 @router.post("/place", response_model=OrderResponse)

@@ -36,8 +36,9 @@ export function AssetSelector() {
     const loadAssets = async () => {
       setIsLoading(true);
       try {
-        // Use full URL to backend API
-        const response = await fetch('http://localhost:8000/api/info/meta');
+        // Use environment variable for API URL
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001';
+        const response = await fetch(`${apiUrl}/api/info/meta`);
         if (!response.ok) throw new Error('Failed to fetch assets');
 
         const data = await response.json();

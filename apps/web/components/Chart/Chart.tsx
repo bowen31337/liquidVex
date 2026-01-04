@@ -36,7 +36,7 @@ export function Chart() {
 
   // Connect to candle WebSocket
   useWebSocket(
-    `${process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:8000'}/ws/candles/${selectedAsset}/${timeframe}`,
+    `${process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:8001'}/ws/candles/${selectedAsset}/${timeframe}`,
     {
       autoReconnect: true,
       reconnectInterval: 3000,
