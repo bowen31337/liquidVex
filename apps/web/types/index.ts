@@ -59,6 +59,31 @@ export interface Trade {
   fee?: number;  // Optional fee field for trade history
 }
 
+export interface OrderFill {
+  type: 'order_fill';
+  oid: number;              // Order ID
+  coin: string;             // Asset symbol
+  side: 'B' | 'A';          // Order side
+  px: number;              // Fill price
+  sz: number;              // Filled size
+  remaining: number;       // Remaining size
+  status: 'open' | 'filled' | 'canceled' | 'triggered'; // New order status
+  timestamp: number;       // Fill timestamp
+  fee: number;             // Fee paid
+  tradeId: number;         // Trade ID
+}
+
+export interface TradeEvent {
+  type: 'trade';
+  coin: string;
+  side: 'B' | 'A';
+  px: number;
+  sz: number;
+  timestamp: number;
+  tradeId: number;
+  taker: boolean;          // True if taker, false if maker
+}
+
 export interface TradeData {
   type: 'trade';
   coin: string;

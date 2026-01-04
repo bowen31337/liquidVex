@@ -54,6 +54,37 @@ export interface Trade {
 }
 
 /**
+ * Order fill event (execution of an order)
+ */
+export interface OrderFill {
+  type: 'order_fill';
+  oid: number;              // Order ID
+  coin: string;             // Asset symbol
+  side: 'B' | 'A';          // Order side
+  px: number;              // Fill price
+  sz: number;              // Filled size
+  remaining: number;       // Remaining size
+  status: 'open' | 'filled' | 'canceled' | 'triggered'; // New order status
+  timestamp: number;       // Fill timestamp
+  fee: number;             // Fee paid
+  tradeId: number;         // Trade ID
+}
+
+/**
+ * Trade event (executed trade)
+ */
+export interface TradeEvent {
+  type: 'trade';
+  coin: string;
+  side: 'B' | 'A';
+  px: number;
+  sz: number;
+  timestamp: number;
+  tradeId: number;
+  taker: boolean;          // True if taker, false if maker
+}
+
+/**
  * L2 Order book snapshot
  */
 export interface OrderBook {
