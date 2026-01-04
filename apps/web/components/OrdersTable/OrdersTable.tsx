@@ -12,9 +12,10 @@ import { useToast } from '../Toast/Toast';
 import { Order } from '../../types';
 import { OrderModifyModal } from '../Modal/OrderModifyModal';
 import { Modal } from '../Modal/Modal';
+import { PositionsTableSkeleton } from '../LoadingSkeleton';
 
 export function OrdersTable() {
-  const { openOrders, setOpenOrders, removeOpenOrder, updateOpenOrder, addOrderHistory } = useOrderStore();
+  const { openOrders, setOpenOrders, removeOpenOrder, updateOpenOrder, addOrderHistory, isLoadingOpenOrders, setIsLoadingOpenOrders } = useOrderStore();
   const { isConnected, address } = useWalletStore();
   const { getOpenOrders, modifyOrder, cancelOrder, cancelAllOrders } = useApi();
   const { success, error } = useToast();
@@ -50,10 +51,13 @@ export function OrdersTable() {
     if (isConnected && address) {
       const loadOrders = async () => {
         try {
+          setIsLoadingOpenOrders(true);
           const data = await getOpenOrders(address);
           setOpenOrders(data);
         } catch (err) {
           console.error('Failed to load orders:', err);
+        } finally {
+          setIsLoadingOpenOrders(false);
         }
       };
       loadOrders();
@@ -63,6 +67,7 @@ export function OrdersTable() {
       return () => clearInterval(interval);
     } else {
       setOpenOrders([]);
+      setIsLoadingOpenOrders(false);
       return;
     }
   }, [isConnected, address, isTestMode]);
@@ -241,6 +246,10 @@ export function OrdersTable() {
         Connect your wallet to view orders
       </div>
     );
+  }
+
+  if (isLoadingOpenOrders) {
+    return <PositionsTableSkeleton />;
   }
 
   if (openOrders.length === 0) {

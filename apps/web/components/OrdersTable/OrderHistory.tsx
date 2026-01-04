@@ -8,6 +8,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { useOrderStore } from '../../stores/orderStore';
 import { useWalletStore } from '../../stores/walletStore';
 import { useApi } from '../../hooks/useApi';
+import { PositionsTableSkeleton } from '../LoadingSkeleton';
 
 type FilterState = {
   dateRange: 'all' | '24h' | '7d' | '30d';
@@ -16,7 +17,7 @@ type FilterState = {
 };
 
 export function OrderHistory() {
-  const { orderHistory, setOrderHistory } = useOrderStore();
+  const { orderHistory, setOrderHistory, isLoadingOrderHistory, setIsLoadingOrderHistory } = useOrderStore();
   const { isConnected, address } = useWalletStore();
   const { getOrderHistory } = useApi();
 
@@ -93,6 +94,7 @@ export function OrderHistory() {
     if (isConnected && address) {
       const loadHistory = async () => {
         try {
+          setIsLoadingOrderHistory(true);
           const data = await getOrderHistory(address);
           setOrderHistory(data);
         } catch (err) {
@@ -147,6 +149,7 @@ export function OrderHistory() {
       loadHistory();
     } else {
       setOrderHistory([]);
+      setIsLoadingOrderHistory(false);
     }
   }, [isConnected, address, isTestMode]);
 
@@ -273,7 +276,9 @@ export function OrderHistory() {
       </div>
 
       {/* Orders Table */}
-      {filteredOrders.length === 0 ? (
+      {isLoadingOrderHistory ? (
+        <PositionsTableSkeleton />
+      ) : filteredOrders.length === 0 ? (
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center text-text-tertiary text-sm">
             {hasActiveFilters ? 'No orders match your filters' : 'No order history'}

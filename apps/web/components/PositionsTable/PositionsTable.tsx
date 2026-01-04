@@ -15,9 +15,10 @@ import { MarginModeModal } from '../Modal/MarginModeModal';
 import { useToast } from '../Toast/Toast';
 import { Position } from '../../types';
 import { useLiquidationMonitor } from '../../hooks/useLiquidationMonitor';
+import { PositionsTableSkeleton } from '../LoadingSkeleton';
 
 export function PositionsTable() {
-  const { positions, setPositions, removePosition } = useOrderStore();
+  const { positions, setPositions, removePosition, isLoadingPositions, setIsLoadingPositions } = useOrderStore();
   const { isConnected, address } = useWalletStore();
   const { getPositions, closePosition, modifyPosition, setMarginMode } = useApi();
   const { allMids } = useMarketStore();
@@ -55,10 +56,13 @@ export function PositionsTable() {
     if (isConnected && address) {
       const loadPositions = async () => {
         try {
+          setIsLoadingPositions(true);
           const data = await getPositions(address);
           setPositions(data);
         } catch (err) {
           console.error('Failed to load positions:', err);
+        } finally {
+          setIsLoadingPositions(false);
         }
       };
       loadPositions();
@@ -68,6 +72,7 @@ export function PositionsTable() {
       return () => clearInterval(interval);
     } else {
       setPositions([]);
+      setIsLoadingPositions(false);
       return undefined;
     }
   }, [isConnected, address, isTestMode]);
@@ -280,6 +285,10 @@ export function PositionsTable() {
         Connect your wallet to view positions and orders
       </div>
     );
+  }
+
+  if (isLoadingPositions) {
+    return <PositionsTableSkeleton />;
   }
 
   if (positions.length === 0) {

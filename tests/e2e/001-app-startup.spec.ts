@@ -27,9 +27,10 @@ test.describe('Application Startup and Initial Render', () => {
     // This simulates WebSocket data arriving so the app renders real components instead of skeletons
     await page.evaluate(() => {
       const stores = (window as any).stores;
-      if (stores) {
+      if (stores && stores.getMarketStoreState) {
+        const marketState = stores.getMarketStoreState();
         // Populate order book data
-        stores.useMarketStore.getState().setOrderBook({
+        marketState.setOrderBook({
           bids: [
             { px: 95420, sz: 1.5, n: 3 },
             { px: 95415, sz: 2.1, n: 5 },
@@ -47,19 +48,19 @@ test.describe('Application Startup and Initial Render', () => {
         });
 
         // Populate recent trades data
-        stores.useMarketStore.getState().setTrades([
+        marketState.setTrades([
           { px: 95422, sz: 0.5, side: 'B', time: Date.now(), hash: 'trade1' },
           { px: 95423, sz: 1.2, side: 'S', time: Date.now() - 1000, hash: 'trade2' },
           { px: 95421, sz: 0.3, side: 'B', time: Date.now() - 2000, hash: 'trade3' },
         ]);
 
         // Set loading states to false to trigger real component rendering
-        stores.useMarketStore.getState().setIsLoadingOrderBook(false);
-        stores.useMarketStore.getState().setIsLoadingTrades(false);
-        stores.useMarketStore.getState().setIsLoadingCandles(false);
+        marketState.setIsLoadingOrderBook(false);
+        marketState.setIsLoadingTrades(false);
+        marketState.setIsLoadingCandles(false);
 
         // Set some candles for the chart panel
-        stores.useMarketStore.getState().setCandles([
+        marketState.setCandles([
           { t: Date.now() - 3600000, o: 95400, h: 95450, l: 95380, c: 95420, v: 100 },
           { t: Date.now() - 2700000, o: 95420, h: 95460, l: 95400, c: 95440, v: 120 },
           { t: Date.now() - 1800000, o: 95440, h: 95480, l: 95420, c: 95450, v: 90 },
@@ -101,31 +102,31 @@ test.describe('Application Startup and Initial Render', () => {
     }
     expect(unexpectedErrors.length).toBe(0), `Expected no console errors, but got: ${unexpectedErrors.join(', ')}`;
 
-    // Step 5: Verify header section renders with logo and navigation
+    // Step 6: Verify header section renders with logo and navigation
     const header = page.locator('header');
     await expect(header).toBeVisible();
     await expect(header.getByText('liquidVex')).toBeVisible();
     await expect(header.getByText('BTC-PERP')).toBeVisible();
     await expect(header.getByText('Connect Wallet')).toBeVisible();
 
-    // Step 6: Verify chart panel renders with loading state or data
+    // Step 7: Verify chart panel renders with loading state or data
     const chartPanel = page.locator('[data-testid="chart-panel"]').first();
     await expect(chartPanel).toBeVisible();
     await expect(chartPanel).toContainText('TradingView Chart');
     // Check that chart has some buttons (timeframe or indicator buttons)
     await expect(chartPanel.locator('button').first()).toBeVisible();
 
-    // Step 7: Verify order book panel renders with bid/ask columns
+    // Step 8: Verify order book panel renders with bid/ask columns
     const orderBookPanel = page.locator('[data-testid="orderbook-panel"]').first();
     await expect(orderBookPanel).toBeVisible();
     await expect(orderBookPanel).toContainText('Order Book');
 
-    // Step 8: Verify recent trades panel renders
+    // Step 9: Verify recent trades panel renders
     const tradesPanel = page.locator('[data-testid="recent-trades-panel"]').first();
     await expect(tradesPanel).toBeVisible();
     await expect(tradesPanel).toContainText('Recent Trades');
 
-    // Step 9: Verify order entry panel renders with form fields
+    // Step 10: Verify order entry panel renders with form fields
     const orderEntryPanel = page.locator('text=Buy / Long').first();
     await expect(orderEntryPanel).toBeVisible();
 
@@ -136,7 +137,7 @@ test.describe('Application Startup and Initial Render', () => {
     await expect(orderFormPanel.locator('input[type="range"]')).toBeVisible(); // Leverage slider
     await expect(orderFormPanel.locator('input[type="checkbox"]')).toHaveCount(2); // Reduce Only, Post Only
 
-    // Step 10: Verify bottom panel with tabs renders
+    // Step 11: Verify bottom panel with tabs renders
     const positionsTab = page.locator('button:has-text("Positions")').first();
     await expect(positionsTab).toBeVisible();
     await expect(page.locator('button:has-text("Open Orders")')).toBeVisible();
@@ -149,7 +150,7 @@ test.describe('Application Startup and Initial Render', () => {
     await expect(bottomContent).toBeVisible();
     await expect(bottomContent).toContainText('No open positions');
 
-    // Step 11: Verify the trading grid structure is in place
+    // Step 12: Verify the trading grid structure is in place
     const tradingGrid = page.locator('[data-testid="chart-panel"]');
     await expect(tradingGrid).toBeVisible();
   });

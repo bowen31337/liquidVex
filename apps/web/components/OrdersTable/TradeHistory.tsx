@@ -8,6 +8,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { useOrderStore } from '../../stores/orderStore';
 import { useWalletStore } from '../../stores/walletStore';
 import { useApi } from '../../hooks/useApi';
+import { PositionsTableSkeleton } from '../LoadingSkeleton';
 
 type FilterState = {
   dateRange: 'all' | '24h' | '7d' | '30d';
@@ -18,7 +19,7 @@ type FilterState = {
 const ITEMS_PER_PAGE = 20;
 
 export function TradeHistory() {
-  const { tradeHistory, setTradeHistory } = useOrderStore();
+  const { tradeHistory, setTradeHistory, isLoadingTradeHistory, setIsLoadingTradeHistory } = useOrderStore();
   const { isConnected, address } = useWalletStore();
   const { getAccountHistory } = useApi();
 
@@ -53,6 +54,7 @@ export function TradeHistory() {
     if (isConnected && address) {
       const loadHistory = async () => {
         try {
+          setIsLoadingTradeHistory(true);
           const data = await getAccountHistory(address);
           setTradeHistory(data.trades);
         } catch (err) {
@@ -110,6 +112,7 @@ export function TradeHistory() {
       loadHistory();
     } else if (!isTestMode) {
       setTradeHistory([]);
+      setIsLoadingTradeHistory(false);
     }
   }, [isConnected, address, isTestMode]);
 

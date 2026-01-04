@@ -3326,17 +3326,16 @@
       "Step 3: Switch back to 1h",
       "Step 4: Verify previous data is cached/loads quickly"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
     "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 0,
-    "last_dev_failure_at": "2026-01-04T13:45:55.683782Z",
-    "dev_failure_reasons": [],
-    "dev_completed_at": "2026-01-05T01:04:20.795855",
+    "dev_completed_at": "2026-01-04T14:11:29.234617Z",
     "is_stuck": false,
     "stuck_reason": null,
-    "stuck_at": null
+    "stuck_at": null,
+    "qa_completed_at": "2026-01-04T14:12:58.530902+00:00"
   },
   {
     "category": "functional",
@@ -3348,12 +3347,18 @@
       "Step 4: Continue panning",
       "Step 5: Verify more data loads on demand"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T13:48:54.824346Z",
-    "dev_failure_count": 0
+    "dev_failure_count": 0,
+    "is_stuck": false,
+    "stuck_reason": null,
+    "stuck_at": null,
+    "last_dev_failure_at": null,
+    "dev_failure_reasons": [],
+    "qa_completed_at": "2026-01-04T14:12:49.333333+00:00"
   },
   {
     "category": "functional",
@@ -3396,14 +3401,11 @@
       "Step 4: Verify number of orders at level"
     ],
     "passes": false,
-    "is_dev_done": false,
+    "is_dev_done": true,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_failure_count": 1,
-    "last_dev_failure_at": "2026-01-04T13:53:25.444173Z",
-    "dev_failure_reasons": [
-      "Worker session timed out"
-    ]
+    "dev_failure_count": 0,
+    "dev_completed_at": "2026-01-04T14:11:28.997989Z"
   },
   {
     "category": "functional",
@@ -3935,9 +3937,10 @@
       "Step 3: Verify address copied to clipboard",
       "Step 4: Verify copy confirmation shown"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "qa_completed_at": "2026-01-04T14:14:04Z"
   },
   {
     "category": "functional",

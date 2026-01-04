@@ -2704,8 +2704,10 @@
       "Step 5: Verify more data loads on demand"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "dev_completed_at": "2026-01-04T14:10:11.770163Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",

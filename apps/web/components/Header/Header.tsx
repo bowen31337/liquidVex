@@ -15,6 +15,7 @@ import { AccountBalance } from '../AccountBalance/AccountBalance';
 import { WalletModal } from '../WalletModal/WalletModal';
 import { ConnectionStatus } from '../ConnectionStatus/ConnectionStatus';
 import { NetworkWarning } from '../NetworkWarning';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 export function Header() {
   const {
@@ -92,6 +93,17 @@ export function Header() {
   // Truncate wallet address
   const truncateAddress = (addr: string) => {
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+  };
+
+  // Copy full wallet address to clipboard
+  const copyAddressToClipboard = async () => {
+    if (!address) return;
+    try {
+      await navigator.clipboard.writeText(address);
+      // Optional: show a toast notification here
+    } catch (err) {
+      console.error('Failed to copy address:', err);
+    }
   };
 
   // Handle wallet connect/disconnect
@@ -222,21 +234,51 @@ export function Header() {
         </button>
 
         {/* Wallet Connect Button */}
-        <button
-          onClick={handleWalletClick}
-          disabled={isConnecting}
-          data-testid="wallet-connect-button"
-          className={`btn btn-accent min-w-[140px] ${
-            isConnected ? 'bg-long hover:bg-long-muted' : ''
-          }`}
-          aria-label={isConnecting ? 'Connecting to wallet' : isConnected ? 'Disconnect wallet' : 'Connect wallet'}
-        >
-          {isConnecting
-            ? 'Connecting...'
-            : isConnected
-            ? truncateAddress(address || '')
-            : 'Connect Wallet'}
-        </button>
+        <div className="relative">
+          <button
+            onClick={handleWalletClick}
+            disabled={isConnecting}
+            data-testid="wallet-connect-button"
+            className={`btn btn-accent min-w-[140px] ${
+              isConnected ? 'bg-long hover:bg-long-muted' : ''
+            }`}
+            aria-label={isConnecting ? 'Connecting to wallet' : isConnected ? 'Disconnect wallet' : 'Connect wallet'}
+          >
+            {isConnecting
+              ? 'Connecting...'
+              : isConnected
+              ? truncateAddress(address || '')
+              : 'Connect Wallet'}
+          </button>
+
+          {/* Copy Address Button - only show when connected */}
+          {isConnected && address && (
+            <Tooltip content="Copy wallet address" position="bottom">
+              <button
+                onClick={copyAddressToClipboard}
+                data-testid="copy-address-button"
+                className="absolute right-0 top-1/2 transform -translate-y-1/2 p-1 text-text-tertiary hover:text-text-primary transition-colors"
+                aria-label="Copy wallet address"
+                title="Copy address"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+              </button>
+            </Tooltip>
+          )}
+        </div>
 
         {/* Settings Modal */}
         <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />

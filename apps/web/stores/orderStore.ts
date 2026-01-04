@@ -20,6 +20,16 @@ export type OrderFormState = {
 };
 
 interface OrderState {
+  // Loading states
+  isLoadingPositions: boolean;
+  isLoadingOpenOrders: boolean;
+  isLoadingOrderHistory: boolean;
+  isLoadingTradeHistory: boolean;
+  setIsLoadingPositions: (loading: boolean) => void;
+  setIsLoadingOpenOrders: (loading: boolean) => void;
+  setIsLoadingOrderHistory: (loading: boolean) => void;
+  setIsLoadingTradeHistory: (loading: boolean) => void;
+
   // Open positions
   positions: Position[];
   setPositions: (positions: Position[]) => void;
@@ -69,6 +79,16 @@ interface PersistedUIState {
 
 // Store for non-persistent data (positions, orders, etc.)
 export const useOrderStore = create<OrderState>((set) => ({
+  // Loading states
+  isLoadingPositions: false,
+  isLoadingOpenOrders: false,
+  isLoadingOrderHistory: false,
+  isLoadingTradeHistory: false,
+  setIsLoadingPositions: (loading) => set({ isLoadingPositions: loading }),
+  setIsLoadingOpenOrders: (loading) => set({ isLoadingOpenOrders: loading }),
+  setIsLoadingOrderHistory: (loading) => set({ isLoadingOrderHistory: loading }),
+  setIsLoadingTradeHistory: (loading) => set({ isLoadingTradeHistory: loading }),
+
   positions: [],
   setPositions: (positions) => set({ positions }),
   addPosition: (position) => set((state) => ({ positions: [...state.positions, position] })),
