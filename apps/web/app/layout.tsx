@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { MarketDataProvider } from '@/components/MarketDataProvider';
+import { Providers } from './providers';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -30,9 +31,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <body className="bg-background text-text-primary antialiased">
-        <MarketDataProvider>
-          {children}
-        </MarketDataProvider>
+        <Providers>
+          <MarketDataProvider>
+            {children}
+          </MarketDataProvider>
+        </Providers>
       </body>
     </html>
   );

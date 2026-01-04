@@ -4,11 +4,15 @@
 
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useMarketStore } from '../../stores/marketStore';
-import { useWalletStore } from '../../stores/walletStore';
+import { useWalletSync } from '../../stores/walletStore';
 import { useApi } from '../../hooks/useApi';
 import { AssetSelector } from '../AssetSelector';
+import { SettingsModal } from '../Settings/SettingsModal';
+import { AccountBalance } from '../AccountBalance/AccountBalance';
+import { WalletModal } from '../WalletModal/WalletModal';
+import { ConnectionStatus } from '../ConnectionStatus/ConnectionStatus';
 
 export function Header() {
   const {
@@ -22,8 +26,11 @@ export function Header() {
     wsConnected,
   } = useMarketStore();
 
-  const { address, isConnected, connecting, connect, disconnect } = useWalletStore();
+  const wagmiWallet = useWalletSync();
+  const { address, isConnected, connecting, connectError, connectMetaMask, connectWalletConnect, disconnect } = wagmiWallet;
   const { getExchangeMeta } = useApi();
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [walletModalOpen, setWalletModalOpen] = useState(false);
 
   // Format price with commas and decimals
   const formatPrice = (price: number) => {
@@ -53,7 +60,8 @@ export function Header() {
     if (isConnected) {
       disconnect();
     } else {
-      connect();
+      // Show wallet connection modal
+      setWalletModalOpen(true);
     }
   };
 
@@ -94,13 +102,7 @@ export function Header() {
         <AssetSelector />
 
         {/* Connection Status Indicator */}
-        <div
-          className={`w-2 h-2 rounded-full ${
-            wsConnected ? 'bg-long animate-pulse' : 'bg-short'
-          }`}
-          data-testid="ws-status"
-          title={wsConnected ? 'Connected' : 'Disconnected'}
-        />
+        <ConnectionStatus showText={false} />
       </div>
 
       {/* Right side: Price and Wallet */}
@@ -127,6 +129,32 @@ export function Header() {
           <div title="Next Funding">{formatCountdown(fundingCountdown)}</div>
         </div>
 
+        {/* Account Balance */}
+        <AccountBalance />
+
+        {/* Settings Gear Icon */}
+        <button
+          onClick={() => setSettingsOpen(true)}
+          data-testid="settings-button"
+          className="p-2 text-text-secondary hover:text-text-primary transition-colors"
+          title="Settings"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.47a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.39a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+        </button>
+
         {/* Wallet Connect Button */}
         <button
           onClick={handleWalletClick}
@@ -142,6 +170,12 @@ export function Header() {
             ? truncateAddress(address || '')
             : 'Connect Wallet'}
         </button>
+
+        {/* Settings Modal */}
+        <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
+
+        {/* Wallet Modal */}
+        <WalletModal isOpen={walletModalOpen} onClose={() => setWalletModalOpen(false)} />
       </div>
     </header>
   );
