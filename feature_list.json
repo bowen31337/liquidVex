@@ -1707,9 +1707,9 @@
       "Step 12: Refresh page",
       "Step 13: Verify tab selection persists"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "dev_failure_count": 0,
     "last_dev_failure_at": null,
     "dev_failure_reasons": [],
