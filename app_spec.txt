@@ -1,0 +1,644 @@
+<project_specification>
+  <project_name>liquidVex - Hyperliquid DEX Trading Interface</project_name>
+
+  <overview>
+    Build a functional Decentralized Exchange (DEX) interface on top of the Hyperliquid Layer 1 
+    blockchain. Features real-time order book streaming, TradingView-style candlestick charts, 
+    order management (limit/market), wallet connectivity, and position tracking. Focus on 
+    sub-100ms UI updates with a dark, neon-accented trading aesthetic mimicking professional 
+    trading terminals like Based.one.
+  </overview>
+
+  <technology_stack>
+    <language_preference>
+      IMPORTANT: Use TypeScript (.ts, .tsx) with strict mode for ALL frontend code.
+      Use Python 3.11+ with type hints for ALL backend code.
+      Enable strict type checking in both tsconfig.json and mypy configuration.
+    </language_preference>
+    <api_key>
+      You can use Hyperliquid Testnet for development. No API key required for public endpoints.
+      Private key for signing is handled client-side via wallet connection.
+    </api_key>
+    <frontend>
+      <framework>Next.js 14+ with App Router and TypeScript</framework>
+      <language>TypeScript (strict mode) - use .tsx for components, .ts for utilities</language>
+      <styling>Tailwind CSS with custom dark theme configuration</styling>
+      <state_management>Zustand for global state, TanStack Query for server state</state_management>
+      <routing>Next.js App Router with typed route parameters</routing>
+      <charts>TradingView Lightweight Charts or react-financial-charts</charts>
+      <wallet>wagmi + viem for EVM wallet connectivity (MetaMask, WalletConnect)</wallet>
+      <websocket>Native WebSocket with auto-reconnect wrapper</websocket>
+      <type_safety>Enable strict mode in tsconfig.json, no implicit any</type_safety>
+      <port>Only launch on port {frontend_port}</port>
+    </frontend>
+    <backend>
+      <runtime>Python 3.11+ with FastAPI and async/await</runtime>
+      <language>Python with full type hints (mypy strict)</language>
+      <sdk>hyperliquid-python-sdk for blockchain interaction</sdk>
+      <websocket>FastAPI WebSocket endpoints tunneling Hyperliquid data</websocket>
+      <http_client>httpx for async HTTP requests</http_client>
+      <validation>Pydantic v2 for request/response models</validation>
+      <type_safety>Use dataclasses or Pydantic models for all data structures</type_safety>
+    </backend>
+    <communication>
+      <api>RESTful endpoints with typed request/response interfaces</api>
+      <websocket>Backend tunnels Hyperliquid WS data to frontend clients</websocket>
+      <signing>Frontend signs transactions; Backend proxies to Hyperliquid</signing>
+      <shared_types>Create shared TypeScript interfaces matching Python Pydantic models</shared_types>
+    </communication>
+    <monorepo>
+      <orchestration>Turborepo for build orchestration</orchestration>
+      <package_manager_js>pnpm for JavaScript/TypeScript dependencies</package_manager_js>
+      <package_manager_py>uv for Python dependencies</package_manager_py>
+    </monorepo>
+  </technology_stack>
+
+  <prerequisites>
+    <environment_setup>
+      - Hyperliquid Testnet access (public, no registration required)
+      - EVM-compatible wallet (MetaMask) with Arbitrum testnet ETH
+      - Node.js 18+ and pnpm installed
+      - Python 3.11+ and uv installed
+      - Frontend dependencies managed via pnpm workspace
+      - Backend code in /apps/api directory
+      - Environment variables: NEXT_PUBLIC_API_URL, NEXT_PUBLIC_WS_URL
+    </environment_setup>
+  </prerequisites>
+
+  <core_features>
+    <market_data>
+      - Real-time L2 order book streaming via WebSocket
+      - Order book depth visualization (bid/ask ladder)
+      - Price level aggregation controls
+      - Recent trades feed with trade direction coloring
+      - OHLCV candlestick data for TradingView chart
+      - Multiple timeframe support (1m, 5m, 15m, 1h, 4h, 1d)
+      - 24h volume and price change statistics
+      - Funding rate display for perpetuals
+      - Mark price and index price display
+      - Liquidation price calculator
+    </market_data>
+
+    <trading>
+      - Limit order placement with price and size
+      - Market order placement with size
+      - Stop-limit and stop-market orders
+      - Take-profit and stop-loss attachment
+      - Order modification (price and size)
+      - Order cancellation (single and batch)
+      - Reduce-only order option
+      - Post-only order option
+      - Time-in-force settings (GTC, IOC, FOK)
+      - Quick order buttons from order book clicks
+      - Keyboard shortcuts for rapid trading
+    </trading>
+
+    <order_book>
+      - Dual-column order book display
+      - Depth bars showing cumulative volume
+      - Price level click to populate order form
+      - Spread display (absolute and percentage)
+      - Order book imbalance indicator
+      - Configurable decimal precision
+      - Real-time delta updates
+      - Animation for new orders and fills
+    </order_book>
+
+    <positions>
+      - Open positions list with real-time PnL
+      - Entry price and current price display
+      - Unrealized and realized PnL
+      - Position size and leverage display
+      - Liquidation price warning
+      - One-click position close
+      - Position modification (add/reduce)
+      - Cross and isolated margin modes
+      - Position history
+    </positions>
+
+    <wallet_connectivity>
+      - MetaMask integration via wagmi
+      - WalletConnect support for mobile wallets
+      - Arbitrum network detection and switching
+      - Signature-based authentication
+      - Session key management for reduced signing
+      - Wallet balance display
+      - Deposit and withdrawal flows
+      - Account equity and margin display
+    </wallet_connectivity>
+
+    <account_management>
+      - Margin balance and available collateral
+      - Account leverage settings
+      - Open orders list with status
+      - Order history with filters
+      - Trade history with export
+      - Funding payment history
+      - PnL analytics and charts
+      - Account risk metrics
+    </account_management>
+
+    <asset_selection>
+      - Trading pair selector dropdown
+      - Favorites and watchlist
+      - Search functionality
+      - Market statistics in selector
+      - Quick pair switching
+      - Recently traded pairs
+    </asset_selection>
+
+    <responsive_design>
+      - Desktop-first layout (primary target)
+      - Tablet adaptation with collapsible panels
+      - Resizable panel grid system
+      - Persistent layout preferences
+      - Full-screen chart mode
+      - Compact mode for multi-monitor
+    </responsive_design>
+  </core_features>
+
+  <data_models>
+    <typescript_interfaces>
+      <order>
+        interface Order {
+          oid: number;
+          coin: string;
+          side: 'B' | 'A';  // Buy or Ask (Sell)
+          limitPx: number;
+          sz: number;
+          origSz: number;
+          status: 'open' | 'filled' | 'canceled' | 'triggered';
+          timestamp: number;
+          orderType: 'limit' | 'market' | 'stop_limit' | 'stop_market';
+          reduceOnly: boolean;
+          postOnly: boolean;
+          tif: 'GTC' | 'IOC' | 'FOK';
+        }
+      </order>
+
+      <position>
+        interface Position {
+          coin: string;
+          side: 'long' | 'short';
+          entryPx: number;
+          sz: number;
+          leverage: number;
+          marginUsed: number;
+          unrealizedPnl: number;
+          realizedPnl: number;
+          liquidationPx: number;
+          marginType: 'cross' | 'isolated';
+        }
+      </position>
+
+      <orderbook_level>
+        interface OrderBookLevel {
+          px: number;      // Price
+          sz: number;      // Size
+          n: number;       // Number of orders
+        }
+      </orderbook_level>
+
+      <trade>
+        interface Trade {
+          coin: string;
+          side: 'B' | 'A';
+          px: number;
+          sz: number;
+          time: number;
+          hash: string;
+        }
+      </trade>
+
+      <candle>
+        interface Candle {
+          t: number;   // Timestamp
+          o: number;   // Open
+          h: number;   // High
+          l: number;   // Low
+          c: number;   // Close
+          v: number;   // Volume
+        }
+      </candle>
+
+      <account_state>
+        interface AccountState {
+          equity: number;
+          marginUsed: number;
+          availableBalance: number;
+          crossMarginSummary: {
+            accountValue: number;
+            totalMarginUsed: number;
+          };
+          withdrawable: number;
+        }
+      </account_state>
+
+      <market_info>
+        interface MarketInfo {
+          coin: string;
+          szDecimals: number;
+          pxDecimals: number;
+          minSz: number;
+          maxLeverage: number;
+          fundingRate: number;
+          openInterest: number;
+          volume24h: number;
+          priceChange24h: number;
+        }
+      </market_info>
+    </typescript_interfaces>
+
+    <python_models>
+      <order>
+        class OrderRequest(BaseModel):
+            coin: str
+            is_buy: bool
+            limit_px: float
+            sz: float
+            order_type: Literal["limit", "market"]
+            reduce_only: bool = False
+            post_only: bool = False
+            tif: Literal["GTC", "IOC", "FOK"] = "GTC"
+      </order>
+
+      <cancel_request>
+        class CancelRequest(BaseModel):
+            coin: str
+            oid: int
+      </cancel_request>
+    </python_models>
+  </data_models>
+
+  <api_endpoints_summary>
+    <info>
+      - GET /api/info/meta                  # Exchange metadata and asset list
+      - GET /api/info/asset/:coin           # Single asset info
+      - GET /api/info/funding/:coin         # Funding rate history
+      - GET /api/info/candles/:coin         # OHLCV candlestick data
+    </info>
+
+    <market_data>
+      - WS /ws/orderbook/:coin              # Real-time L2 order book
+      - WS /ws/trades/:coin                 # Real-time trade stream
+      - WS /ws/candles/:coin/:interval      # Real-time candle updates
+      - WS /ws/allMids                      # All mid prices stream
+    </market_data>
+
+    <trading>
+      - POST /api/trade/place               # Place order (signed payload)
+      - POST /api/trade/cancel              # Cancel order (signed payload)
+      - POST /api/trade/modify              # Modify order (signed payload)
+      - POST /api/trade/cancel-all          # Cancel all orders (signed)
+      - POST /api/trade/close-position      # Close position (signed)
+    </trading>
+
+    <account>
+      - GET /api/account/state/:address     # Account balances and margins
+      - GET /api/account/positions/:address # Open positions
+      - GET /api/account/orders/:address    # Open orders
+      - GET /api/account/history/:address   # Order and trade history
+      - WS /ws/user/:address                # Real-time user updates
+    </account>
+
+    <wallet>
+      - POST /api/wallet/connect            # Initiate wallet connection
+      - POST /api/wallet/verify             # Verify signature
+      - GET /api/wallet/session             # Get session status
+    </wallet>
+  </api_endpoints_summary>
+
+  <ui_layout>
+    <header>
+      - Logo (left)
+      - Asset selector with search
+      - Current price with 24h change
+      - Mark price and index price
+      - Funding rate countdown
+      - Account equity display
+      - Wallet connect button
+      - Settings gear icon
+    </header>
+
+    <main_grid>
+      - Center: TradingView Chart (resizable, 60% width)
+      - Right Top: Order Book (20% width)
+      - Right Bottom: Recent Trades feed
+      - Far Right: Order Entry Form (20% width)
+    </main_grid>
+
+    <order_book_panel>
+      - Price column (center)
+      - Bid size column (left, green bars)
+      - Ask size column (right, red bars)
+      - Spread indicator between bids/asks
+      - Price precision toggle
+      - Grouping/aggregation control
+    </order_book_panel>
+
+    <order_entry_panel>
+      - Buy/Sell toggle tabs
+      - Order type selector (Limit/Market/Stop)
+      - Price input with increment buttons
+      - Size input with percentage buttons (25%, 50%, 75%, 100%)
+      - Leverage slider
+      - Reduce-only checkbox
+      - Post-only checkbox
+      - Order value display
+      - Available balance display
+      - Submit order button (green buy, red sell)
+    </order_entry_panel>
+
+    <bottom_panel>
+      - Tab navigation: Positions | Open Orders | Order History | Trade History
+      - Positions table with real-time PnL
+      - Orders table with cancel buttons
+      - History tables with filters and pagination
+      - Export functionality
+    </bottom_panel>
+
+    <chart_panel>
+      - TradingView Lightweight Charts integration
+      - Timeframe selector (1m, 5m, 15m, 1h, 4h, 1d)
+      - Chart type toggle (Candles, Line)
+      - Drawing tools (basic)
+      - Indicator overlay options
+      - Full-screen toggle
+      - Price scale on right
+      - Time scale on bottom
+    </chart_panel>
+  </ui_layout>
+
+  <design_system>
+    <color_palette>
+      - Background: #0a0a0a (deep black)
+      - Surface: #171717 (card backgrounds)
+      - Surface Elevated: #262626 (modals, dropdowns)
+      - Border: #404040 (subtle borders)
+      - Text Primary: #f5f5f5 (white-ish)
+      - Text Secondary: #a3a3a3 (muted)
+      - Text Tertiary: #737373 (very muted)
+      - Long/Buy: #22c55e (neon green)
+      - Long Muted: #16a34a (green for backgrounds)
+      - Short/Sell: #ef4444 (neon red)
+      - Short Muted: #dc2626 (red for backgrounds)
+      - Accent: #3b82f6 (blue for links, buttons)
+      - Warning: #f59e0b (amber)
+      - Profit: #22c55e (green)
+      - Loss: #ef4444 (red)
+    </color_palette>
+
+    <typography>
+      - UI Font: 'Inter', -apple-system, sans-serif
+      - Data Font: 'JetBrains Mono', 'Fira Code', monospace
+      - Headers: font-semibold, text-sm to text-base
+      - Labels: font-medium, text-xs, uppercase, tracking-wide
+      - Prices: font-mono, font-medium
+      - Table Data: font-mono, text-xs to text-sm
+    </typography>
+
+    <components>
+      - High-density data tables with hover states
+      - Compact input fields with dark backgrounds
+      - Toggle buttons with active state indicators
+      - Slider components for leverage
+      - Dropdown menus with search
+      - Toast notifications for order feedback
+      - Loading skeletons for data fetching
+      - Connection status indicator (green/red dot)
+      - Keyboard shortcut hints
+    </components>
+
+    <animations>
+      - Order book flash on new orders (subtle)
+      - Trade feed slide-in animation
+      - Price tick up/down color flash
+      - Button press feedback
+      - Panel resize transitions
+      - Loading state shimmer
+    </animations>
+  </design_system>
+
+  <implementation_steps>
+    <step number="1">
+      <title>Monorepo Foundation</title>
+      <tasks>
+        - Initialize Turborepo with pnpm workspace
+        - Create apps/web (Next.js 14+ with TypeScript)
+        - Create apps/api (Python FastAPI with uv)
+        - Create packages/shared-config (eslint, tsconfig, tailwind)
+        - Set up Biome for linting and formatting
+        - Configure environment variables (.env.local, .env.example)
+        - Set up Vitest for frontend testing, Pytest for backend
+        - Create development scripts in root package.json
+      </tasks>
+    </step>
+
+    <step number="2">
+      <title>Backend API Foundation</title>
+      <tasks>
+        - Install hyperliquid-python-sdk
+        - Create FastAPI application structure
+        - Implement info endpoints (meta, asset info)
+        - Set up WebSocket infrastructure
+        - Create Pydantic models for all data types
+        - Implement error handling middleware
+        - Add CORS configuration for frontend
+        - Write backend unit tests
+      </tasks>
+    </step>
+
+    <step number="3">
+      <title>Frontend Foundation</title>
+      <tasks>
+        - Set up Next.js with App Router
+        - Configure Tailwind with custom dark theme
+        - Create base layout components
+        - Implement Zustand stores (market, orders, positions)
+        - Set up TanStack Query for API calls
+        - Create WebSocket connection manager
+        - Build reusable UI component library
+        - Implement responsive grid layout system
+      </tasks>
+    </step>
+
+    <step number="4">
+      <title>Market Data Integration</title>
+      <tasks>
+        - Implement order book WebSocket stream
+        - Build order book visualization component
+        - Implement trades feed WebSocket stream
+        - Build recent trades component
+        - Integrate OHLCV data for charts
+        - Set up TradingView Lightweight Charts
+        - Implement timeframe switching
+        - Add real-time price updates
+      </tasks>
+    </step>
+
+    <step number="5">
+      <title>Wallet Integration</title>
+      <tasks>
+        - Install and configure wagmi + viem
+        - Implement wallet connection UI
+        - Handle network switching to Arbitrum
+        - Implement signature-based auth
+        - Create session management
+        - Display connected wallet info
+        - Handle wallet disconnection
+        - Build wallet balance display
+      </tasks>
+    </step>
+
+    <step number="6">
+      <title>Trading Functionality</title>
+      <tasks>
+        - Build order entry form component
+        - Implement limit order placement
+        - Implement market order placement
+        - Add order type variations (stop, take-profit)
+        - Build order confirmation flow
+        - Implement transaction signing
+        - Handle order placement errors
+        - Add success/error notifications
+      </tasks>
+    </step>
+
+    <step number="7">
+      <title>Order and Position Management</title>
+      <tasks>
+        - Build open orders table
+        - Implement order cancellation
+        - Implement order modification
+        - Build positions table with real-time PnL
+        - Implement position close functionality
+        - Add order history table
+        - Add trade history table
+        - Implement filters and pagination
+      </tasks>
+    </step>
+
+    <step number="8">
+      <title>Account Features</title>
+      <tasks>
+        - Display account equity and margins
+        - Show available balance
+        - Implement leverage adjustment
+        - Add margin mode switching
+        - Display funding payments
+        - Build PnL analytics
+        - Add risk warnings
+        - Implement account export
+      </tasks>
+    </step>
+
+    <step number="9">
+      <title>Polish and Optimization</title>
+      <tasks>
+        - Optimize WebSocket message handling
+        - Implement connection auto-reconnect
+        - Add keyboard shortcuts
+        - Optimize re-renders with memoization
+        - Add loading states and skeletons
+        - Implement error boundaries
+        - Performance profiling and optimization
+        - Accessibility improvements
+      </tasks>
+    </step>
+
+    <step number="10">
+      <title>Testing and Documentation</title>
+      <tasks>
+        - Write comprehensive Vitest unit tests
+        - Write Pytest backend tests
+        - Integration testing for trading flows
+        - WebSocket connection resilience tests
+        - Create API documentation
+        - Write deployment guide
+        - Performance benchmarking
+        - Security review
+      </tasks>
+    </step>
+  </implementation_steps>
+
+  <success_criteria>
+    <functionality>
+      - Real-time order book updates display correctly
+      - Candlestick chart renders with multiple timeframes
+      - Wallet connects and displays correct balance
+      - Orders place, modify, and cancel successfully
+      - Positions display with accurate real-time PnL
+      - WebSocket reconnects automatically on disconnect
+      - All trading pairs are selectable and functional
+    </functionality>
+
+    <performance>
+      - UI updates under 100ms after market data change
+      - API latency under 500ms for order operations
+      - Order book renders 50+ levels without lag
+      - Chart loads under 2 seconds
+      - Memory stable under extended use (no leaks)
+      - Handles 50+ concurrent WebSocket connections
+    </performance>
+
+    <design>
+      - Professional trading terminal appearance
+      - Consistent dark theme throughout
+      - Neon green/red color coding for buy/sell
+      - Readable monospace data presentation
+      - Intuitive order entry workflow
+      - Clear visual hierarchy
+      - Responsive on desktop and tablet
+    </design>
+
+    <reliability>
+      - WebSocket auto-reconnect within 5 seconds
+      - Graceful degradation on connection loss
+      - Order state consistency with blockchain
+      - No duplicate order submissions
+      - Accurate PnL calculations
+      - Proper error messages for failures
+    </reliability>
+  </success_criteria>
+
+  <security_considerations>
+    <critical>
+      - Private keys NEVER stored or transmitted to backend
+      - All signing happens client-side via wallet
+      - Backend only proxies signed payloads
+      - Session tokens are short-lived
+      - Rate limiting on API endpoints
+      - Input validation on all user inputs
+      - HTTPS only in production
+      - CORS properly configured
+    </critical>
+  </security_considerations>
+
+  <project_structure>
+    <monorepo_layout>
+      liquidVex/
+      ├── apps/
+      │   ├── web/                    # Next.js frontend
+      │   │   ├── app/                # App Router pages
+      │   │   ├── components/         # React components
+      │   │   ├── hooks/              # Custom hooks
+      │   │   ├── lib/                # Utilities
+      │   │   ├── stores/             # Zustand stores
+      │   │   └── types/              # TypeScript types
+      │   └── api/                    # FastAPI backend
+      │       ├── routers/            # API route handlers
+      │       ├── services/           # Business logic
+      │       ├── models/             # Pydantic models
+      │       ├── ws/                 # WebSocket handlers
+      │       └── tests/              # Pytest tests
+      ├── packages/
+      │   ├── shared-config/          # Shared configs
+      │   └── ui/                     # Shared UI components (optional)
+      ├── turbo.json                  # Turborepo config
+      ├── package.json                # Root package.json
+      ├── pnpm-workspace.yaml         # pnpm workspace
+      └── biome.json                  # Biome linting config
+    </monorepo_layout>
+  </project_structure>
+</project_specification>
+

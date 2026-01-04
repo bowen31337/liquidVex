@@ -1,0 +1,318 @@
+{
+  "generated_at": "2026-01-04T02:24:13.668728Z",
+  "project_dir": "liquidvex",
+  "structure": {
+    "directories": [
+      {
+        "name": "apps",
+        "path": "apps",
+        "depth": 3,
+        "subdirectories": [
+          {
+            "name": "api",
+            "path": "apps/api",
+            "depth": 3,
+            "subdirectories": [
+              {
+                "name": "models",
+                "path": "apps/api/models",
+                "depth": 3,
+                "subdirectories": [],
+                "file_count": 0,
+                "key_files": []
+              },
+              {
+                "name": "routers",
+                "path": "apps/api/routers",
+                "depth": 3,
+                "subdirectories": [],
+                "file_count": 5,
+                "key_files": []
+              },
+              {
+                "name": "services",
+                "path": "apps/api/services",
+                "depth": 3,
+                "subdirectories": [],
+                "file_count": 0,
+                "key_files": []
+              },
+              {
+                "name": "tests",
+                "path": "apps/api/tests",
+                "depth": 3,
+                "subdirectories": [],
+                "file_count": 0,
+                "key_files": []
+              },
+              {
+                "name": "ws",
+                "path": "apps/api/ws",
+                "depth": 3,
+                "subdirectories": [],
+                "file_count": 0,
+                "key_files": []
+              }
+            ],
+            "file_count": 2,
+            "key_files": [
+              "main.py"
+            ]
+          },
+          {
+            "name": "web",
+            "path": "apps/web",
+            "depth": 3,
+            "subdirectories": [
+              {
+                "name": "app",
+                "path": "apps/web/app",
+                "depth": 3,
+                "subdirectories": [],
+                "file_count": 3,
+                "key_files": []
+              },
+              {
+                "name": "components",
+                "path": "apps/web/components",
+                "depth": 3,
+                "subdirectories": [],
+                "file_count": 0,
+                "key_files": []
+              },
+              {
+                "name": "hooks",
+                "path": "apps/web/hooks",
+                "depth": 3,
+                "subdirectories": [],
+                "file_count": 0,
+                "key_files": []
+              },
+              {
+                "name": "lib",
+                "path": "apps/web/lib",
+                "depth": 3,
+                "subdirectories": [],
+                "file_count": 0,
+                "key_files": []
+              },
+              {
+                "name": "stores",
+                "path": "apps/web/stores",
+                "depth": 3,
+                "subdirectories": [],
+                "file_count": 0,
+                "key_files": []
+              },
+              {
+                "name": "types",
+                "path": "apps/web/types",
+                "depth": 3,
+                "subdirectories": [],
+                "file_count": 0,
+                "key_files": []
+              }
+            ],
+            "file_count": 5,
+            "key_files": [
+              "next.config.js",
+              "postcss.config.js",
+              "tailwind.config.ts",
+              "tsconfig.json"
+            ]
+          }
+        ],
+        "file_count": 0,
+        "key_files": []
+      },
+      {
+        "name": "docs",
+        "path": "docs",
+        "depth": 2,
+        "subdirectories": [
+          {
+            "name": "api",
+            "path": "docs/api",
+            "depth": 2,
+            "subdirectories": [],
+            "file_count": 0,
+            "key_files": []
+          }
+        ],
+        "file_count": 0,
+        "key_files": []
+      },
+      {
+        "name": "packages",
+        "path": "packages",
+        "depth": 2,
+        "subdirectories": [
+          {
+            "name": "shared-config",
+            "path": "packages/shared-config",
+            "depth": 2,
+            "subdirectories": [],
+            "file_count": 0,
+            "key_files": []
+          }
+        ],
+        "file_count": 0,
+        "key_files": []
+      },
+      {
+        "name": "scripts",
+        "path": "scripts",
+        "depth": 1,
+        "subdirectories": [],
+        "file_count": 0,
+        "key_files": []
+      },
+      {
+        "name": "tests",
+        "path": "tests",
+        "depth": 2,
+        "subdirectories": [
+          {
+            "name": "e2e",
+            "path": "tests/e2e",
+            "depth": 2,
+            "subdirectories": [],
+            "file_count": 0,
+            "key_files": []
+          },
+          {
+            "name": "fixtures",
+            "path": "tests/fixtures",
+            "depth": 2,
+            "subdirectories": [],
+            "file_count": 0,
+            "key_files": []
+          },
+          {
+            "name": "integration",
+            "path": "tests/integration",
+            "depth": 2,
+            "subdirectories": [],
+            "file_count": 0,
+            "key_files": []
+          },
+          {
+            "name": "unit",
+            "path": "tests/unit",
+            "depth": 2,
+            "subdirectories": [],
+            "file_count": 0,
+            "key_files": []
+          }
+        ],
+        "file_count": 0,
+        "key_files": []
+      }
+    ],
+    "root_files": [
+      {
+        "name": ".gitignore",
+        "size": 563,
+        "type": "other"
+      },
+      {
+        "name": "README.md",
+        "size": 5620,
+        "type": "markdown"
+      },
+      {
+        "name": "app_spec.txt",
+        "size": 22682,
+        "type": "text"
+      },
+      {
+        "name": "biome.json",
+        "size": 777,
+        "type": "config"
+      },
+      {
+        "name": "claude-progress.txt",
+        "size": 6336,
+        "type": "text"
+      },
+      {
+        "name": "feature_list.json",
+        "size": 103506,
+        "type": "config"
+      },
+      {
+        "name": "init.sh",
+        "size": 8487,
+        "type": "shell"
+      },
+      {
+        "name": "package.json",
+        "size": 647,
+        "type": "config"
+      },
+      {
+        "name": "pnpm-workspace.yaml",
+        "size": 40,
+        "type": "config"
+      },
+      {
+        "name": "token-consumption-report.json",
+        "size": 1370,
+        "type": "config"
+      },
+      {
+        "name": "turbo.json",
+        "size": 531,
+        "type": "config"
+      }
+    ],
+    "depth": 3
+  },
+  "components": {
+    "components": [],
+    "services": [],
+    "utilities": [],
+    "routes": [],
+    "models": [],
+    "hooks": []
+  },
+  "file_stats": {
+    "typescript": {
+      "count": 3,
+      "total_size": 10356
+    },
+    "javascript": {
+      "count": 2,
+      "total_size": 249
+    },
+    "python": {
+      "count": 6,
+      "total_size": 22968
+    },
+    "css": {
+      "count": 1,
+      "total_size": 3509
+    },
+    "config": {
+      "count": 10,
+      "total_size": 110894
+    }
+  },
+  "recent_changes": {
+    "available": true,
+    "recent_commits": [
+      {
+        "hash": "739cb63",
+        "message": "Initial setup: feature_list.json, init.sh, and project structure"
+      }
+    ],
+    "files_changed_recently": []
+  },
+  "dependencies": {
+    "npm": [
+      "@playwright/test"
+    ],
+    "python": []
+  },
+  "estimated_tokens": 1858
+}

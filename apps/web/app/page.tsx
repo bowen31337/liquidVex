@@ -1,3 +1,5 @@
+import { AssetSelector } from '@/components/AssetSelector';
+
 export default function Home(): React.ReactElement {
   return (
     <main className="min-h-screen">
@@ -5,8 +7,8 @@ export default function Home(): React.ReactElement {
       <header className="h-14 border-b border-border bg-surface flex items-center justify-between px-4">
         <div className="flex items-center gap-4">
           <h1 className="text-xl font-semibold text-text-primary">liquidVex</h1>
-          {/* Asset Selector will go here */}
-          <div className="text-text-secondary text-sm">BTC-PERP</div>
+          {/* Asset Selector */}
+          <AssetSelector />
         </div>
         <div className="flex items-center gap-4">
           {/* Price display */}
