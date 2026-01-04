@@ -321,9 +321,9 @@ export function PositionsTable() {
                   <td className={pos.side === 'long' ? 'text-long' : 'text-short'}>
                     {pos.side.toUpperCase()}
                   </td>
-                  <td>{formatNumber(pos.sz, 4)}</td>
-                  <td>{formatNumber(pos.entryPx, 2)}</td>
-                  <td>{markPrice ? formatNumber(markPrice) : '--'}</td>
+                  <td>{formatVariableDecimals(pos.sz, 4)}</td>
+                  <td>{formatFixedDecimals(pos.entryPx, 2)}</td>
+                  <td>{markPrice ? formatFixedDecimals(markPrice, 2) : '--'}</td>
                   <td>
                     {realTimePnl !== null
                       ? formatPnl(realTimePnl)
@@ -332,8 +332,8 @@ export function PositionsTable() {
                   </td>
                   <td>{formatPnl(pos.realizedPnl)}</td>
                   <td>{pos.leverage}x</td>
-                  <td>{formatNumber(pos.marginUsed)}</td>
-                  <td>{formatNumber(pos.liquidationPx)}</td>
+                  <td>{formatFixedDecimals(pos.marginUsed, 2)}</td>
+                  <td>{formatFixedDecimals(pos.liquidationPx, 2)}</td>
                   <td>
                     {risk && risk.riskLevel !== 'low' && (
                       <span className={`px-2 py-1 rounded text-xs font-medium border ${getRiskBadgeClass(risk.riskLevel)}`} data-testid={`liquidation-risk-${pos.coin}`}>

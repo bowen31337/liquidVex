@@ -3217,8 +3217,11 @@
       "Step 5: Verify UI PnL matches calculation"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T13:22:01.209058Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",

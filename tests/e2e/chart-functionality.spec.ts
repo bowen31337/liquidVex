@@ -32,7 +32,7 @@ test.describe('Chart Functionality Tests', () => {
   });
 
   test('should switch between timeframe buttons', async ({ page }) => {
-    const chartPanel = page.locator('.chart-panel');
+    const chartPanel = page.locator('.chart-panel').first();
 
     // Test switching to 5m timeframe
     const fiveMButton = chartPanel.locator('button:has-text("5m")').first();
@@ -60,7 +60,7 @@ test.describe('Chart Functionality Tests', () => {
   });
 
   test('should render candlestick chart by default', async ({ page }) => {
-    const chartPanel = page.locator('.chart-panel');
+    const chartPanel = page.locator('.chart-panel').first();
 
     // Wait for chart data to load
     await page.waitForTimeout(1000);
@@ -76,7 +76,7 @@ test.describe('Chart Functionality Tests', () => {
   });
 
   test('should switch between candlestick and line chart modes', async ({ page }) => {
-    const chartPanel = page.locator('.chart-panel');
+    const chartPanel = page.locator('.chart-panel').first();
 
     // Wait for initial chart to load
     await page.waitForTimeout(1000);
@@ -104,7 +104,7 @@ test.describe('Chart Functionality Tests', () => {
 
   test('should handle full-screen toggle', async ({ page }) => {
     // Use the chart-panel class for more specific targeting
-    const chartPanel = page.locator('.chart-panel');
+    const chartPanel = page.locator('.chart-panel').first();
 
     // Find full-screen button
     const fullscreenButton = chartPanel.locator('button:has-text("Full"), button:has-text("Exit")');
@@ -131,7 +131,7 @@ test.describe('Chart Functionality Tests', () => {
   });
 
   test('should update chart with real-time data from WebSocket', async ({ page }) => {
-    const chartPanel = page.locator('.chart-panel');
+    const chartPanel = page.locator('.chart-panel').first();
 
     // Wait for initial data
     await page.waitForTimeout(2000);
@@ -154,7 +154,7 @@ test.describe('Chart Functionality Tests', () => {
   });
 
   test('should display chart controls and labels', async ({ page }) => {
-    const chartPanel = page.locator('.chart-panel');
+    const chartPanel = page.locator('.chart-panel').first();
 
     // Verify chart controls are present
     const timeframeControls = chartPanel.locator('div.flex.items-center.justify-between');
@@ -170,7 +170,7 @@ test.describe('Chart Functionality Tests', () => {
   });
 
   test('should handle chart loading states gracefully', async ({ page }) => {
-    const chartPanel = page.locator('.chart-panel');
+    const chartPanel = page.locator('.chart-panel').first();
 
     // Chart should either show data or loading state
     const chartCanvas = chartPanel.locator('[data-testid="chart-container"] canvas').first();
