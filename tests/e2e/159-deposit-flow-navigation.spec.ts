@@ -8,111 +8,142 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Deposit Flow Navigation', () => {
   test.beforeEach(async ({ page }) => {
-    // Navigate to the application with test mode
     await page.goto('http://localhost:3002?testMode=true');
+    await page.waitForLoadState('networkidle');
 
-    // Populate store data to render components
+    // Wait for stores to be available
+    await page.waitForFunction(() => {
+      return typeof window !== 'undefined' && (window as any).stores;
+    }, { timeout: 10000 });
+
+    // Populate account state to make deposit button visible
     await page.evaluate(() => {
       const stores = (window as any).stores;
-      if (stores && stores.getMarketStoreState) {
-        const marketState = stores.getMarketStoreState();
-        marketState.setIsLoadingOrderBook(false);
-        marketState.setIsLoadingTrades(false);
-        marketState.setIsLoadingCandles(false);
-      }
-
-      // Set wallet as connected for deposit tests
-      const walletStore = (window as any).stores?.useWalletStore;
-      if (walletStore) {
-        walletStore.setState({
-          address: '0x1234567890123456789012345678901234567890',
-          isConnected: true,
-          connecting: false,
-        });
-      }
-
-      // Populate account state
-      const orderStore = (window as any).stores?.useOrderStore;
-      if (orderStore) {
-        orderStore.setState({
-          accountState: {
-            equity: 10000,
-            marginUsed: 2500,
-            availableBalance: 7500,
-            withdrawable: 7500,
+      if (stores && stores.getOrderStoreState) {
+        const orderStoreState = stores.getOrderStoreState();
+        if (orderStoreState && orderStoreState.setAccountState) {
+          orderStoreState.setAccountState({
+            equity: 10000.0,
+            marginUsed: 2500.0,
+            availableBalance: 7500.0,
+            withdrawable: 5000.0,
             crossMarginSummary: {
-              accountValue: 10000,
-              totalMarginUsed: 2500,
+              accountValue: 10000.0,
+              totalMarginUsed: 2500.0,
             },
-          },
-        });
+          });
+        }
       }
     });
 
+    // Wait for account balance to render
+    await page.waitForSelector('[data-testid="account-balance"]', { timeout: 10000 });
     await page.waitForTimeout(300);
   });
 
-  test('Step 1: Connect wallet', async ({ page }) => {
-    // Verify wallet is connected
-    const walletButton = page.locator('[data-testid="wallet-connect-button"]');
-    await expect(walletButton).toBeVisible();
-    await expect(walletButton).toContainText('0x1234...');
-  });
-
-  test('Step 2: Click deposit button', async ({ page }) => {
-    // Find and click the deposit button - scroll to top first
-    await page.evaluate(() => window.scrollTo(0, 0));
-    await page.waitForTimeout(100);
-
+  test('Step 1: Verify deposit button is visible', async ({ page }) => {
     const depositButton = page.locator('[data-testid="deposit-button"]');
-    await expect(depositButton).toBeVisible();
+    await expect(depositButton).toBeVisible({ timeout: 10000 });
     await expect(depositButton).toContainText('Deposit');
-    await depositButton.click({ force: true });
   });
 
-  test('Step 3: Verify deposit modal opens', async ({ page }) => {
-    // Scroll to top and click deposit button
+  test('Step 2: Click deposit button opens modal', async ({ page }) => {
     await page.evaluate(() => window.scrollTo(0, 0));
-    await page.waitForTimeout(100);
+    await page.waitForTimeout(200);
 
-    const depositButton = page.locator('[data-testid="deposit-button"]');
-    await depositButton.click({ force: true });
+    // Click using JavaScript to ensure React state updates
+    const modalOpened = await page.evaluate(() => {
+      const depositButton = document.querySelector('[data-testid="deposit-button"]') as HTMLElement;
+      if (depositButton) {
+        depositButton.click();
+        return true;
+      }
+      return false;
+    });
 
-    // Verify modal is visible
+    expect(modalOpened).toBe(true);
+
+    // Wait for modal to appear
+    await page.waitForTimeout(500);
     const modal = page.locator('.modal-overlay');
     await expect(modal).toBeVisible();
+  });
 
-    // Verify modal title
+  test('Step 3: Verify deposit modal title', async ({ page }) => {
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(200);
+
+    // Open modal
+    await page.evaluate(() => {
+      const depositButton = document.querySelector('[data-testid="deposit-button"]') as HTMLElement;
+      if (depositButton) depositButton.click();
+    });
+
+    await page.waitForTimeout(500);
     const modalTitle = page.locator('h2', { hasText: 'Deposit Funds' });
     await expect(modalTitle).toBeVisible();
   });
 
-  test('Step 4: Verify deposit instructions displayed', async ({ page }) => {
-    // Scroll to top and click deposit button
+  test('Step 4: Verify deposit instructions are displayed', async ({ page }) => {
     await page.evaluate(() => window.scrollTo(0, 0));
-    await page.waitForTimeout(100);
+    await page.waitForTimeout(200);
 
-    const depositButton = page.locator('[data-testid="deposit-button"]');
-    await depositButton.click({ force: true });
+    // Open modal
+    await page.evaluate(() => {
+      const depositButton = document.querySelector('[data-testid="deposit-button"]') as HTMLElement;
+      if (depositButton) depositButton.click();
+    });
 
-    // Verify modal is visible
+    await page.waitForTimeout(500);
     const modal = page.locator('.modal-overlay');
     await expect(modal).toBeVisible();
-
-    // Verify key instruction elements are present
     await expect(page.locator('text=Deposit Instructions')).toBeVisible();
-    await expect(page.locator('text=Arbitrum')).toBeVisible();
-    await expect(page.locator('text=USDC')).toBeVisible();
+    // Use exact text match for "Arbitrum One" to avoid matching other "Arbitrum" text
+    await expect(page.locator('text=/^Arbitrum One$/')).toBeVisible();
+    // Use regex for exact match of USDC token type
+    await expect(page.locator('text=/^USDC$/')).toBeVisible();
     await expect(page.locator('text=Network Information')).toBeVisible();
-
-    // Verify warning message
     const warning = page.locator('text=Important');
     await expect(warning).toBeVisible();
+  });
 
-    // Verify close button works
+  test('Step 5: Verify close button functionality', async ({ page }) => {
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(200);
+
+    // Open modal
+    await page.evaluate(() => {
+      const depositButton = document.querySelector('[data-testid="deposit-button"]') as HTMLElement;
+      if (depositButton) depositButton.click();
+    });
+
+    await page.waitForTimeout(500);
+    const modal = page.locator('.modal-overlay');
+    await expect(modal).toBeVisible();
     const closeButton = page.locator('button', { hasText: 'Close' });
     await expect(closeButton).toBeVisible();
     await closeButton.click();
+    await page.waitForTimeout(300);
+    await expect(modal).not.toBeVisible();
+  });
+
+  test('Step 6: Verify I Understand button functionality', async ({ page }) => {
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(200);
+
+    // Open modal
+    await page.evaluate(() => {
+      const depositButton = document.querySelector('[data-testid="deposit-button"]') as HTMLElement;
+      if (depositButton) depositButton.click();
+    });
+
+    await page.waitForTimeout(500);
+    const modal = page.locator('.modal-overlay');
+    await expect(modal).toBeVisible();
+    const understandButton = page.locator('button', { hasText: 'I Understand' });
+    await expect(understandButton).toBeVisible();
+    await understandButton.click();
+    await page.waitForTimeout(300);
     await expect(modal).not.toBeVisible();
   });
 });

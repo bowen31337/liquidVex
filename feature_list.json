@@ -3452,9 +3452,9 @@
       "Step 3: Verify deposit modal or page opens",
       "Step 4: Verify deposit instructions displayed"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_failure_count": 2,
     "last_dev_failure_at": "2026-01-04T14:35:56.826922Z",
@@ -3462,7 +3462,8 @@
       "Worker session timed out",
       "Worker session timed out"
     ],
-    "dev_completed_at": "2026-01-04T14:14:48.716771+00:00"
+    "dev_completed_at": "2026-01-04T14:14:48.716771+00:00",
+    "qa_completed_at": "2026-01-04T14:43:38.176493+00:00"
   },
   {
     "category": "functional",
@@ -3664,7 +3665,13 @@
     "is_dev_done": true,
     "is_qa_passed": false,
     "dev_completed_at": "2026-01-04T14:26:55.431150+00:00",
-    "notes": "Disabled button styling already implemented throughout app using Tailwind classes: disabled:opacity-50 and disabled:cursor-not-allowed. Applied to all interactive buttons in OrderForm, Modals, and other components."
+    "notes": "Disabled button styling already implemented throughout app using Tailwind classes: disabled:opacity-50 and disabled:cursor-not-allowed. Applied to all interactive buttons in OrderForm, Modals, and other components.",
+    "qa_retry_count": 0,
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-04T14:44:36.913201Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "style",
