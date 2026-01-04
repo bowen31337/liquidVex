@@ -2883,9 +2883,17 @@
       "Step 9: Verify data resumes flowing",
       "Step 10: Verify no duplicate data or missed updates"
     ],
-    "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "passes": true,
+    "is_dev_done": true,
+    "is_qa_passed": true,
+    "test_file": "tests/e2e/102-error-recovery-resilience.spec.ts",
+    "notes": "All 5 E2E tests passed in Chromium. Verified: network interruption handling, error display, WebSocket auto-reconnection with exponential backoff, and data flow resumption without duplicates. WebSocket manager has testDisconnectAll() and testIsConnected() methods for simulation.",
+    "qa_retry_count": 0,
+    "dev_failure_count": 1,
+    "last_dev_failure_at": "2026-01-04T12:53:08.862064Z",
+    "dev_failure_reasons": [
+      "Worker session timed out"
+    ]
   },
   {
     "category": "functional",
@@ -2962,8 +2970,10 @@
     "is_dev_done": true,
     "is_qa_passed": false,
     "test_file": "tests/e2e/032-asset-validation-features.spec.ts",
-    "dev_completed_at": "2026-01-04T23:45:00.000000Z",
-    "notes": "Implemented with truncateDecimals() helper in OrderForm.tsx. handleInputChange truncates price to pxDecimals (BTC: 1, ETH: 2). adjustPrice() uses correct precision."
+    "dev_completed_at": "2026-01-04T12:48:46.578904Z",
+    "notes": "Implemented with truncateDecimals() helper in OrderForm.tsx. handleInputChange truncates price to pxDecimals (BTC: 1, ETH: 2). adjustPrice() uses correct precision.",
+    "qa_retry_count": 0,
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -2996,11 +3006,10 @@
     "is_qa_passed": false,
     "qa_retry_count": 0,
     "dev_failure_count": 0,
-    "last_dev_failure_at": null,
-    "dev_failure_reasons": [],
     "is_stuck": false,
     "stuck_reason": null,
-    "stuck_at": null
+    "stuck_at": null,
+    "dev_completed_at": "2026-01-04T12:54:27.314922Z"
   },
   {
     "category": "functional",
@@ -3495,7 +3504,7 @@
     ],
     "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false
+    "is_qa_passed": true
   },
   {
     "category": "style",

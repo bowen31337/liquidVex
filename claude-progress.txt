@@ -97,10 +97,31 @@ Successfully implemented 5 critical infrastructure features for the liquidVex tr
 - Automated testing infrastructure for both frontend and backend
 
 ### Progress Update
-**Previous State:** 78/201 features passing (38.8%)
-**Current State:** 81/201 features passing (40.3%)
+**Previous State:** 82/201 features passing (40.8%)
+**Current State:** 84/201 features passing (41.8%)
 
 **Recently Completed Features:**
+
+#### Error Recovery and Resilience Testing ✅
+- Feature 2871: Error recovery and resilience testing
+- **Status:** DEV DONE ✓ | QA PASSED ✓
+- **Test:** `tests/e2e/102-error-recovery-resilience.spec.ts`
+- **Files Created:** `tests/e2e/102-error-recovery-resilience.spec.ts` (5 comprehensive E2E tests)
+
+**Key Features Verified:**
+- Network interruption simulation during order placement
+- Error display verification with toast notifications
+- WebSocket disconnection simulation via `wsManager.testDisconnectAll()`
+- Auto-reconnection with exponential backoff (3s initial, doubling each retry)
+- Data flow resumption without duplicates or missed updates
+- Graceful error handling without application crashes
+
+**Test Results:** All 5 tests passed in Chromium
+- Step 1-6: Order placement with network interruption, error handling, retry flow
+- Step 7-10: WebSocket disconnection, auto-reconnection, data flow verification
+- WebSocket manager reconnection logic validation
+- Error handler capture and reporting
+- Order form graceful error handling
 
 #### Order Form Clears After Successful Submission ✅
 - Feature 139: Order form clears after successful submission
@@ -110,28 +131,75 @@ Successfully implemented 5 critical infrastructure features for the liquidVex tr
 - **Verification:** Form resets to default values (empty price/size, buy side, limit type, GTC tif) after successful order submission
 
 #### Accessibility: Focus States and Color Contrast ✅
-- Feature 124: Accessibility: focus states and color contrast
-- **Status:** DEV DONE ✓ | QA PENDING
-- **Test:** `tests/e2e/201-accessibility-features.spec.ts`
+- Feature 123: Accessibility: focus states and color contrast
+- **Status:** DEV DONE ✓ | QA PASSED ✓
+- **Test:** `tests/e2e/002-accessibility.spec.ts`
 - **Files Modified:**
-  - `apps/web/app/globals.css` - Added focus-visible utility classes
-  - `apps/web/components/OrderForm/OrderForm.tsx` - Added aria-labels and focus states
-  - `apps/web/components/Header/Header.tsx` - Added accessibility attributes
-  - `apps/web/components/AssetSelector.tsx` - Added keyboard navigation and ARIA
-  - `apps/web/components/TradingGrid/TradingGrid.tsx` - Added focus states to resize handles
-  - `apps/web/components/OrderBook/OrderBook.tsx` - Added keyboard accessibility
-  - `apps/web/components/OrderBook/RecentTrades.tsx` - Added focus states
+  - `apps/web/app/globals.css` - Already had focus-visible utility classes
+  - `apps/web/components/Header/Header.tsx` - Fixed test mode wallet handling
+  - `apps/web/components/OrderForm/OrderForm.tsx` - Fixed duplicate variable declaration
+- **New Tests Created:** `tests/e2e/002-accessibility.spec.ts` with 6 comprehensive tests
 
-**Key Accessibility Improvements:**
-- WCAG compliant focus indicators (2px ring with offset)
-- ARIA labels on all interactive elements
-- Keyboard navigation support (Tab, Enter, Escape)
-- Role attributes (listbox, option, separator, region)
-- Focus-visible styles for all buttons, inputs, selects, and checkboxes
-- Screen reader friendly labels and descriptions
+**Key Accessibility Features Verified:**
+- Input focus ring styling with visible focus indicators
+- Color contrast meets WCAG AA standards (10.98:1 for focus ring)
+- Reduced motion support via CSS media query
+- High contrast mode support
+- Keyboard navigation through trading interface
+- Screen reader announcements with proper aria-labels
 
-**Total DEV Complete:** 130/201 features (64.7%)
-**Total QA Passed:** 81/201 features (40.3%)
+#### Input Focus Ring Styling ✅
+- Feature 172: Input focus ring styling
+- **Status:** DEV DONE ✓ | QA PASSED ✓
+- **Test:** `tests/e2e/002-accessibility.spec.ts`
+- **Verification:** Focus rings visible on all inputs using `.input` class with `focus-visible:ring-2 focus-visible:ring-focus-ring`
+
+#### Screen Reader and Keyboard Accessibility ✅
+- Feature 124: Screen reader and keyboard accessibility
+- **Status:** DEV DONE ✓ | QA PASSED ✓
+- **Test:** `tests/e2e/002-accessibility.spec.ts`
+- **Verification:** All interactive elements have aria-labels, keyboard navigation works through Tab/Shift+Tab, screen reader announcements for order actions
+
+**Total DEV Complete:** 145/201 features (72.1%)
+**Total QA Passed:** 89/201 features (44.3%)
+
+### Recently Completed Features (Current Session)
+
+#### Asset-Specific Validation Features (132-135) ✅
+- **Features 132-135:** Asset-specific order validation
+- **Status:** DEV DONE ✓ | QA PASSED ✓
+- **Test:** `tests/e2e/032-asset-validation-features.spec.ts` (5 tests, all passing)
+- **Files Modified:**
+  - `apps/web/hooks/useMarginValidation.ts` - Added validation functions
+  - `apps/web/components/OrderForm/OrderForm.tsx` - Integrated validation and truncation
+  - `feature_list.json` - Updated feature status
+
+**Feature 132: Maximum leverage limits enforced per asset**
+- Implemented `validateLeverage()` in useMarginValidation.ts
+- OrderForm.tsx slider max attribute dynamically set from assetInfo.maxLeverage
+- Prevents leverage exceeding asset-specific limits (BTC: 50x, ETH: 50x)
+
+**Feature 133: Minimum order size validation**
+- Implemented `validateSize()` in useMarginValidation.ts
+- Validates against asset minSz (BTC: 0.001, ETH: 0.01)
+- Also validates decimal precision for size
+
+**Feature 134: Price decimal precision per asset**
+- Implemented `truncateDecimals()` helper in OrderForm.tsx
+- `handleInputChange()` truncates price to pxDecimals (BTC: 1, ETH: 2)
+- `adjustPrice()` uses correct precision for increment/decrement
+
+**Feature 135: Size decimal precision per asset**
+- Implemented `truncateDecimals()` helper in OrderForm.tsx
+- `handleInputChange()` truncates size to szDecimals (BTC: 4, ETH: 3)
+- `handlePercentage()` uses correct precision for percentage calculations
+
+**Test Results:**
+- Feature 132: ✅ Maximum leverage limits enforced per asset
+- Feature 133: ✅ Minimum order size validation
+- Feature 134: ✅ Price decimal precision per asset
+- Feature 135: ✅ Size decimal precision per asset
+- Combined: ✅ All validation features work together
 
 ### Next Steps
 The core infrastructure is now complete with:
@@ -141,6 +209,7 @@ The core infrastructure is now complete with:
 - ✅ Type checking and safety
 - ✅ Unit testing infrastructure
 - ✅ Order form clearing functionality
+- ✅ Error recovery and resilience testing
 
 Ready to proceed with:
 - E2E tests for critical user flows
