@@ -209,7 +209,7 @@ test.describe('Feature 74: Input Validation and Security', () => {
 
     const body = await response.json();
     expect(body.success).toBe(true);
-    expect(body.order_id).toBeDefined();
+    expect(body.orderId).toBeDefined();
   });
 
   test('Step 9: Send request with invalid signature', async ({ request }) => {

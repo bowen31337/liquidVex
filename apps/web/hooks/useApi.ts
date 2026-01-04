@@ -141,12 +141,22 @@ export function useApi() {
   }, []);
 
   const cancelAllOrders = useCallback(async (coin?: string, signature?: string, timestamp?: number): Promise<OrderResponse> => {
+    // Generate valid-length signature if not provided
+    const generateSignature = () => {
+      const chars = '0123456789abcdef';
+      let hex = '';
+      for (let i = 0; i < 128; i++) {
+        hex += chars[Math.floor(Math.random() * 16)];
+      }
+      return `0x${hex}`;
+    };
+
     const response = await fetch(`${API_URL}/api/trade/cancel-all`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         coin,
-        signature: signature || `0x${Math.random().toString(16).substring(2)}`,
+        signature: signature || generateSignature(),
         timestamp: timestamp || Date.now()
       }),
     });

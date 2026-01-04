@@ -11,7 +11,9 @@ export const wagmiConfig = createConfig({
     injected(),
     walletConnect({
       projectId,
-      showQrModal: false,
+      showQrModal: true,
+      termsOfUseUrl: 'https://liquidvex.example.com/terms',
+      privacyPolicyUrl: 'https://liquidvex.example.com/privacy',
     }),
   ],
   transports: {

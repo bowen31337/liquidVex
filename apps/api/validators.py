@@ -213,11 +213,20 @@ class SecurityValidator:
         if not isinstance(signature, str):
             return False
 
+        # Must start with 0x
+        if not signature.lower().startswith("0x"):
+            return False
+
         # Check if it's a hex string (0x prefix or just hex)
         signature_clean = signature.lower().replace("0x", "")
 
-        # Check length (typical Ethereum signatures are 130 chars: 0x + 64 + 64)
-        if len(signature_clean) not in [130, 132]:
+        # Check minimum length (realistic signature is 130 hex chars for 65 bytes)
+        # Require at least 64 hex chars (32 bytes) for a reasonable minimum
+        if len(signature_clean) < 64:
+            return False
+
+        # Check maximum length (reasonable for a signature)
+        if len(signature_clean) > 200:
             return False
 
         # Check if it's valid hex

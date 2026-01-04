@@ -31,6 +31,8 @@ function ToastItem({ toast }: ToastItemProps) {
   return (
     <div
       data-testid="toast"
+      data-toast-type={toast.type}
+      data-toast-message={toast.message}
       className={`${bgColor} ${textColor} border px-4 py-3 rounded shadow-lg flex items-center justify-between min-w-[300px] max-w-md animate-slide-in`}
     >
       <span className="text-sm font-medium">{toast.message}</span>

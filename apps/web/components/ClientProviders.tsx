@@ -2,7 +2,7 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { FavoritesProvider } from '@/contexts/FavoritesContext';
 import { wagmiConfig } from '@/lib/wagmi';
 
@@ -16,17 +16,8 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
     },
   }));
 
-  // Only render when client-side to avoid SSR issues
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) {
-    return <div>Loading...</div>;
-  }
-
+  // Render providers directly - no client-side blocking
+  // WagmiProvider and QueryClientProvider handle SSR correctly
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>

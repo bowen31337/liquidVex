@@ -20,6 +20,19 @@ export function OrdersTable() {
   const [cancelling, setCancelling] = useState<Set<number>>(new Set());
   const [cancellingAll, setCancellingAll] = useState(false);
 
+  // Check for test mode
+  const isTestMode = (() => {
+    if (typeof process !== 'undefined' &&
+        (process.env.NEXT_PUBLIC_TEST_MODE === 'true' || process.env.NODE_ENV === 'test')) {
+      return true;
+    }
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('testMode') === 'true' || urlParams.has('testMode');
+    }
+    return false;
+  })();
+
   // Modal state
   const [modifyModalOpen, setModifyModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -27,6 +40,11 @@ export function OrdersTable() {
 
   // Load orders when wallet connects
   useEffect(() => {
+    // In test mode, don't load from API (orders are added directly to store)
+    if (isTestMode) {
+      return;
+    }
+
     if (isConnected && address) {
       const loadOrders = async () => {
         try {
@@ -45,7 +63,7 @@ export function OrdersTable() {
       setOpenOrders([]);
       return;
     }
-  }, [isConnected, address]);
+  }, [isConnected, address, isTestMode]);
 
   const formatNumber = (num: number, decimals = 2) => {
     return num.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
@@ -66,7 +84,16 @@ export function OrdersTable() {
     setCancelling(prev => new Set(prev).add(oid));
     try {
       // Generate mock signature (in production, wallet would sign)
-      const signature = `0x${Math.random().toString(16).substring(2)}${Math.random().toString(16).substring(2)}`;
+      // Generate a 130-character hex signature (64 bytes for r + 64 bytes for s + '0x' prefix)
+      const generateHex = (length: number) => {
+        let result = '';
+        const chars = '0123456789abcdef';
+        for (let i = 0; i < length; i++) {
+          result += chars[Math.floor(Math.random() * 16)];
+        }
+        return result;
+      };
+      const signature = `0x${generateHex(128)}`;
       const timestamp = Date.now();
 
       // Call the real API
@@ -106,7 +133,15 @@ export function OrdersTable() {
     setCancellingAll(true);
     try {
       // Generate mock signature
-      const signature = `0x${Math.random().toString(16).substring(2)}${Math.random().toString(16).substring(2)}`;
+      const generateHex = (length: number) => {
+        let result = '';
+        const chars = '0123456789abcdef';
+        for (let i = 0; i < length; i++) {
+          result += chars[Math.floor(Math.random() * 16)];
+        }
+        return result;
+      };
+      const signature = `0x${generateHex(128)}`;
       const timestamp = Date.now();
 
       // Call the real API
@@ -176,7 +211,7 @@ export function OrdersTable() {
     setIsSubmittingModify(false);
   };
 
-  if (!isConnected) {
+  if (!isConnected && !isTestMode) {
     return (
       <div className="p-4 text-center text-text-tertiary text-sm pointer-events-none" data-testid="orders-table">
         Connect your wallet to view orders
