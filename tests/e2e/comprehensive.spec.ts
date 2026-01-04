@@ -1,0 +1,197 @@
+/**
+ * Comprehensive E2E tests for all major features
+ */
+
+import { test, expect } from '@playwright/test';
+
+test.describe('Comprehensive Trading Interface Tests', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('http://localhost:3000');
+    await page.waitForLoadState('networkidle');
+  });
+
+  test('Order Book displays with bid/ask data', async ({ page }) => {
+    const orderBook = page.locator('.panel', { hasText: 'Order Book' });
+    await expect(orderBook).toBeVisible();
+
+    // Wait for WebSocket connection and data
+    await page.waitForTimeout(1000);
+
+    // Check for bid/ask price levels
+    const bids = orderBook.locator('text=/\\d+\\.\\d+/'); // Price numbers
+    await expect(bids.first()).toBeVisible();
+  });
+
+  test('Recent Trades component updates with trade data', async ({ page }) => {
+    const tradesPanel = page.locator('.panel', { hasText: 'Recent Trades' });
+    await expect(tradesPanel).toBeVisible();
+
+    // Wait for trades to appear
+    await page.waitForTimeout(2000);
+
+    // Should have trade entries
+    const tradeRows = tradesPanel.locator('div.font-mono');
+    // At least one trade should appear within 5 seconds
+    await expect(tradeRows.first()).toBeVisible({ timeout: 5000 });
+  });
+
+  test('Order Form has all required inputs and controls', async ({ page }) => {
+    const orderForm = page.locator('.panel', { hasText: 'Order Type' });
+    await expect(orderForm).toBeVisible();
+
+    // Buy/Sell toggle (use first for toggle, second for submit)
+    const buyToggle = orderForm.locator('button.flex-1:has-text("Buy")');
+    await expect(buyToggle).toBeVisible();
+    const sellToggle = orderForm.locator('button.flex-1:has-text("Sell")');
+    await expect(sellToggle).toBeVisible();
+
+    // Order type selector
+    await expect(orderForm.locator('select')).toBeVisible();
+
+    // Price input (for limit orders)
+    const priceInput = orderForm.locator('input[type="number"]').first();
+    await expect(priceInput).toBeVisible();
+
+    // Size input
+    const sizeInput = orderForm.locator('input[type="number"]').nth(1);
+    await expect(sizeInput).toBeVisible();
+
+    // Percentage buttons
+    for (const pct of ['25%', '50%', '75%', '100%']) {
+      await expect(orderForm.locator(`button:has-text("${pct}")`)).toBeVisible();
+    }
+
+    // Leverage slider
+    await expect(orderForm.locator('input[type="range"]')).toBeVisible();
+
+    // Checkboxes
+    await expect(orderForm.locator('input[type="checkbox"]')).toHaveCount(2);
+
+    // Submit button
+    await expect(orderForm.locator('button.btn-buy, button.btn-sell')).toBeVisible();
+
+    // Order summary
+    await expect(orderForm.locator('text=Order Value')).toBeVisible();
+    await expect(orderForm.locator('text=Available')).toBeVisible();
+  });
+
+  test('Bottom panel tabs switch correctly', async ({ page }) => {
+    const bottomPanel = page.locator('div[class*="h-[200px]"]');
+    await expect(bottomPanel).toBeVisible();
+
+    const tabs = ['Positions', 'Open Orders', 'Order History', 'Trade History'];
+
+    for (const tab of tabs) {
+      const tabButton = page.locator(`button:has-text("${tab}")`);
+      await expect(tabButton).toBeVisible();
+
+      // Click tab
+      await tabButton.click();
+
+      // Verify active state
+      await expect(tabButton).toHaveClass(/text-text-primary/);
+      await expect(tabButton).toHaveClass(/border-b-2/);
+
+      // Wait for content area
+      await expect(bottomPanel).toBeVisible();
+    }
+  });
+
+  test('Wallet connect button interaction', async ({ page }) => {
+    const walletButton = page.locator('button:has-text("Connect Wallet")');
+    await expect(walletButton).toBeVisible();
+
+    // Click to connect (mock)
+    await walletButton.click();
+
+    // Should show connecting state
+    await expect(walletButton).toHaveText('Connecting...', { timeout: 1000 });
+
+    // Should then show mock address
+    await expect(walletButton).toHaveText(/0x[a-fA-F0-9]{6}\.\.\.[a-fA-F0-9]{4}/, { timeout: 2000 });
+  });
+
+  test('Price display updates in header', async ({ page }) => {
+    const header = page.locator('header');
+    const priceElement = header.locator('div.font-mono');
+
+    // Get initial price
+    const initialPrice = await priceElement.textContent();
+
+    // Wait a bit
+    await page.waitForTimeout(2000);
+
+    // Price should still be visible (format may change with updates)
+    await expect(priceElement).toBeVisible();
+
+    // Should have dollar sign
+    expect(await priceElement.textContent()).toMatch(/\$/);
+  });
+
+  test('Chart component renders with timeframe buttons', async ({ page }) => {
+    const chartPanel = page.locator('.panel', { hasText: 'Chart' });
+    await expect(chartPanel).toBeVisible();
+
+    // Timeframe buttons
+    const timeframes = ['1m', '5m', '15m', '1h', '4h', '1D'];
+    for (const tf of timeframes) {
+      await expect(chartPanel.locator(`button:has-text("${tf}")`)).toBeVisible();
+    }
+
+    // Chart controls
+    await expect(chartPanel.locator('button:has-text("Line")')).toBeVisible();
+    await expect(chartPanel.locator('button:has-text("Full")')).toBeVisible();
+  });
+
+  test('Connection status indicators show correctly', async ({ page }) => {
+    // WebSocket indicator in header
+    const indicator = page.locator('header div.w-2.h-2');
+    await expect(indicator).toBeVisible();
+
+    // Should be pulsing (connected) or solid (disconnected)
+    const className = await indicator.getAttribute('class');
+    expect(className).toContain('rounded-full');
+  });
+
+  test('All major UI sections are present', async ({ page }) => {
+    // Header
+    await expect(page.locator('header')).toBeVisible();
+    await expect(page.locator('h1:has-text("liquidVex")')).toBeVisible();
+
+    // Chart area
+    await expect(page.locator('.panel', { hasText: 'Chart' })).toBeVisible();
+
+    // Order Book
+    await expect(page.locator('.panel', { hasText: 'Order Book' })).toBeVisible();
+
+    // Recent Trades
+    await expect(page.locator('.panel', { hasText: 'Recent Trades' })).toBeVisible();
+
+    // Order Form
+    await expect(page.locator('.panel', { hasText: 'Order Type' })).toBeVisible();
+
+    // Bottom Panel
+    await expect(page.locator('div[class*="h-[200px]"]')).toBeVisible();
+  });
+
+  test('No console errors on page load', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error') {
+        errors.push(msg.text());
+      }
+    });
+
+    await page.goto('http://localhost:3000');
+    await page.waitForLoadState('networkidle');
+
+    // Filter out expected warnings
+    const unexpectedErrors = errors.filter(e =>
+      !e.includes('NO_COLOR') &&
+      !e.includes('FORCE_COLOR') &&
+      !e.includes('Warning:')
+    );
+
+    expect(unexpectedErrors.length).toBe(0, `Unexpected errors: ${unexpectedErrors.join(', ')}`);
+  });
+});

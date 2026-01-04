@@ -17,7 +17,7 @@ test.describe('Application Startup and Initial Render', () => {
     });
 
     // Step 1: Navigate to the application root URL
-    await page.goto('http://localhost:3000', { waitUntil: 'networkidle' });
+    await page.goto('http://localhost:3000');
 
     // Step 2: Wait for the page to fully load
     await expect(page).toHaveURL('http://localhost:3000/');
@@ -75,7 +75,7 @@ test.describe('Application Startup and Initial Render', () => {
     // Step 11: Verify WebSocket connection status indicator is visible
     // (This will be added when we implement the status indicator)
     // For now, we verify the basic structure is in place
-    const mainGrid = page.locator('.grid');
+    const mainGrid = page.locator('.grid.grid-cols-12');
     await expect(mainGrid).toBeVisible();
   });
 });

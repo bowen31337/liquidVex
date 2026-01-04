@@ -493,8 +493,11 @@
       "Step 7: Verify warning disappears"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T02:37:08.766740Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
