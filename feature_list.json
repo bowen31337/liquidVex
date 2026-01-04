@@ -828,7 +828,8 @@
     "dev_failure_reasons": [
       "Worker session timed out"
     ],
-    "qa_completed_at": "2026-01-04T21:17:46.049749Z"
+    "qa_completed_at": "2026-01-04T21:17:46.049749Z",
+    "qa_passed_at": "2026-01-04T21:15:00.000000Z"
   },
   {
     "category": "functional",
@@ -2007,8 +2008,11 @@
       "Step 12: Verify dropdown animates closed"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T10:19:36.395925Z",
+    "dev_failure_count": 0
   },
   {
     "category": "style",

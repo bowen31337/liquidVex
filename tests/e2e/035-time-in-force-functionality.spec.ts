@@ -27,7 +27,8 @@ test.describe('Time-in-Force (TIF) Functionality', () => {
     // Step 6: Submit order
     await page.getByTestId('order-submit-button').click();
 
-    // Step 7: Confirm order in modal
+    // Step 7: Wait for modal and confirm order
+    await expect(page.getByTestId('order-confirm-modal')).toBeVisible({ timeout: 5000 });
     await page.getByRole('button', { name: 'Confirm Order' }).click();
 
     // Step 8: Verify success toast appears
@@ -85,7 +86,8 @@ test.describe('Time-in-Force (TIF) Functionality', () => {
     await page.getByTestId('order-submit-button').click();
 
     // Step 8: Confirm in modal
-    await page.getByRole('button', { name: /Confirm.*Buy/i }).click();
+    await expect(page.getByTestId('order-confirm-modal')).toBeVisible({ timeout: 5000 });
+    await page.getByRole('button', { name: 'Confirm Order' }).click();
 
     // Step 9: Verify success message
     const successToast = page.locator('[data-testid="toast"]', { hasText: /Order placed/ });
@@ -116,7 +118,8 @@ test.describe('Time-in-Force (TIF) Functionality', () => {
     await page.getByTestId('order-submit-button').click();
 
     // Step 8: Confirm in modal
-    await page.getByRole('button', { name: /Confirm.*Buy/i }).click();
+    await expect(page.getByTestId('order-confirm-modal')).toBeVisible({ timeout: 5000 });
+    await page.getByRole('button', { name: 'Confirm Order' }).click();
 
     // Step 9: Verify success message
     const successToast = page.locator('[data-testid="toast"]', { hasText: /Order placed/ });
@@ -174,10 +177,11 @@ test.describe('Time-in-Force (TIF) Functionality', () => {
 
       // Submit order
       await page.getByTestId('order-submit-button').click();
+      await expect(page.getByTestId('order-confirm-modal')).toBeVisible({ timeout: 5000 });
       await page.getByRole('button', { name: 'Confirm Order' }).click();
 
       // Verify success
-      const successToast = page.locator('[data-testid="toast"]', { hasText: /Order placed/ });
+      const successToast = page.locator('[data-testid="toast"]', { hasText: /Order placed/ }).first();
       await expect(successToast).toBeVisible({ timeout: 5000 });
 
       // Small delay between orders
@@ -222,7 +226,8 @@ test.describe('Time-in-Force (TIF) Functionality', () => {
     await page.getByTestId('order-price-input').fill('94500');
     await page.getByTestId('order-size-input').fill('0.5');
     await page.getByTestId('order-submit-button').click();
-    await page.getByRole('button', { name: /Confirm/i }).click();
+    await expect(page.getByTestId('order-confirm-modal')).toBeVisible({ timeout: 5000 });
+    await page.getByRole('button', { name: 'Confirm Order' }).click();
     const successToast = page.locator('[data-testid="toast"]', { hasText: /Order placed/ });
     await expect(successToast).toBeVisible({ timeout: 5000 });
 
@@ -261,7 +266,8 @@ test.describe('Time-in-Force (TIF) Functionality', () => {
 
     // Submit
     await page.getByTestId('order-submit-button').click();
-    await page.getByRole('button', { name: /Confirm/i }).click();
+    await expect(page.getByTestId('order-confirm-modal')).toBeVisible({ timeout: 5000 });
+    await page.getByRole('button', { name: 'Confirm Order' }).click();
 
     // Verify success
     const successToast = page.locator('[data-testid="toast"]', { hasText: /Order placed/ });
