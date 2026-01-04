@@ -15,6 +15,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from routers import info, trade, account, websocket
 from rate_limiter import rate_limiter
+from validation_middleware import ValidationMiddleware
 
 
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
@@ -103,6 +104,9 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
 # Rate Limiting Middleware - Prevent excessive API calls
 app.add_middleware(RateLimitMiddleware)
+
+# Input Validation Middleware - Validate requests for security issues
+app.add_middleware(ValidationMiddleware)
 
 # CORS Configuration - Allow frontend origins with proper settings
 # In production, replace with specific allowed origins

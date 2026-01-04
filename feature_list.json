@@ -586,9 +586,9 @@
       "Step 11: Type a valid size (e.g., 0.5)",
       "Step 12: Verify size is displayed correctly"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
+    "is_qa_passed": true,
     "qa_retry_count": 0,
     "dev_completed_at": "2026-01-04T02:59:32.198804Z",
     "dev_failure_count": 0
@@ -1603,9 +1603,9 @@
       "Step 3: Wait for rate limit reset",
       "Step 4: Verify calls succeed again"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false
+    "is_qa_passed": true
   },
   {
     "category": "functional",
