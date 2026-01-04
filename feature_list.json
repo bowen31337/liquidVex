@@ -668,8 +668,11 @@
       "Step 14: Verify order appears in open orders"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T03:13:59.590927Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",

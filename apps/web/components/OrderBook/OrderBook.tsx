@@ -74,13 +74,12 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
     orderBook && orderBook.asks.length > 0 && orderBook.bids.length > 0
       ? {
           absolute: orderBook.asks[0].px - orderBook.bids[0].px,
-          percentage:
-            ((orderBook.asks[0].px - orderBook.bids[0].px) / orderBook.bids[0].px) * 100,
+          percentage: ((orderBook.asks[0].px - orderBook.bids[0].px) / ((orderBook.asks[0].px + orderBook.bids[0].px) / 2)) * 100,
         }
       : null;
 
   return (
-    <div className="panel p-2 flex flex-col h-full">
+    <div className="panel orderbook-panel p-2 flex flex-col h-full">
       {/* Header */}
       <div className="flex items-center justify-between mb-2">
         <div className="text-xs font-medium text-text-secondary uppercase tracking-wider">
@@ -104,8 +103,11 @@ export function OrderBook({ levels = 15, precision = 2 }: OrderBookProps) {
 
       {/* Spread Indicator */}
       {spread && (
-        <div className="text-xs text-text-tertiary mb-1 px-1 py-0.5 bg-surface-elevated rounded text-center">
-          Spread: {spread.absolute.toFixed(precision)} ({spread.percentage.toFixed(3)}%)
+        <div
+          className="text-xs text-text-tertiary mb-1 px-1 py-0.5 bg-surface-elevated rounded text-center"
+          data-testid="spread-display"
+        >
+          Spread: {spread.absolute.toFixed(precision)} (<span data-testid="spread-percentage">{spread.percentage.toFixed(3)}%</span>)
         </div>
       )}
 
