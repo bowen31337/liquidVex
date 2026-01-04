@@ -10,19 +10,25 @@ import { useWalletStore } from '../../stores/walletStore';
 import { useApi } from '../../hooks/useApi';
 import { useMarketStore } from '../../stores/marketStore';
 import { PositionCloseModal } from '../Modal/PositionCloseModal';
+import { PositionModifyModal } from '../Modal/PositionModifyModal';
+import { MarginModeModal } from '../Modal/MarginModeModal';
 import { useToast } from '../Toast/Toast';
 import { Position } from '../../types';
 
 export function PositionsTable() {
   const { positions, setPositions, removePosition } = useOrderStore();
   const { isConnected, address } = useWalletStore();
-  const { getPositions, closePosition } = useApi();
+  const { getPositions, closePosition, modifyPosition, setMarginMode } = useApi();
   const { allMids } = useMarketStore();
   const { success, error } = useToast();
   const [markPrices, setMarkPrices] = useState<Record<string, number>>({});
   const [modalOpen, setModalOpen] = useState(false);
+  const [modifyModalOpen, setModifyModalOpen] = useState(false);
+  const [marginModeModalOpen, setMarginModeModalOpen] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState<Position | null>(null);
   const [isClosing, setIsClosing] = useState(false);
+  const [isModifying, setIsModifying] = useState(false);
+  const [isSettingMargin, setIsSettingMargin] = useState(false);
 
   // Load positions when wallet connects
   useEffect(() => {
@@ -135,6 +141,90 @@ export function PositionsTable() {
     setIsClosing(false);
   };
 
+  // Handle modify position click
+  const handleOpenModifyModal = (position: Position) => {
+    setSelectedPosition(position);
+    setModifyModalOpen(true);
+  };
+
+  // Confirm modify position
+  const handleConfirmModify = async (addSize?: number, reduceSize?: number) => {
+    if (!selectedPosition || !address) return;
+
+    setIsModifying(true);
+    try {
+      // Call the API to modify the position
+      await modifyPosition({
+        coin: selectedPosition.coin,
+        addSize,
+        reduceSize,
+        signature: 'mock-signature', // In real implementation, this would come from wallet
+        timestamp: Date.now(),
+      });
+
+      // Show success toast
+      const action = addSize ? `added ${addSize}` : `reduced ${reduceSize}`;
+      success(`Position for ${selectedPosition.coin} ${action} successfully`);
+
+      // Close modal
+      setModifyModalOpen(false);
+      setSelectedPosition(null);
+    } catch (err) {
+      console.error('Failed to modify position:', err);
+      error(`Failed to modify ${selectedPosition.coin} position`);
+    } finally {
+      setIsModifying(false);
+    }
+  };
+
+  // Cancel modify modal
+  const handleCancelModify = () => {
+    setModifyModalOpen(false);
+    setSelectedPosition(null);
+    setIsModifying(false);
+  };
+
+  // Handle margin mode click
+  const handleOpenMarginModeModal = (position: Position) => {
+    setSelectedPosition(position);
+    setMarginModeModalOpen(true);
+  };
+
+  // Confirm margin mode change
+  const handleConfirmMarginMode = async (marginType: 'cross' | 'isolated') => {
+    if (!selectedPosition || !address) return;
+
+    setIsSettingMargin(true);
+    try {
+      // Call the API to set margin mode
+      await setMarginMode({
+        coin: selectedPosition.coin,
+        marginType,
+        signature: 'mock-signature', // In real implementation, this would come from wallet
+        timestamp: Date.now(),
+      });
+
+      // Show success toast
+      success(`Margin mode for ${selectedPosition.coin} set to ${marginType}`);
+
+      // Close modal
+      setMarginModeModalOpen(false);
+      setSelectedPosition(null);
+    } catch (err) {
+      console.error('Failed to set margin mode:', err);
+      error(`Failed to set margin mode for ${selectedPosition.coin}`);
+    } finally {
+      setIsSettingMargin(false);
+    }
+  };
+
+  // Cancel margin mode modal
+  const handleCancelMarginMode = () => {
+    setMarginModeModalOpen(false);
+    setSelectedPosition(null);
+    setIsSettingMargin(false);
+  };
+
   if (!isConnected) {
     return (
       <div className="p-4 text-center text-text-tertiary text-sm pointer-events-none">
@@ -167,6 +257,7 @@ export function PositionsTable() {
               <th>Leverage</th>
               <th>Margin</th>
               <th>Liq. Price</th>
+              <th>Margin Type</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -194,13 +285,38 @@ export function PositionsTable() {
                   <td>{formatNumber(pos.marginUsed)}</td>
                   <td>{formatNumber(pos.liquidationPx)}</td>
                   <td>
-                    <button
-                      onClick={() => handleOpenCloseModal(pos)}
-                      className="px-2 py-1 text-xs bg-short hover:bg-short-muted text-white rounded disabled:opacity-50"
-                      data-testid={`close-position-${pos.coin}`}
-                    >
-                      Close
-                    </button>
+                    <span className={`px-2 py-1 rounded text-xs font-medium ${
+                      pos.marginType === 'cross'
+                        ? 'bg-long/20 text-long'
+                        : 'bg-short/20 text-short'
+                    }`}>
+                      {pos.marginType.toUpperCase()}
+                    </span>
+                  </td>
+                  <td>
+                    <div className="flex gap-1">
+                      <button
+                        onClick={() => handleOpenMarginModeModal(pos)}
+                        className="px-2 py-1 text-xs bg-accent hover:bg-accent-muted text-white rounded disabled:opacity-50"
+                        data-testid={`margin-mode-${pos.coin}`}
+                      >
+                        Set Mode
+                      </button>
+                      <button
+                        onClick={() => handleOpenModifyModal(pos)}
+                        className="px-2 py-1 text-xs bg-accent hover:bg-accent-muted text-white rounded disabled:opacity-50"
+                        data-testid={`modify-position-${pos.coin}`}
+                      >
+                        Modify
+                      </button>
+                      <button
+                        onClick={() => handleOpenCloseModal(pos)}
+                        className="px-2 py-1 text-xs bg-short hover:bg-short-muted text-white rounded disabled:opacity-50"
+                        data-testid={`close-position-${pos.coin}`}
+                      >
+                        Close
+                      </button>
+                    </div>
                   </td>
                 </tr>
               );
@@ -216,6 +332,24 @@ export function PositionsTable() {
         onConfirm={handleConfirmClose}
         onCancel={handleCancelClose}
         isSubmitting={isClosing}
+      />
+
+      {/* Position Modify Modal */}
+      <PositionModifyModal
+        isOpen={modifyModalOpen}
+        position={selectedPosition}
+        onConfirm={handleConfirmModify}
+        onCancel={handleCancelModify}
+        isSubmitting={isModifying}
+      />
+
+      {/* Margin Mode Selection Modal */}
+      <MarginModeModal
+        isOpen={marginModeModalOpen}
+        position={selectedPosition}
+        onConfirm={handleConfirmMarginMode}
+        onCancel={handleCancelMarginMode}
+        isSubmitting={isSettingMargin}
       />
     </>
   );

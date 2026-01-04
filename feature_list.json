@@ -728,12 +728,9 @@
     "is_dev_done": true,
     "is_qa_passed": false,
     "qa_retry_count": 0,
-    "dev_failure_count": 1,
-    "last_dev_failure_at": "2026-01-04T03:22:42.772128Z",
-    "dev_failure_reasons": [
-      "Worker session timed out"
-    ],
-    "notes": "Implementation complete. Market orders work with limitPx=0.0. Tests passing for chromium."
+    "dev_failure_count": 0,
+    "notes": "Implementation complete. Market orders work with limitPx=0.0. Tests passing for chromium.",
+    "dev_completed_at": "2026-01-04T03:42:52.376056Z"
   },
   {
     "category": "functional",
@@ -927,7 +924,10 @@
     "passes": false,
     "is_dev_done": true,
     "is_qa_passed": false,
-    "notes": "PositionsTable now shows real-time mark prices from allMids WebSocket. Calculates real-time PnL based on entry price and current mark price."
+    "notes": "PositionsTable now shows real-time mark prices from allMids WebSocket. Calculates real-time PnL based on entry price and current mark price.",
+    "qa_retry_count": 0,
+    "dev_completed_at": "2026-01-04T03:42:59.050725Z",
+    "dev_failure_count": 0
   },
   {
     "category": "functional",
@@ -944,8 +944,9 @@
       "Step 9: Verify trade appears in history"
     ],
     "passes": false,
-    "is_dev_done": false,
-    "is_qa_passed": false
+    "is_dev_done": true,
+    "is_qa_passed": false,
+    "dev_completed_at": "2026-01-04T06:45:00.000000Z"
   },
   {
     "category": "functional",

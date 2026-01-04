@@ -182,6 +182,21 @@ export interface ClosePositionRequest {
   timestamp: number;
 }
 
+export interface ModifyPositionRequest {
+  coin: string;
+  addSize?: number;  // Size to add to position
+  reduceSize?: number;  // Size to reduce from position
+  signature: string;
+  timestamp: number;
+}
+
+export interface SetMarginModeRequest {
+  coin: string;
+  marginType: 'cross' | 'isolated';
+  signature: string;
+  timestamp: number;
+}
+
 export interface OrderResponse {
   success: boolean;
   orderId?: number;

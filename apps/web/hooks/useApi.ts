@@ -3,7 +3,7 @@
  */
 
 import { useCallback } from 'react';
-import { ExchangeMeta, AssetInfo, AccountState, AccountHistory, OrderResponse, OrderRequest, CancelRequest, ClosePositionRequest } from '../types';
+import { ExchangeMeta, AssetInfo, AccountState, AccountHistory, OrderResponse, OrderRequest, CancelRequest, ClosePositionRequest, ModifyPositionRequest, SetMarginModeRequest } from '../types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -160,6 +160,26 @@ export function useApi() {
     return response.json();
   }, []);
 
+  const modifyPosition = useCallback(async (request: ModifyPositionRequest): Promise<OrderResponse> => {
+    const response = await fetch(`${API_URL}/api/trade/modify-position`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(request),
+    });
+    if (!response.ok) throw new Error('Failed to modify position');
+    return response.json();
+  }, []);
+
+  const setMarginMode = useCallback(async (request: SetMarginModeRequest): Promise<OrderResponse> => {
+    const response = await fetch(`${API_URL}/api/trade/set-margin-mode`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(request),
+    });
+    if (!response.ok) throw new Error('Failed to set margin mode');
+    return response.json();
+  }, []);
+
   return {
     getExchangeMeta,
     getAssetInfo,
@@ -173,5 +193,7 @@ export function useApi() {
     cancelOrder,
     cancelAllOrders,
     closePosition,
+    modifyPosition,
+    setMarginMode,
   };
 }

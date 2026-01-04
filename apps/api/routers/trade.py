@@ -5,7 +5,7 @@ Trade Router - Order placement, modification, and cancellation endpoints.
 from typing import Literal
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, Field
 
 router = APIRouter()
 
@@ -13,14 +13,16 @@ router = APIRouter()
 class OrderRequest(BaseModel):
     """Request body for placing a new order."""
 
+    model_config = ConfigDict(populate_by_name=True)
+
     coin: str
-    is_buy: bool
-    limit_px: float = 0.0  # 0 for market orders
+    is_buy: bool = Field(alias='isBuy')
+    limit_px: float = Field(default=0.0, alias='limitPx')  # 0 for market orders
     sz: float
-    order_type: Literal["limit", "market", "stop_limit", "stop_market"] = "limit"
-    stop_px: float | None = None  # Trigger price for stop orders
-    reduce_only: bool = False
-    post_only: bool = False
+    order_type: Literal["limit", "market", "stop_limit", "stop_market"] = Field(default="limit", alias='orderType')
+    stop_px: float | None = Field(default=None, alias='stopPx')  # Trigger price for stop orders
+    reduce_only: bool = Field(default=False, alias='reduceOnly')
+    post_only: bool = Field(default=False, alias='postOnly')
     tif: Literal["GTC", "IOC", "FOK"] = "GTC"
     # Signature from wallet
     signature: str
@@ -31,12 +33,14 @@ class OrderResponse(BaseModel):
     """Response after order operation."""
 
     success: bool
-    order_id: int | None = None
+    order_id: int | None = Field(default=None, alias='orderId')
     message: str | None = None
 
 
 class CancelRequest(BaseModel):
     """Request body for canceling an order."""
+
+    model_config = ConfigDict(populate_by_name=True)
 
     coin: str
     oid: int
@@ -47,16 +51,20 @@ class CancelRequest(BaseModel):
 class ModifyRequest(BaseModel):
     """Request body for modifying an existing order."""
 
+    model_config = ConfigDict(populate_by_name=True)
+
     coin: str
     oid: int
-    new_px: float | None = None
-    new_sz: float | None = None
+    new_px: float | None = Field(default=None, alias='newPx')
+    new_sz: float | None = Field(default=None, alias='newSz')
     signature: str
     timestamp: int
 
 
 class CancelAllRequest(BaseModel):
     """Request body for canceling all orders."""
+
+    model_config = ConfigDict(populate_by_name=True)
 
     coin: str | None = None  # Optional: cancel for specific coin only
     signature: str
@@ -66,7 +74,32 @@ class CancelAllRequest(BaseModel):
 class ClosePositionRequest(BaseModel):
     """Request body for closing a position."""
 
+    model_config = ConfigDict(populate_by_name=True)
+
     coin: str
+    signature: str
+    timestamp: int
+
+
+class ModifyPositionRequest(BaseModel):
+    """Request body for modifying position size."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    coin: str
+    addSize: float | None = None  # Size to add to position
+    reduceSize: float | None = None  # Size to reduce from position
+    signature: str
+    timestamp: int
+
+
+class SetMarginModeRequest(BaseModel):
+    """Request body for setting margin mode."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    coin: str
+    marginType: Literal['cross', 'isolated']
     signature: str
     timestamp: int
 
@@ -167,4 +200,65 @@ async def close_position(request: ClosePositionRequest) -> OrderResponse:
     return OrderResponse(
         success=True,
         message=f"Position for {request.coin} closed successfully",
+    )
+
+
+@router.post("/modify-position", response_model=OrderResponse)
+async def modify_position(request: ModifyPositionRequest) -> OrderResponse:
+    """
+    Modify position size by adding to or reducing from existing position.
+
+    Args:
+        request: Position modification request
+
+    Returns:
+        Result of the modification operation.
+    """
+    if request.addSize is None and request.reduceSize is None:
+        raise HTTPException(
+            status_code=400,
+            detail="Either addSize or reduceSize must be provided",
+        )
+
+    if request.addSize is not None and request.reduceSize is not None:
+        raise HTTPException(
+            status_code=400,
+            detail="Cannot provide both addSize and reduceSize",
+        )
+
+    if request.addSize is not None and request.addSize <= 0:
+        raise HTTPException(
+            status_code=400,
+            detail="addSize must be positive",
+        )
+
+    if request.reduceSize is not None and request.reduceSize <= 0:
+        raise HTTPException(
+            status_code=400,
+            detail="reduceSize must be positive",
+        )
+
+    action = "added" if request.addSize is not None else "reduced"
+    size = request.addSize if request.addSize is not None else request.reduceSize
+
+    return OrderResponse(
+        success=True,
+        message=f"Position for {request.coin} {action} by {size}",
+    )
+
+
+@router.post("/set-margin-mode", response_model=OrderResponse)
+async def set_margin_mode(request: SetMarginModeRequest) -> OrderResponse:
+    """
+    Set margin mode for a position (cross or isolated).
+
+    Args:
+        request: Margin mode setting request
+
+    Returns:
+        Result of the margin mode change operation.
+    """
+    return OrderResponse(
+        success=True,
+        message=f"Margin mode for {request.coin} set to {request.marginType}",
     )

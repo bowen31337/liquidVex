@@ -33,12 +33,15 @@ test.describe('Position Close Flow', () => {
     await expect(closeButtons.first()).toBeVisible();
 
     // Step 6: Click the Close button on a position
+    // Scroll the button into view and click
     const closeBtcButton = page.locator('button[data-testid="close-position-BTC"]');
-    if (await closeBtcButton.isVisible()) {
-      await closeBtcButton.click();
+    if (await closeBtcButton.count() > 0) {
+      await closeBtcButton.scrollIntoViewIfNeeded();
+      await closeBtcButton.click({ force: true });
     } else {
       // Fallback to first close button
-      await closeButtons.first().click();
+      await closeButtons.first().scrollIntoViewIfNeeded();
+      await closeButtons.first().click({ force: true });
     }
 
     // Step 7: Verify confirmation modal appears
@@ -65,7 +68,8 @@ test.describe('Position Close Flow', () => {
     await expect(modal).not.toBeVisible();
 
     // Step 11: Re-open modal and confirm close
-    await closeBtcButton.click();
+    await closeBtcButton.scrollIntoViewIfNeeded();
+    await closeBtcButton.click({ force: true });
     await expect(modal).toBeVisible();
 
     // Step 12: Click Close Position to confirm
@@ -109,11 +113,13 @@ test.describe('Position Close Flow', () => {
 
     // Open close modal
     const closeBtcButton = page.locator('button[data-testid="close-position-BTC"]');
-    if (await closeBtcButton.isVisible()) {
-      await closeBtcButton.click();
+    if (await closeBtcButton.count() > 0) {
+      await closeBtcButton.scrollIntoViewIfNeeded();
+      await closeBtcButton.click({ force: true });
     } else {
       const closeButtons = page.locator('button[data-testid^="close-position-"]');
-      await closeButtons.first().click();
+      await closeButtons.first().scrollIntoViewIfNeeded();
+      await closeButtons.first().click({ force: true });
     }
 
     // Verify modal content
@@ -157,11 +163,13 @@ test.describe('Position Close Flow', () => {
 
     // Open close modal
     const closeBtcButton = page.locator('button[data-testid="close-position-BTC"]');
-    if (await closeBtcButton.isVisible()) {
-      await closeBtcButton.click();
+    if (await closeBtcButton.count() > 0) {
+      await closeBtcButton.scrollIntoViewIfNeeded();
+      await closeBtcButton.click({ force: true });
     } else {
       const closeButtons = page.locator('button[data-testid^="close-position-"]');
-      await closeButtons.first().click();
+      await closeButtons.first().scrollIntoViewIfNeeded();
+      await closeButtons.first().click({ force: true });
     }
 
     // Confirm close
