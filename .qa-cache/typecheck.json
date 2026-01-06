@@ -1,0 +1,14 @@
+{
+  "content_hash": "6f46c11d0ebefe28d09ff75031bb999f50dfbbf20b2be042b33217245fbe9073",
+  "cached_at": "2026-01-05T09:27:37.318484Z",
+  "result": {
+    "passed": true,
+    "duration_seconds": 0.0,
+    "tool": "mypy",
+    "tool_version": "unknown",
+    "errors": [],
+    "from_cache": false,
+    "cache_hit": false,
+    "files_checked": 255
+  }
+}

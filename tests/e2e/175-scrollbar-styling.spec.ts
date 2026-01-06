@@ -11,7 +11,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Feature 175: Scrollbar Styling in Data Tables', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to app with test mode enabled
-    await page.goto('http://localhost:3002?testMode=true');
+    await page.goto('/?testMode=true');
     await page.waitForLoadState('networkidle');
   });
 

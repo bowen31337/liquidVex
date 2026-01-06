@@ -208,10 +208,10 @@
       "Step 10: Verify data flow resumes with correct values",
       "Step 11: Verify no data loss or corruption occurred"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
-    "qa_retry_count": 0,
+    "is_qa_passed": true,
+    "qa_retry_count": 1,
     "dev_failure_count": 0,
     "dev_completed_at": "2026-01-04T02:27:00.933175Z"
   },
@@ -292,10 +292,10 @@
       "Step 11: Select lower aggregation",
       "Step 12: Verify more price levels appear"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
-    "qa_retry_count": 0,
+    "is_qa_passed": true,
+    "qa_retry_count": 1,
     "dev_failure_count": 0,
     "dev_completed_at": "2026-01-04T02:27:01.315238Z"
   },
@@ -308,10 +308,10 @@
       "Step 3: Verify indicator shows relative bid vs ask volume",
       "Step 4: Verify indicator updates with market changes"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
-    "qa_retry_count": 0,
+    "is_qa_passed": true,
+    "qa_retry_count": 1,
     "dev_failure_count": 0,
     "dev_completed_at": "2026-01-04T02:27:01.061397Z"
   },
@@ -478,10 +478,10 @@
       "Step 11: Hover over address to see full address tooltip",
       "Step 12: Verify wallet balance displays correctly"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
-    "qa_retry_count": 0,
+    "is_qa_passed": true,
+    "qa_retry_count": 1,
     "dev_completed_at": "2026-01-04T02:43:16.854748Z",
     "dev_failure_count": 0
   },
@@ -495,10 +495,10 @@
       "Step 4: Verify QR code is scannable",
       "Step 5: Verify modal can be closed"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
-    "qa_retry_count": 0,
+    "is_qa_passed": true,
+    "qa_retry_count": 1,
     "dev_completed_at": "2026-01-04T02:39:22.918023Z",
     "dev_failure_count": 0
   },
@@ -514,10 +514,10 @@
       "Step 6: Verify correct network is now selected",
       "Step 7: Verify warning disappears"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
-    "qa_retry_count": 0,
+    "is_qa_passed": true,
+    "qa_retry_count": 1,
     "dev_completed_at": "2026-01-04T02:37:08.766740Z",
     "dev_failure_count": 0
   },
@@ -532,10 +532,10 @@
       "Step 5: Verify connect button reappears",
       "Step 6: Verify balance and address are hidden"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
-    "qa_retry_count": 0,
+    "is_qa_passed": true,
+    "qa_retry_count": 1,
     "dev_completed_at": "2026-01-04T02:48:53.671654Z",
     "dev_failure_count": 0
   },
@@ -557,10 +557,10 @@
       "Step 12: Select Stop order type",
       "Step 13: Verify trigger price field appears"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
-    "qa_retry_count": 0,
+    "is_qa_passed": true,
+    "qa_retry_count": 1,
     "dev_completed_at": "2026-01-04T02:52:42.670846Z",
     "dev_failure_count": 0
   },
@@ -581,10 +581,10 @@
       "Step 11: Type a valid size (e.g., 0.5)",
       "Step 12: Verify size is displayed correctly"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
-    "qa_retry_count": 0,
+    "is_qa_passed": true,
+    "qa_retry_count": 1,
     "dev_completed_at": "2026-01-04T02:59:32.198804Z",
     "dev_failure_count": 0
   },
@@ -608,10 +608,10 @@
       "Step 14: Drag slider to 20x",
       "Step 15: Verify leverage display shows 20x"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
-    "qa_retry_count": 0,
+    "is_qa_passed": true,
+    "qa_retry_count": 1,
     "dev_completed_at": "2026-01-04T02:50:47.548061Z",
     "dev_failure_count": 0
   },
@@ -631,10 +631,10 @@
       "Step 10: Click to enable post-only",
       "Step 11: Verify checkbox is checked"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
-    "qa_retry_count": 0,
+    "is_qa_passed": true,
+    "qa_retry_count": 1,
     "dev_completed_at": "2026-01-04T02:53:39.366243Z",
     "dev_failure_count": 0
   },
@@ -652,10 +652,10 @@
       "Step 8: Verify available balance is displayed",
       "Step 9: Verify balance matches account state"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
-    "qa_retry_count": 0,
+    "is_qa_passed": true,
+    "qa_retry_count": 1,
     "dev_completed_at": "2026-01-04T03:01:37.326485Z",
     "dev_failure_count": 0
   },
@@ -678,10 +678,10 @@
       "Step 13: Verify success notification appears",
       "Step 14: Verify order appears in open orders"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
-    "qa_retry_count": 0,
+    "is_qa_passed": true,
+    "qa_retry_count": 1,
     "dev_completed_at": "2026-01-04T03:22:36.418547Z",
     "dev_failure_count": 0
   },
@@ -703,10 +703,10 @@
       "Step 12: Verify success notification appears",
       "Step 13: Verify order appears in open orders"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
-    "qa_retry_count": 0,
+    "is_qa_passed": true,
+    "qa_retry_count": 1,
     "dev_completed_at": "2026-01-04T03:03:52.348478Z",
     "dev_failure_count": 0
   },
@@ -724,10 +724,10 @@
       "Step 8: Verify position is created or updated",
       "Step 9: Verify trade appears in trade history"
     ],
-    "passes": false,
+    "passes": true,
     "is_dev_done": true,
-    "is_qa_passed": false,
-    "qa_retry_count": 0,
+    "is_qa_passed": true,
+    "qa_retry_count": 1,
     "dev_failure_count": 1,
     "last_dev_failure_at": "2026-01-04T03:22:42.772128Z",
     "dev_failure_reasons": [

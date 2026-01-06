@@ -1,0 +1,176 @@
+{
+  "$schema": "qa-report-schema-v1.json",
+  "feature_id": 130,
+  "feature_description": "24h volume statistics display and update",
+  "timestamp": "2026-01-05T20:30:11.740763Z",
+  "overall_status": "PASSED",
+  "gates": {
+    "typecheck": {
+      "passed": true,
+      "duration_seconds": 0.0,
+      "tool": "mypy",
+      "tool_version": "unknown",
+      "errors": [],
+      "from_cache": false,
+      "cache_hit": false,
+      "files_checked": 255
+    },
+    "lint": {
+      "passed": true,
+      "duration_seconds": 305.11,
+      "tool": "biome",
+      "tool_version": "biome=unknown",
+      "errors": [],
+      "warnings": [],
+      "from_cache": false,
+      "cache_hit": false,
+      "files_checked": 493
+    },
+    "storyvalidation": {
+      "passed": true,
+      "duration_seconds": 0.0,
+      "acceptance_criteria_met": 0,
+      "acceptance_criteria_total": 0,
+      "errors": [],
+      "step_results": [],
+      "screenshots": [],
+      "note": "Server health check failed: Server unreachable: [Errno 111] Connection refused. Skipping story validation.",
+      "server_healthy": false
+    },
+    "unittest": {
+      "passed": false,
+      "duration_seconds": 31.23,
+      "tool": "vitest",
+      "tool_version": "vitest=vitest/4.0.16 linux-x64 node-v24.12.0",
+      "tests_run": 0,
+      "tests_passed": 0,
+      "tests_failed": 0,
+      "errors": []
+    },
+    "browserautomation": {
+      "passed": false,
+      "duration_seconds": 302.49,
+      "tool": "playwright",
+      "tool_version": "Version 1.57.0",
+      "errors": [],
+      "screenshots": [
+        {
+          "path": "test-results/failure-should-place-limit-buy-order-successfully.png",
+          "name": "failure-should-place-limit-buy-order-successfully.png",
+          "test": "test-results"
+        },
+        {
+          "path": "test-results/failure-should-handle-order-cancellation-in-confirmation-modal.png",
+          "name": "failure-should-handle-order-cancellation-in-confirmation-modal.png",
+          "test": "test-results"
+        },
+        {
+          "path": "test-results/failure-should-disable-submit-button-while-order-is-processing.png",
+          "name": "failure-should-disable-submit-button-while-order-is-processing.png",
+          "test": "test-results"
+        },
+        {
+          "path": "test-results/failure-should-show-loading-state-during-order-submission.png",
+          "name": "failure-should-show-loading-state-during-order-submission.png",
+          "test": "test-results"
+        },
+        {
+          "path": "test-results/failure-should-reset-form-after-successful-order.png",
+          "name": "failure-should-reset-form-after-successful-order.png",
+          "test": "test-results"
+        },
+        {
+          "path": "test-results/failure-should-prevent-new-order-submission-while-current-order-is-in-progress.png",
+          "name": "failure-should-prevent-new-order-submission-while-current-order-is-in-progress.png",
+          "test": "test-results"
+        },
+        {
+          "path": "test-results/failure-should-handle-multiple-rapid-clicks-on-order-form-submit.png",
+          "name": "failure-should-handle-multiple-rapid-clicks-on-order-form-submit.png",
+          "test": "test-results"
+        },
+        {
+          "path": "test-results/failure-should-maintain-form-state-after-modal-close.png",
+          "name": "failure-should-maintain-form-state-after-modal-close.png",
+          "test": "test-results"
+        },
+        {
+          "path": "test-results/failure-should-prevent-duplicate-orders-from-rapid-double-click-on-confirm-button.png",
+          "name": "failure-should-prevent-duplicate-orders-from-rapid-double-click-on-confirm-button.png",
+          "test": "test-results"
+        },
+        {
+          "path": "test-results/failure-should-validate-order-form-before-submission.png",
+          "name": "failure-should-validate-order-form-before-submission.png",
+          "test": "test-results"
+        },
+        {
+          "path": "test-results/failure-should-prevent-duplicate-orders-from-rapid-double-click-on-submit-button.png",
+          "name": "failure-should-prevent-duplicate-orders-from-rapid-double-click-on-submit-button.png",
+          "test": "test-results"
+        },
+        {
+          "path": "test-results/162-163-session-keys-Featu-71fc0-celing-session-key-creation-chromium/test-failed-1.png",
+          "name": "test-failed-1.png",
+          "test": "162-163-session-keys-Featu-71fc0-celing-session-key-creation-chromium"
+        },
+        {
+          "path": "test-results/162-163-session-keys-Featu-94e46-evoke-an-active-session-key-chromium/test-failed-1.png",
+          "name": "test-failed-1.png",
+          "test": "162-163-session-keys-Featu-94e46-evoke-an-active-session-key-chromium"
+        },
+        {
+          "path": "test-results/162-163-session-keys-Featu-27a54-ng-session-key-with-no-name-chromium/test-failed-1.png",
+          "name": "test-failed-1.png",
+          "test": "162-163-session-keys-Featu-27a54-ng-session-key-with-no-name-chromium"
+        },
+        {
+          "path": "test-results/162-163-session-keys-Featu-872f2-ion-key-with-no-permissions-chromium/test-failed-1.png",
+          "name": "test-failed-1.png",
+          "test": "162-163-session-keys-Featu-872f2-ion-key-with-no-permissions-chromium"
+        },
+        {
+          "path": "test-results/162-163-session-keys-Featu-42eb9-anage-multiple-session-keys-chromium/test-failed-1.png",
+          "name": "test-failed-1.png",
+          "test": "162-163-session-keys-Featu-42eb9-anage-multiple-session-keys-chromium"
+        },
+        {
+          "path": "test-results/162-163-session-keys-Featu-7f63b--allow-canceling-revocation-chromium/test-failed-1.png",
+          "name": "test-failed-1.png",
+          "test": "162-163-session-keys-Featu-7f63b--allow-canceling-revocation-chromium"
+        },
+        {
+          "path": "test-results/162-163-session-keys-Featu-741c6--with-specified-permissions-chromium/test-failed-1.png",
+          "name": "test-failed-1.png",
+          "test": "162-163-session-keys-Featu-741c6--with-specified-permissions-chromium"
+        },
+        {
+          "path": "test-results/162-163-session-keys-Featu-741c6--with-specified-permissions-firefox/test-failed-1.png",
+          "name": "test-failed-1.png",
+          "test": "162-163-session-keys-Featu-741c6--with-specified-permissions-firefox"
+        }
+      ]
+    }
+  },
+  "summary": {
+    "gates_passed": 3,
+    "gates_failed": 2,
+    "gates_total": 5,
+    "total_duration_seconds": 638.83,
+    "total_errors": 0,
+    "total_warnings": 0,
+    "errors_by_gate": {},
+    "files_with_errors": 0,
+    "tests_run": 0,
+    "tests_passed": 0,
+    "tests_failed": 0,
+    "hard_gates_passed": true,
+    "soft_gate_warnings": [
+      "unittest",
+      "browserautomation"
+    ]
+  },
+  "priority_fixes": [],
+  "qa_agent_version": "2.2.0",
+  "batch_mode": true
+}

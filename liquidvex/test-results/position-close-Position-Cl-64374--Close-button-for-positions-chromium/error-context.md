@@ -1,0 +1,193 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - heading "liquidVex" [level=1] [ref=e5]
+        - button "Select trading pair" [ref=e7] [cursor=pointer]:
+          - generic [ref=e8]: BTC-PERP
+          - img [ref=e9]
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - generic [ref=e16]: $95,420.50
+          - generic [ref=e17]: +2.34%
+        - generic [ref=e18]:
+          - generic "Mark Price" [ref=e19]: "M: $95,420.50"
+          - generic "Index Price" [ref=e20]: "I: $95,420.00"
+        - generic [ref=e21]:
+          - generic "Funding Rate" [ref=e22]: "F: 0.010%"
+          - generic "Next Funding" [ref=e23]: 1h 0m
+        - generic [ref=e24]:
+          - generic "24h Volume" [ref=e25]: "Vol: $0"
+          - generic "Open Interest" [ref=e26]: "OI: $0"
+        - generic [ref=e27]:
+          - generic [ref=e28]:
+            - generic [ref=e29]:
+              - generic [ref=e30]: Account Equity
+              - generic [ref=e31]: +0.00%
+            - generic [ref=e32]: $10,000.00
+          - generic [ref=e33]:
+            - generic [ref=e34]:
+              - text: Margin Used
+              - generic [ref=e35]: $2,500.00
+            - generic [ref=e36]:
+              - text: Available
+              - generic [ref=e37]: $7,500.00
+            - generic [ref=e38]:
+              - text: Withdrawable
+              - generic [ref=e39]: $5,000.00
+            - generic [ref=e40]:
+              - text: Leverage
+              - generic [ref=e41]: 10x
+          - generic [ref=e43]:
+            - generic [ref=e44]: Margin Utilization
+            - generic [ref=e45]: 25.0%
+          - generic [ref=e48]:
+            - generic [ref=e49]: Cross Margin Summary
+            - generic [ref=e50]:
+              - generic [ref=e51]: Account Value
+              - generic [ref=e52]: $10,000.00
+              - generic [ref=e53]: Total Margin Used
+              - generic [ref=e54]: $2,500.00
+          - generic [ref=e55]:
+            - button "Deposit" [ref=e56] [cursor=pointer]
+            - button "Withdraw" [ref=e57] [cursor=pointer]
+        - button "Open settings" [ref=e58] [cursor=pointer]:
+          - img [ref=e59]
+        - link "Open documentation (opens in new tab)" [ref=e63] [cursor=pointer]:
+          - /url: https://docs.hyperliquid.xyz/
+          - img [ref=e64]
+        - button "Connect wallet" [active] [ref=e68] [cursor=pointer]: Connect Wallet
+        - generic [ref=e70]:
+          - heading "Connect Wallet" [level=2] [ref=e71]
+          - generic [ref=e72]:
+            - button "M MetaMask Extension not detected" [disabled] [ref=e73]:
+              - generic [ref=e75]:
+                - generic [ref=e77]: M
+                - generic [ref=e78]:
+                  - generic [ref=e79]: MetaMask
+                  - generic [ref=e80]: Extension not detected
+            - button "WC WalletConnect Mobile wallets" [ref=e81] [cursor=pointer]:
+              - generic [ref=e83]:
+                - generic [ref=e85]: WC
+                - generic [ref=e86]:
+                  - generic [ref=e87]: WalletConnect
+                  - generic [ref=e88]: Mobile wallets
+          - generic [ref=e90]:
+            - generic [ref=e91]: • Select MetaMask to connect your browser wallet
+            - generic [ref=e92]: • Select WalletConnect to connect via QR code
+            - generic [ref=e93]: • You will be prompted to switch to Arbitrum network if needed
+          - button "Cancel" [ref=e94] [cursor=pointer]
+    - generic [ref=e95]:
+      - button "Full-screen Chart" [ref=e96] [cursor=pointer]: Full-screen
+      - button "Toggle compact mode" [ref=e97] [cursor=pointer]: Normal
+    - generic [ref=e98]:
+      - generic [ref=e99]:
+        - generic [ref=e101]:
+          - generic [ref=e102]:
+            - generic [ref=e103]:
+              - generic [ref=e104]: TradingView Chart
+              - generic [ref=e105]:
+                - button "1m" [ref=e106] [cursor=pointer]
+                - button "5m" [ref=e107] [cursor=pointer]
+                - button "15m" [ref=e108] [cursor=pointer]
+                - button "1h" [ref=e109] [cursor=pointer]
+                - button "4h" [ref=e110] [cursor=pointer]
+                - button "1D" [ref=e111] [cursor=pointer]
+            - generic [ref=e112]:
+              - generic [ref=e113]:
+                - button "Volume" [ref=e114] [cursor=pointer]
+                - button "RSI" [ref=e115] [cursor=pointer]
+              - button "Line" [ref=e116] [cursor=pointer]
+              - button "Full" [ref=e117] [cursor=pointer]
+          - table [ref=e120]:
+            - row [ref=e121]:
+              - cell
+              - cell [ref=e122]:
+                - link "Charting by TradingView" [ref=e126] [cursor=pointer]:
+                  - /url: https://www.tradingview.com/?utm_medium=lwc-link&utm_campaign=lwc-chart&utm_source=localhost/
+                  - img [ref=e127]
+              - cell [ref=e131]
+            - row [ref=e135]:
+              - cell
+              - cell [ref=e136]
+              - cell [ref=e140]
+        - separator "Resize panel" [ref=e143]
+      - separator "Resize panel" [ref=e268]
+      - region "Order Entry Form" [ref=e272]:
+        - generic [ref=e273]:
+          - button "Switch to Buy / Long order" [pressed] [ref=e275] [cursor=pointer]: Buy / Long
+          - button "Switch to Sell / Short order" [ref=e277] [cursor=pointer]: Sell / Short
+        - generic [ref=e278]:
+          - text: Order Type
+          - combobox "Order type selection" [ref=e279]:
+            - option "Limit" [selected]
+            - option "Market"
+            - option "Stop Limit"
+            - option "Stop Market"
+        - generic [ref=e280]:
+          - generic [ref=e281]:
+            - generic [ref=e282]: Price
+            - generic [ref=e283]:
+              - button "Decrease price by 0.5" [ref=e284] [cursor=pointer]: "-"
+              - button "Increase price by 0.5" [ref=e285] [cursor=pointer]: +
+          - spinbutton "Order price" [ref=e286]
+        - generic [ref=e287]:
+          - text: Size
+          - spinbutton "Order size" [ref=e288]
+          - generic [ref=e289]:
+            - button "Set size to 25% of available balance" [ref=e290] [cursor=pointer]: 25%
+            - button "Set size to 50% of available balance" [ref=e291] [cursor=pointer]: 50%
+            - button "Set size to 75% of available balance" [ref=e292] [cursor=pointer]: 75%
+            - button "Set size to 100% of available balance" [ref=e293] [cursor=pointer]: 100%
+        - generic [ref=e294]:
+          - generic [ref=e295]:
+            - generic [ref=e296]: Leverage
+            - generic [ref=e297]: 10x
+          - slider "Leverage" [ref=e298]: "10"
+        - generic [ref=e299]:
+          - generic [ref=e300] [cursor=pointer]:
+            - checkbox "Reduce only - position will only decrease" [ref=e301]
+            - text: Reduce Only
+          - generic [ref=e302] [cursor=pointer]:
+            - checkbox "Post only - order will not match existing orders" [ref=e303]
+            - text: Post Only
+        - generic [ref=e304]:
+          - text: Time-in-Force
+          - combobox "Time in force selection" [ref=e305]:
+            - option "Good Till Cancelled (GTC)" [selected]
+            - option "Immediate or Cancel (IOC)"
+            - option "Fill or Kill (FOK)"
+        - button "Submit buy order" [ref=e307] [cursor=pointer]: Buy / Long
+        - generic [ref=e308]:
+          - generic [ref=e309]:
+            - generic [ref=e310]: Order Value
+            - generic [ref=e311]: $0.00
+          - generic [ref=e312]:
+            - generic [ref=e313]: Required Margin
+            - generic [ref=e314]: $0.00
+          - generic [ref=e315]:
+            - generic [ref=e316]: Available Margin
+            - generic [ref=e317]: $0.00
+          - generic [ref=e318]:
+            - generic [ref=e319]: Leverage
+            - generic [ref=e320]: 10x
+          - generic [ref=e321]:
+            - generic [ref=e322]: Available
+            - generic [ref=e323]: $7,500.00
+    - generic [ref=e324]:
+      - generic [ref=e325]:
+        - generic [ref=e326]:
+          - button "Positions" [ref=e327] [cursor=pointer]
+          - button "Open Orders" [ref=e328] [cursor=pointer]
+          - button "Order History" [ref=e329] [cursor=pointer]
+          - button "Trade History" [ref=e330] [cursor=pointer]
+          - button "Calculator" [ref=e331] [cursor=pointer]
+        - generic [ref=e337]: Disconnected
+      - generic [ref=e338]:
+        - generic: Connect your wallet to view positions and orders
+  - generic [ref=e339]: Focus moved to Connect wallet
+  - alert [ref=e341]
+```

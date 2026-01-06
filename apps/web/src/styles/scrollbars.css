@@ -1,0 +1,254 @@
+/* Custom Scrollbar Styling for Data Tables */
+/* Focus on data table scrollbars while maintaining system scrollbars for main layout */
+
+/* Data table specific scrollbar styles */
+.data-table-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.data-table-container::-webkit-scrollbar-track {
+  background: #1f1f1f;
+  border-left: 1px solid #4a4a4a;
+}
+
+.data-table-container::-webkit-scrollbar-thumb {
+  background: #4a4a4a;
+  border-radius: 4px;
+  border: 1px solid #666666;
+}
+
+.data-table-container::-webkit-scrollbar-thumb:hover {
+  background: #666666;
+  border-color: #888888;
+}
+
+.data-table-container::-webkit-scrollbar-thumb:active {
+  background: #888888;
+}
+
+/* Order book specific scrollbar - more prominent */
+.order-book-container::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.order-book-container::-webkit-scrollbar-track {
+  background: #171717;
+  border-left: 1px solid #333333;
+}
+
+.order-book-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #4a4a4a, #3a3a3a);
+  border-radius: 5px;
+  border: 1px solid #555555;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.3);
+}
+
+.order-book-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #666666, #555555);
+  border-color: #777777;
+}
+
+/* Trades feed scrollbar - subtle */
+.trades-feed-container::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.trades-feed-container::-webkit-scrollbar-track {
+  background: #1f1f1f;
+}
+
+.trades-feed-container::-webkit-scrollbar-thumb {
+  background: #555555;
+  border-radius: 3px;
+}
+
+.trades-feed-container::-webkit-scrollbar-thumb:hover {
+  background: #666666;
+}
+
+/* Recent trades table scrollbar */
+.recent-trades-table::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.recent-trades-table::-webkit-scrollbar-track {
+  background: #1f1f1f;
+  border-top: 1px solid #4a4a4a;
+}
+
+.recent-trades-table::-webkit-scrollbar-thumb {
+  background: #4a4a4a;
+  border-radius: 4px;
+  border: 1px solid #666666;
+}
+
+.recent-trades-table::-webkit-scrollbar-thumb:hover {
+  background: #666666;
+}
+
+/* Order history table scrollbar */
+.order-history-table::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.order-history-table::-webkit-scrollbar-track {
+  background: #1f1f1f;
+}
+
+.order-history-table::-webkit-scrollbar-thumb {
+  background: #4a4a4a;
+  border-radius: 4px;
+  border: 1px solid #666666;
+}
+
+.order-history-table::-webkit-scrollbar-thumb:hover {
+  background: #666666;
+}
+
+/* Position table scrollbar */
+.positions-table::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.positions-table::-webkit-scrollbar-track {
+  background: #1f1f1f;
+}
+
+.positions-table::-webkit-scrollbar-thumb {
+  background: #4a4a4a;
+  border-radius: 4px;
+  border: 1px solid #666666;
+}
+
+.positions-table::-webkit-scrollbar-thumb:hover {
+  background: #666666;
+}
+
+/* Chart container scrollbar (if needed) */
+.chart-container::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.chart-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chart-container::-webkit-scrollbar-thumb {
+  background: rgba(74, 74, 74, 0.8);
+  border-radius: 3px;
+  border: 1px solid rgba(102, 102, 102, 0.6);
+}
+
+.chart-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(102, 102, 102, 0.9);
+}
+
+/* Firefox scrollbar support */
+@supports selector(::-moz-scrollbar) {
+  .data-table-container {
+    scrollbar-color: #4a4a4a #1f1f1f;
+    scrollbar-width: thin;
+  }
+
+  .data-table-container:hover {
+    scrollbar-color: #666666 #1f1f1f;
+  }
+
+  .order-book-container {
+    scrollbar-color: #4a4a4a #171717;
+    scrollbar-width: thin;
+  }
+
+  .order-book-container:hover {
+    scrollbar-color: #666666 #171717;
+  }
+
+  .trades-feed-container {
+    scrollbar-color: #555555 #1f1f1f;
+    scrollbar-width: thin;
+  }
+
+  .trades-feed-container:hover {
+    scrollbar-color: #666666 #1f1f1f;
+  }
+
+  .recent-trades-table,
+  .order-history-table,
+  .positions-table {
+    scrollbar-color: #4a4a4a #1f1f1f;
+    scrollbar-width: thin;
+  }
+
+  .recent-trades-table:hover,
+  .order-history-table:hover,
+  .positions-table:hover {
+    scrollbar-color: #666666 #1f1f1f;
+  }
+
+  .chart-container {
+    scrollbar-color: rgba(74, 74, 74, 0.8) transparent;
+    scrollbar-width: thin;
+  }
+
+  .chart-container:hover {
+    scrollbar-color: rgba(102, 102, 102, 0.9) transparent;
+  }
+}
+
+/* Smooth scrolling for all data containers */
+.data-table-container,
+.order-book-container,
+.trades-feed-container,
+.recent-trades-table,
+.order-history-table,
+.positions-table,
+.chart-container {
+  scrollbar-behavior: smooth;
+}
+
+/* Hide scrollbar on hover for main layout but keep on data panels */
+.main-layout-container::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* Ensure data tables always show scrollbars when needed */
+.data-table-container {
+  overflow: auto;
+}
+
+/* Improve accessibility with focus indicators */
+.data-table-container:focus-within::-webkit-scrollbar-thumb {
+  outline: 2px solid #93c5fd;
+  outline-offset: -2px;
+}
+
+.order-book-container:focus-within::-webkit-scrollbar-thumb {
+  outline: 2px solid #93c5fd;
+  outline-offset: -2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .data-table-container::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .order-book-container::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .trades-feed-container::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+}

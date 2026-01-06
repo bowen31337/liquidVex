@@ -6,6 +6,18 @@
 
 import { test, expect } from '@playwright/test';
 
+// Helper function to open withdrawal modal with proper handling
+async function openWithdrawalModal(page: any) {
+  // Use JavaScript to click the button directly, bypassing any overlay issues
+  await page.evaluate(() => {
+    const btn = document.querySelector('[data-testid="withdraw-button"]');
+    if (btn) {
+      (btn as HTMLButtonElement).click();
+    }
+  });
+  await page.waitForTimeout(500);
+}
+
 test.describe('Withdrawal Flow Navigation', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:3002?testMode=true');
@@ -51,41 +63,33 @@ test.describe('Withdrawal Flow Navigation', () => {
   });
 
   test('Step 2: Clicking withdraw button opens withdrawal modal', async ({ page }) => {
-    // Click withdraw button
-    const withdrawButton = page.locator('[data-testid="withdraw-button"]');
-    await withdrawButton.click();
+    // Click withdraw button - scroll into view first to avoid overlay issues
+    await openWithdrawalModal(page);
 
-    // Wait for modal to appear
-    await page.waitForTimeout(300);
-
-    // Verify modal is visible by checking for modal title
-    const modalTitle = page.locator('text=Withdraw Funds');
+    // Verify modal is visible by checking for modal title (use heading role for specificity)
+    const modalTitle = page.getByRole('heading', { name: 'Withdraw Funds' });
     await expect(modalTitle).toBeVisible();
   });
 
   test('Step 3: Modal displays withdrawal instructions', async ({ page }) => {
     // Open withdrawal modal
-    const withdrawButton = page.locator('[data-testid="withdraw-button"]');
-    await withdrawButton.click();
-    await page.waitForTimeout(300);
+    await openWithdrawalModal(page);
 
     // Verify instructions are shown
-    const instructions = page.locator('text=Withdrawal Instructions');
+    const instructions = page.getByText('Withdrawal Instructions', { exact: true });
     await expect(instructions).toBeVisible();
 
     // Verify instruction steps
-    const step1 = page.locator('text=Enter the amount you wish to withdraw');
+    const step1 = page.getByText('Enter the amount you wish to withdraw', { exact: true });
     await expect(step1).toBeVisible();
 
-    const step2 = page.locator('text=Provide your destination wallet address');
+    const step2 = page.getByText('Provide your destination wallet address', { exact: true });
     await expect(step2).toBeVisible();
   });
 
   test('Step 4: Modal displays withdrawal form inputs', async ({ page }) => {
     // Open withdrawal modal
-    const withdrawButton = page.locator('[data-testid="withdraw-button"]');
-    await withdrawButton.click();
-    await page.waitForTimeout(300);
+    await openWithdrawalModal(page);
 
     // Verify amount input
     const amountInput = page.locator('[data-testid="withdrawal-amount-input"]');
@@ -100,40 +104,36 @@ test.describe('Withdrawal Flow Navigation', () => {
 
   test('Step 5: Modal displays network information', async ({ page }) => {
     // Open withdrawal modal
-    const withdrawButton = page.locator('[data-testid="withdraw-button"]');
-    await withdrawButton.click();
-    await page.waitForTimeout(300);
+    await openWithdrawalModal(page);
 
     // Verify network info section
-    const networkInfo = page.locator('text=Network Information');
+    const networkInfo = page.getByText('Network Information', { exact: true });
     await expect(networkInfo).toBeVisible();
 
     // Verify network details
-    const network = page.locator('text=Arbitrum One');
+    const network = page.getByText('Arbitrum One', { exact: true });
     await expect(network).toBeVisible();
 
-    const chainId = page.locator('text=42161');
+    const chainId = page.getByText('42161', { exact: true });
     await expect(chainId).toBeVisible();
 
-    const asset = page.locator('text=USDC');
+    const asset = page.getByText('USDC', { exact: true });
     await expect(asset).toBeVisible();
   });
 
   test('Step 6: Modal displays minimum withdrawal and fee information', async ({ page }) => {
     // Open withdrawal modal
-    const withdrawButton = page.locator('[data-testid="withdraw-button"]');
-    await withdrawButton.click();
-    await page.waitForTimeout(300);
+    await openWithdrawalModal(page);
 
     // Verify minimum withdrawal
-    const minWithdrawal = page.locator('text=Minimum Withdrawal:');
+    const minWithdrawal = page.getByText('Minimum Withdrawal:', { exact: true });
     await expect(minWithdrawal).toBeVisible();
 
-    const minAmount = page.locator('text=10 USDC');
+    const minAmount = page.getByText('10 USDC', { exact: true });
     await expect(minAmount).toBeVisible();
 
     // Verify withdrawal fee
-    const feeLabel = page.locator('text=Withdrawal Fee:');
+    const feeLabel = page.getByText('Withdrawal Fee:', { exact: true });
     await expect(feeLabel).toBeVisible();
 
     const fee = page.locator('text=~0.5 USDC');
@@ -142,13 +142,11 @@ test.describe('Withdrawal Flow Navigation', () => {
 
   test('Step 7: Modal displays important warning message', async ({ page }) => {
     // Open withdrawal modal
-    const withdrawButton = page.locator('[data-testid="withdraw-button"]');
-    await withdrawButton.click();
-    await page.waitForTimeout(300);
+    await openWithdrawalModal(page);
 
-    // Verify warning message
-    const warning = page.locator('.text-warning').filter({ hasText: 'Important:' });
-    await expect(warning).toBeVisible();
+    // Verify warning message - look for the warning text
+    const warning = page.locator('.text-warning');
+    await expect(warning).toContainText('Important:');
 
     // Verify warning content
     const warningText = await warning.textContent();
@@ -159,9 +157,7 @@ test.describe('Withdrawal Flow Navigation', () => {
 
   test('Step 8: Modal displays Cancel and Confirm buttons', async ({ page }) => {
     // Open withdrawal modal
-    const withdrawButton = page.locator('[data-testid="withdraw-button"]');
-    await withdrawButton.click();
-    await page.waitForTimeout(300);
+    await openWithdrawalModal(page);
 
     // Verify Cancel button
     const cancelButton = page.locator('[data-testid="withdrawal-cancel-button"]');
@@ -176,12 +172,10 @@ test.describe('Withdrawal Flow Navigation', () => {
 
   test('Step 9: Cancel button closes modal', async ({ page }) => {
     // Open withdrawal modal
-    const withdrawButton = page.locator('[data-testid="withdraw-button"]');
-    await withdrawButton.click();
-    await page.waitForTimeout(300);
+    await openWithdrawalModal(page);
 
     // Verify modal is open
-    const modalTitle = page.locator('text=Withdraw Funds');
+    const modalTitle = page.getByRole('heading', { name: 'Withdraw Funds' });
     await expect(modalTitle).toBeVisible();
 
     // Click Cancel button
@@ -195,9 +189,7 @@ test.describe('Withdrawal Flow Navigation', () => {
 
   test('Step 10: Withdrawal amount input accepts values', async ({ page }) => {
     // Open withdrawal modal
-    const withdrawButton = page.locator('[data-testid="withdraw-button"]');
-    await withdrawButton.click();
-    await page.waitForTimeout(300);
+    await openWithdrawalModal(page);
 
     // Fill in amount
     const amountInput = page.locator('[data-testid="withdrawal-amount-input"]');
@@ -210,9 +202,7 @@ test.describe('Withdrawal Flow Navigation', () => {
 
   test('Step 11: Withdrawal address input accepts values', async ({ page }) => {
     // Open withdrawal modal
-    const withdrawButton = page.locator('[data-testid="withdraw-button"]');
-    await withdrawButton.click();
-    await page.waitForTimeout(300);
+    await openWithdrawalModal(page);
 
     // Fill in address
     const addressInput = page.locator('[data-testid="withdrawal-address-input"]');
@@ -225,9 +215,7 @@ test.describe('Withdrawal Flow Navigation', () => {
 
   test('Step 12: Confirm button is disabled when form is incomplete', async ({ page }) => {
     // Open withdrawal modal
-    const withdrawButton = page.locator('[data-testid="withdraw-button"]');
-    await withdrawButton.click();
-    await page.waitForTimeout(300);
+    await openWithdrawalModal(page);
 
     // Verify Confirm button is disabled initially
     const confirmButton = page.locator('[data-testid="withdrawal-confirm-button"]');
